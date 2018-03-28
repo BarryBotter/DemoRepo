@@ -99,10 +99,10 @@ public class Play extends GameState {
         TextureRegion mountains = new TextureRegion(bgs, 0,235 , 320, 240);
         Texture trees = Game.res.getTexture("bgone");
         TextureRegion  treeLayer = new TextureRegion(trees, 0, 27, 320, 240);
-        backgrounds = new Background[3];
+        backgrounds = new Background[2];
         backgrounds[0] = new Background(sky, cam, 0f);
         backgrounds[1] = new Background(mountains, cam, 0.1f);
-        backgrounds[2] = new Background(treeLayer, cam, 0.2f);
+       // backgrounds[2] = new Background(treeLayer, cam, 0.2f);
 
 
 
@@ -215,7 +215,7 @@ public class Play extends GameState {
         //set cam to follow player
         cam.position.set(
                 player.getposition().x * PPM + Game.V_WIDTH / 4,
-                /*Game.V_HEIGHT / 2*/player.getposition().y * PPM +Game.V_HEIGHT/4, 0);
+                Game.V_HEIGHT / 2/*player.getposition().y * PPM +Game.V_HEIGHT/4*/, 0);
         cam.update();
 
         // draw bgs
@@ -310,6 +310,11 @@ public class Play extends GameState {
 
         if (layer != null)
         createCorners(layer, B2DVars.BIT_CORNER);
+
+        layer = (TiledMapTileLayer) tileMap.getLayers().get("jumps");
+
+        if (layer != null)
+            createJump(layer, B2DVars.BIT_JUMP);
     }
 
 
@@ -390,6 +395,45 @@ public class Play extends GameState {
             }
         }
 
+    }
+
+    private void createJump(TiledMapTileLayer layer, short bits) {
+
+        // tile size
+        float ts = layer.getTileWidth();
+
+        // go through all cells in layer
+        for (int row = 0; row < layer.getHeight(); row++) {
+            for (int col = 0; col < layer.getWidth(); col++) {
+
+                // get cell
+                TiledMapTileLayer.Cell cell = layer.getCell(col, row);
+
+                // check that there is a cell
+                if (cell == null) continue;
+                if (cell.getTile() == null) continue;
+
+                // create body from cell
+                BodyDef bdef = new BodyDef();
+                bdef.type = BodyDef.BodyType.StaticBody;
+                bdef.position.set((col + 0.5f) * ts / PPM, (row + 0.5f) * ts / PPM);
+                ChainShape cs = new ChainShape();
+                Vector2[] v = new Vector2[3];
+                v[0] = new Vector2(-ts / 2 / PPM, -ts / 2 / PPM);
+                v[1] = new Vector2(-ts / 2 / PPM, ts / 2 / PPM);
+                v[2] = new Vector2(ts / 2 / PPM, ts / 2 / PPM);
+                cs.createChain(v);
+                FixtureDef fd = new FixtureDef();
+                fd.friction = 0;
+                fd.shape = cs;
+                fd.restitution = 3;
+                fd.filter.categoryBits = bits;
+                fd.filter.maskBits = B2DVars.BIT_PLAYER;
+                world.createBody(bdef).createFixture(fd).setUserData("jump");
+                cs.dispose();
+
+            }
+        }
     }
 
 

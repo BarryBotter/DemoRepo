@@ -54,6 +54,12 @@ public class MyContacListener implements ContactListener {
         if (fb.getUserData() != null && fb.getUserData().equals("win")) {
             wincontact = true;
         }
+        if (fa.getUserData() != null && fa.getUserData().equals("jump")) {
+            System.out.print("jump baby");
+        }
+        if (fb.getUserData() != null && fb.getUserData().equals("jump")) {
+            System.out.print("jump baby");
+        }
         if (fa.getUserData() != null && fa.getUserData().equals("corner")) {
            // cornerCollision = true;
 
