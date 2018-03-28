@@ -210,6 +210,9 @@ public class Play extends GameState {
             createEnemy();
         }
         else {
+            if(enemies.get(0).getBody().getPosition().y < 0) {
+                enemies.get(0).getBody().setTransform(player.getposition().x + 5, player.getposition().y + 5, 0);
+            }
             enemies.get(0).getBody().setTransform(enemy.getposition().x - 0.01f,enemy.getposition().y, 0);
         }
         enemyBodies.clear();
@@ -260,6 +263,8 @@ public class Play extends GameState {
             if (level == 1) {
                 gsm.setState(GameStateManager.LEVEL_SELECT);
             } else if (level == 3) {
+                gsm.setState(GameStateManager.MENU);
+            } else if (level == 8) {
                 gsm.setState(GameStateManager.MENU);
             }
         }
