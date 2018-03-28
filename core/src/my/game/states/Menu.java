@@ -31,7 +31,6 @@ public class Menu extends GameState{
     private boolean debug = false;
 
     private Background bg;
-    private Animation animation;
     private GameButton playButton;
     private GameButton exitButton;
 
@@ -48,14 +47,6 @@ public class Menu extends GameState{
         Texture tex = Game.res.getTexture("menubg");
         bg = new Background(new TextureRegion(tex),hudCam,5 );
         bg.setVector(0, 0);
-
-        tex = Game.res.getTexture("bunny");
-        TextureRegion[] reg = new TextureRegion[4];
-        for(int i = 0; i < reg.length; i++) {
-            reg[i] = new TextureRegion(tex, i * 32, 0, 32, 32);
-        }
-        animation = new Animation(reg, 1 / 12f);
-
 
         tex = Game.res.getTexture("main");
         menuButtons = new TextureRegion[5];
@@ -113,7 +104,6 @@ public class Menu extends GameState{
         world.step(dt / 5, 8, 3);
 
         bg.update(dt);
-        animation.update(dt);
 
         playButton.update(dt);
 
@@ -128,11 +118,6 @@ public class Menu extends GameState{
 
         // draw button
         playButton.render(sb);
-
-        // draw bunny
-        sb.begin();
-        sb.draw(animation.getFrame(), 146, 31);
-        sb.end();
 
         // debug draw box2d
         if(debug) {

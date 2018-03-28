@@ -17,7 +17,7 @@ public class Game implements ApplicationListener {
 	public static final float STEP = 1 / 90f;
 
 	private SpriteBatch sb;
-	private BoundedCamera cam;
+	private static BoundedCamera cam;
 	private OrthographicCamera hudCam;
 
 	private GameStateManager gsm;
@@ -25,7 +25,7 @@ public class Game implements ApplicationListener {
 	public static Content res;
 
 	public SpriteBatch getSpriteBatch(){return sb;}
-	public BoundedCamera getCamera(){return cam;}
+	public static BoundedCamera getCamera(){return cam;}
 	public OrthographicCamera getHUDCamera(){return hudCam;}
 
 
@@ -48,6 +48,11 @@ public class Game implements ApplicationListener {
 		res.loadTexture("res/background/rsz_karkkimaas.png","bgones");
 		res.loadTexture("res/background/mountains.png", "mountain");
 		res.loadTexture("res/images/char.png","char");
+		res.loadTexture("res/images/bullet.png","bullet");
+		res.loadTexture("res/UI_assets/heartSilhoutte.png","heartSilhoutte");
+		res.loadTexture("res/UI_assets/ammoSilhoutte.png","ammoSilhoutte");
+		res.loadTexture("res/UI_assets/heart.png","heart");
+		res.loadTexture("res/UI_assets/ammo.png","ammo");
 
 		res.loadSound("res/sfx/necksnap.mp3","snap");
 		res.loadSound("res/sfx/hit.wav","hit");

@@ -5,9 +5,11 @@ import com.badlogic.gdx.InputAdapter;
 
 import my.game.Game;
 import my.game.entities.Background;
+import my.game.entities.Enemy;
 import my.game.entities.HUD;
 import my.game.entities.PickUp;
 import my.game.entities.Player;
+import my.game.entities.Projectile;
 import my.game.entities.TextureDraw;
 import my.game.handlers.B2DVars;
 
@@ -48,6 +50,8 @@ public class Play extends GameState {
     private World world;
     private Box2DDebugRenderer b2dr;
 
+    public static float accumulator = 0;
+
     //private OrthographicCamera b2dCam;
     private BoundedCamera b2dCam;
 
@@ -63,7 +67,11 @@ public class Play extends GameState {
     private MyContacListener cl;
 
     private Player player;
+    private Projectile bullet;
+    private Enemy enemy;
     private Array<PickUp> crystals;
+    private Array<Enemy> enemies;
+    // private Array<Projectile> bullets;
     private TextureDraw win;
     private Vector3 touchPoint;
 
@@ -92,6 +100,12 @@ public class Play extends GameState {
 
         //create winblock
         createWin();
+
+        //Create bullet
+        createBullet();
+
+        //Create enemy
+        createEnemy();
 
         // create backgrounds
         Texture bgs = Game.res.getTexture("bgones");
@@ -131,7 +145,22 @@ public class Play extends GameState {
                 translateScreenToWorldCoordinates(x, y);
 
                 if (rightSideTouched(touchPoint.x, touchPoint.y)) {
-                    //switchBlocks();
+                    // If the player has ammo and bullet is not on cooldown, shoot the bullet.
+                    if (player.returnNumberOfAmmo() > 0 && !bullet.returnCoolDownState()) {
+                        bullet.resetBullet(player.getposition().x, player.getposition().y);
+                        // Check if the touch is below or above player.
+                        if(touchPoint.y / PPM >= player.getposition().y) {
+                            bullet.shootBullet(touchPoint.x / PPM, touchPoint.y / PPM, false);
+                        }
+                        else {
+                            bullet.shootBullet(touchPoint.x / PPM, (touchPoint.y / PPM) - player.getposition().y , true);
+                        }
+
+                    }
+                    else {
+                        // After teh bullet's been shot, deploy a little cool down.
+                        bullet.checkBulletCoolDown();
+                    }
 
 
                 } else if (leftSideTouched(touchPoint.x, touchPoint.y)) {
@@ -159,7 +188,7 @@ public class Play extends GameState {
             }
         });
 
-        world.step(Game.STEP, 1, 1);
+        stepWorld();
 
         //remove pickups
         Array<Body> bodies = cl.getBodiesToRemove();
@@ -171,13 +200,59 @@ public class Play extends GameState {
         }
         bodies.clear();
 
+        Array<Body> enemyBodies = cl.getEnemyBodiesToRemove();
+
+        if(enemyBodies.size > 0) {
+            Body b = enemy.getBody();
+            enemies.removeValue((Enemy) b.getUserData(), true);
+            world.destroyBody(b);
+            enemy.enemyDestroyed();
+            createEnemy();
+        }
+        else {
+            enemies.get(0).getBody().setTransform(enemy.getposition().x - 0.01f,enemy.getposition().y, 0);
+        }
+        enemyBodies.clear();
+
+        /*
+        Array<Body> bulletBodies = cl.getBulletBodiesToRemove();
+
+        if(bulletBodies.size > 0) {
+            Body b = bullet.getBody();
+            bullets.removeValue((Projectile) b.getUserData(), true);
+            world.destroyBody(b);
+            createBullet();
+        }
+        bulletBodies.clear();*/
+        /*
+
+        for (int i = 0; i < bullets.size; i++) {
+            bullets.get(i).update(dt);
+            bullet.checkBulletCoolDown();
+        }*/
+
         player.update(dt);
+
+        if(Projectile.returnBulletHitState()) {
+            bullet.getBody().setTransform(-100,-100,0);
+            Projectile.bulletNotHit();
+        }
+        bullet.update(dt);
+        bullet.checkBulletCoolDown();
 
         for (int i = 0; i < crystals.size; i++) {
             crystals.get(i).update(dt);
         }
 
+        for (int i = 0; i < enemies.size; i++) {
+            enemies.get(i).update(dt);
+        }
+
         if (player.getBody().getPosition().y < 0) {
+            gsm.setState(GameStateManager.GAMEOVER);
+        }
+
+        if(Player.gameIsOver()) {
             gsm.setState(GameStateManager.GAMEOVER);
         }
 
@@ -237,6 +312,11 @@ public class Play extends GameState {
             crystals.get(i).render(sb);
         }
 
+        //draw enemy
+        for (int i = 0; i < enemies.size; i++) {
+            enemies.get(i).render(sb);
+        }
+
         //draw win
         win.render(sb);
 
@@ -244,8 +324,13 @@ public class Play extends GameState {
         sb.setProjectionMatrix(hudCam.combined);
         hud.render(sb);
 
-        //draw box2d world
-        //b2dr.render(world, b2dCam.combined);
+        //draw enemy
+        sb.setProjectionMatrix(cam.combined);
+        /*
+        for (int i = 0; i < bullets.size; i++) {
+            bullets.get(i).render(sb);
+        }*/
+        bullet.render(sb);
 
     }
 
@@ -268,7 +353,7 @@ public class Play extends GameState {
         shape.setAsBox(13 / PPM, 15 / PPM);
         fdef.shape = shape;
         fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-        fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_CRYSTAL | B2DVars.BIT_CORNER;
+        fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_CRYSTAL | B2DVars.BIT_CORNER | B2DVars.BIT_ENEMY;;
         body.createFixture(fdef).setUserData("player");
         shape.dispose();
 
@@ -348,7 +433,7 @@ public class Play extends GameState {
                 fd.friction = 0;
                 fd.shape = cs;
                 fd.filter.categoryBits = bits;
-                fd.filter.maskBits = B2DVars.BIT_PLAYER;
+                fd.filter.maskBits = B2DVars.BIT_PLAYER | B2DVars.BIT_ENEMY;;
                 world.createBody(bdef).createFixture(fd).setUserData("Ground");
                 cs.dispose();
 
@@ -510,5 +595,67 @@ public class Play extends GameState {
             body.setUserData(win);
         }
     }
-}}
+    }
+
+    private void createBullet() {
+        //bullets = new Array<Projectile>();
+        BodyDef bdef = new BodyDef();
+        PolygonShape shape = new PolygonShape();
+        FixtureDef fdef = new FixtureDef();
+
+        bdef.position.set(-100, -100);
+        bdef.linearVelocity.set(0, 0);
+        bdef.type = BodyDef.BodyType.DynamicBody;
+        Body body = world.createBody(bdef);
+        body.setGravityScale(0);
+
+        shape.setAsBox(13 / PPM, 15 / PPM);
+        fdef.shape = shape;
+        fdef.filter.categoryBits = B2DVars.BIT_BULLET;
+        fdef.filter.maskBits = B2DVars.BIT_ENEMY;
+        body.createFixture(fdef).setUserData("bullet");
+        shape.dispose();
+
+        //create player
+        bullet = new Projectile(body);
+        // bullets.add(bullet);
+        // body.setUserData(bullet);
+    }
+
+
+    private void createEnemy() {
+        enemies = new Array<Enemy>();
+        BodyDef bdef = new BodyDef();
+        PolygonShape shape = new PolygonShape();
+        FixtureDef fdef = new FixtureDef();
+
+        bdef.position.set(player.getposition().x + 5, player.getposition().y + 5);
+        bdef.linearVelocity.set(0, 0);
+        bdef.type = BodyDef.BodyType.DynamicBody;
+        Body body = world.createBody(bdef);
+        body.setGravityScale(3);
+
+        shape.setAsBox(13 / PPM, 15 / PPM);
+        fdef.shape = shape;
+        fdef.filter.categoryBits = B2DVars.BIT_ENEMY;
+        fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER | B2DVars.BIT_BULLET;
+        body.createFixture(fdef).setUserData("enemy");
+        shape.dispose();
+
+        //create enemy
+        enemy = new Enemy(body);
+        enemies.add(enemy);
+        body.setUserData(enemy);
+    }
+
+    public void stepWorld() {
+        float delta = Gdx.graphics.getDeltaTime();
+        accumulator += Math.min(delta, 0.25f);
+
+        if (accumulator >= Game.STEP) {
+            accumulator -= Game.STEP;
+            world.step(Game.STEP, 1, 1);
+        }
+    }
+}
 

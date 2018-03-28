@@ -18,6 +18,11 @@ public class HUD {
     private TextureRegion crystal;
     private TextureRegion[] font;
 
+    private Texture heartTexture;
+    private Texture heartSilhoutteTexture;
+    private Texture ammoTexture;
+    private Texture ammoSilhoutteTexture;
+
     public HUD(Player player) {
         this.player = player;
 
@@ -37,6 +42,11 @@ public class HUD {
         for (int i = 0; i < 5; i++) {
             font[i + 6] = new TextureRegion(tex, 32 + i * 9, 25, 9, 9);
         }
+
+        heartTexture = Game.res.getTexture("heart");
+        heartSilhoutteTexture = Game.res.getTexture("heartSilhoutte");
+        ammoTexture = Game.res.getTexture("ammo");
+        ammoSilhoutteTexture = Game.res.getTexture("ammoSilhoutte");
     }
 
     public void render(SpriteBatch sb) {
@@ -45,6 +55,22 @@ public class HUD {
 
         // draw crystal
         sb.draw(crystal, 100, 208);
+
+        // Draw the hearts and empty hearts.
+        for(int i = 0; i < Player.returnMaxHealth(); i++) {
+            sb.draw(heartSilhoutteTexture, 5 + (i*17),222, 12,12);
+        }
+        for(int i = 0; i < Player.returnHealth(); i++) {
+            sb.draw(heartTexture, 5 + (i*17),222, 12,12);
+        }
+
+        // Draw the ammo and empty ammo.
+        for(int i = 0; i < Player.returnMaxAmmo(); i++) {
+            sb.draw(ammoSilhoutteTexture, 5 + (i*17),190, 12,24);
+        }
+        for(int i = 0; i < Player.returnNumberOfAmmo(); i++) {
+            sb.draw(ammoTexture, 5 + (i*17),190, 12,24);
+        }
 
         // draw crystal amount
         drawString(sb, player.getNumCrystals() + " / " + player.getTotalCrystals(), 132, 211);
@@ -62,3 +88,4 @@ public class HUD {
 
     }
 }
+//

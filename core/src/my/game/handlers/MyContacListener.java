@@ -10,6 +10,8 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.utils.Array;
 
 import my.game.Game;
+import my.game.entities.Player;
+import my.game.entities.Projectile;
 import my.game.states.Play;
 
 import static my.game.handlers.B2DVars.PPM;
@@ -25,9 +27,13 @@ public class MyContacListener implements ContactListener {
     private int numFootContacts;
     public boolean wincontact;
     private Array<Body> bodiesToRemove;
+    private Array<Body> enemyBodiesToRemove;
+    private Array<Body> bulletBodiesToRemove;
 
     public MyContacListener() {
         bodiesToRemove = new Array<Body>();
+        enemyBodiesToRemove = new Array<Body>();
+        bulletBodiesToRemove = new Array<Body>();
     }
 
     @Override
@@ -41,18 +47,48 @@ public class MyContacListener implements ContactListener {
         if (fb.getUserData() != null && fb.getUserData().equals("foot")) {
             numFootContacts++;
         }
-        if (fa.getUserData() != null && fa.getUserData().equals("crystal")) {
+
+        // Check collision between player and pickups.
+        if(fa.getUserData() != null && fa.getUserData().equals("crystal")){
             //remove pickup
             bodiesToRemove.add(fa.getBody());
+            Player.increaseAmmo();
         }
-        if (fb.getUserData() != null && fb.getUserData().equals("crystal")) {
+        if(fb.getUserData() != null && fb.getUserData().equals("crystal")){
             bodiesToRemove.add(fb.getBody());
+            Player.increaseAmmo();
         }
-        if (fa.getUserData() != null && fa.getUserData().equals("win")) {
+
+        // Check collision between player and win block.
+        if(fa.getUserData() != null && fa.getUserData().equals("win")){
             wincontact = true;
         }
-        if (fb.getUserData() != null && fb.getUserData().equals("win")) {
+        if(fb.getUserData() != null && fb.getUserData().equals("win")){
             wincontact = true;
+        }
+
+        // Check collisions between enemy and player/bullet.
+        if(fa.getUserData() != null && fa.getUserData().equals("enemy")) {
+            if(fb.getUserData().equals("player")) {
+                enemyBodiesToRemove.add(fa.getBody());
+                Player.loseHealth();
+            }
+            else if(fb.getUserData().equals("bullet")) {
+                enemyBodiesToRemove.add(fa.getBody());
+                Projectile.bulletHit();
+                // bulletBodiesToRemove.add(fb.getBody());
+            }
+        }
+        if(fb.getUserData() != null && fb.getUserData().equals("enemy")) {
+            if(fa.getUserData().equals("player")) {
+                enemyBodiesToRemove.add(fb.getBody());
+                Player.loseHealth();
+            }
+            else if(fa.getUserData().equals("bullet")) {
+                enemyBodiesToRemove.add(fb.getBody());
+                Projectile.bulletHit();
+                //  bulletBodiesToRemove.add(fa.getBody());
+            }
         }
         if (fa.getUserData() != null && fa.getUserData().equals("jump")) {
             System.out.print("jump baby");
@@ -131,7 +167,8 @@ public class MyContacListener implements ContactListener {
     public Array<Body> getBodiesToRemove() {
         return bodiesToRemove;
     }
-
+    public Array<Body> getEnemyBodiesToRemove(){return enemyBodiesToRemove;}
+    public Array<Body> getBulletBodiesToRemove(){return bulletBodiesToRemove;}
     public boolean isPlayerWin() {
         return wincontact;
     }

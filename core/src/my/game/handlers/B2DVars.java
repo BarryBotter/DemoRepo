@@ -16,6 +16,8 @@ public class B2DVars {
     public static final short BIT_JUMP =16;
     public static final short BIT_CRYSTAL = 32;
     public static final short BIT_GROUND = 64;
+    public static final short BIT_BULLET = 128;
+    public static final short BIT_ENEMY = 256;
 
     public static final short BIT_TOP_BLOCK = 2;
     public static final short BIT_TOP_PLATFORM = 8;
