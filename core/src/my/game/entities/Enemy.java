@@ -36,8 +36,8 @@ public class Enemy extends B2DSprite{
 
     public Enemy(Body body) {
         super(body);
-        Texture tex = Game.res.getTexture("bunny");
-        TextureRegion[] sprites = TextureRegion.split(tex,32,32)[0];
+        Texture tex = Game.res.getTexture("happyTooth");
+        TextureRegion[] sprites = TextureRegion.split(tex,35,34)[0];
         setAnimation(sprites, 1/12f);
     }
 

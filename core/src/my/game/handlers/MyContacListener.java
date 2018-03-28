@@ -71,10 +71,12 @@ public class MyContacListener implements ContactListener {
         if(fa.getUserData() != null && fa.getUserData().equals("enemy")) {
             if(fb.getUserData().equals("player")) {
                 enemyBodiesToRemove.add(fa.getBody());
+                Game.res.getSound("snap").play();
                 Player.loseHealth();
             }
             else if(fb.getUserData().equals("bullet")) {
                 enemyBodiesToRemove.add(fa.getBody());
+                Game.res.getSound("hit").play();
                 Projectile.bulletHit();
                 // bulletBodiesToRemove.add(fb.getBody());
             }
@@ -82,10 +84,12 @@ public class MyContacListener implements ContactListener {
         if(fb.getUserData() != null && fb.getUserData().equals("enemy")) {
             if(fa.getUserData().equals("player")) {
                 enemyBodiesToRemove.add(fb.getBody());
+                Game.res.getSound("snap").play();
                 Player.loseHealth();
             }
             else if(fa.getUserData().equals("bullet")) {
                 enemyBodiesToRemove.add(fb.getBody());
+                Game.res.getSound("hit").play();
                 Projectile.bulletHit();
                 //  bulletBodiesToRemove.add(fa.getBody());
             }

@@ -130,6 +130,7 @@ public class Play extends GameState {
 
         //setup touch areas
         setupTouchControlAreas();
+
     }
 
     @Override
@@ -251,14 +252,18 @@ public class Play extends GameState {
             enemies.get(i).update(dt);
         }
 
+        // Game over stuff
         if (player.getBody().getPosition().y < 0) {
+            Game.res.getSound("snap").play();
             gsm.setState(GameStateManager.GAMEOVER);
         }
 
         if(Player.gameIsOver()) {
+            Game.res.getSound("snap").play();
             gsm.setState(GameStateManager.GAMEOVER);
         }
 
+        // Win stuff
         if (cl.isPlayerWin() == true) {
             if (level == 1) {
                 gsm.setState(GameStateManager.LEVEL_SELECT);
