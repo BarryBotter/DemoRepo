@@ -43,12 +43,18 @@ public class Game implements ApplicationListener {
 		res.loadTexture("res/UI_final/rebg.png","menubg");
 		res.loadTexture("res/UI_final/resized_paavalikko.png","main");
 		res.loadTexture("res/UI_final/resized_hammas.png","tooth");
-		res.loadSound("res/sfx/necksnap.mp3","snap");
+		res.loadTexture("res/images/Game_Over.png", "gameover");
+		res.loadTexture("res/background/testimaa.png","bgone");
+		res.loadTexture("res/background/rsz_karkkimaas.png","bgones");
+		res.loadTexture("res/background/mountains.png", "mountain");
 
-		res.loadMusic("res/music/bbsong.ogg");
-		res.getMusic("bbsong").setLooping(true);
-		res.getMusic("bbsong").setVolume(0.5f);
-		res.getMusic("bbsong").play();
+		res.loadSound("res/sfx/necksnap.mp3","snap");
+		res.loadSound("res/sfx/hit.wav","hit");
+
+		//res.loadMusic("res/music/bbsong.ogg");
+		//res.getMusic("bbsong").setLooping(true);
+		//res.getMusic("bbsong").setVolume(0.5f);
+		//res.getMusic("bbsong").play();
 
 		sb = new SpriteBatch();
 		cam = new BoundedCamera();

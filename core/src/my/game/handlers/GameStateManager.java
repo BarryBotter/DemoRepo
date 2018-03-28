@@ -3,6 +3,8 @@ package my.game.handlers;
 import com.badlogic.gdx.Game;
 
 import java.util.Stack;
+
+import my.game.states.GameOver;
 import my.game.states.GameState;
 import my.game.states.LevelSelect;
 import my.game.states.Menu;
@@ -21,6 +23,7 @@ public class GameStateManager {
     public static final int PLAY = 2182301;
     public static final int MENU = 823183;
     public static final int LEVEL_SELECT = 323971;
+    public static final int GAMEOVER = 213212;
 
 
     public GameStateManager(my.game.Game game){
@@ -51,6 +54,10 @@ public class GameStateManager {
         if (state == LEVEL_SELECT)
         {
             return new LevelSelect(this);
+        }
+        if (state == GAMEOVER)
+        {
+            return new GameOver(this);
         }
         return null;
     }

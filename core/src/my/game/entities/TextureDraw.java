@@ -16,7 +16,8 @@ public class TextureDraw extends B2DSprite {
 
     Texture tex;
 
-    public TextureDraw(Body body, String key ) {
+
+    public TextureDraw(Body body, String key) {
         super(body);
 
         tex = Game.res.getTexture(key);
@@ -25,7 +26,7 @@ public class TextureDraw extends B2DSprite {
     public void render(SpriteBatch sb)
     {
         sb.begin();
-        sb.draw(tex,body.getPosition().x * B2DVars.PPM - width / 2, body.getPosition().y * B2DVars.PPM - height/2,25,25 );
+        sb.draw(tex,body.getPosition().x * B2DVars.PPM - width / 2, body.getPosition().y * B2DVars.PPM - height/2,25,25);
         sb.end();
     }
 }

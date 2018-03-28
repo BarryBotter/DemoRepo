@@ -3,9 +3,10 @@
  <tileset firstgid="1" name="blocks" tilewidth="32" tileheight="32" tilecount="3" columns="3">
   <image source="blocks.png" width="96" height="32"/>
  </tileset>
+ <tileset firstgid="4" source="block.tsx"/>
  <layer name="platforms" width="78" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUjIJRMJQBIxEYBJiR8HAC6P5EB0xoeKQBQukClxpqA/R4gGFi0i+6u3CZhQuDADOJmBqAVDtJcQcA3LwAsQ==
+   eJxjYBgFo2B4AykseBQQB0bDbGgARiIwCDAj4eEE0P2JDpjQ8EgDhNIFLjXUBujxAMPEpF90d+EyCxcGAWYSMTUAqXaS4g4ACkYBgQ==
   </data>
  </layer>
  <objectgroup name="win">

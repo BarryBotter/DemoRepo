@@ -93,20 +93,23 @@ public class Play extends GameState {
         //create winblock
         createWin();
 
-        //create background
-        Texture bgs = Game.res.getTexture("bg");
+        // create backgrounds
+        Texture bgs = Game.res.getTexture("bgones");
         TextureRegion sky = new TextureRegion(bgs, 0, 0, 320, 240);
-        TextureRegion clouds = new TextureRegion(bgs, 0, 240, 320, 240);
-        TextureRegion mountains = new TextureRegion(bgs, 0, 480, 320, 240);
+        TextureRegion mountains = new TextureRegion(bgs, 0,235 , 320, 240);
+        Texture trees = Game.res.getTexture("bgone");
+        TextureRegion  treeLayer = new TextureRegion(trees, 0, 27, 320, 240);
         backgrounds = new Background[3];
         backgrounds[0] = new Background(sky, cam, 0f);
-        backgrounds[1] = new Background(clouds, cam, 0.1f);
-        backgrounds[2] = new Background(mountains, cam, 0.2f);
+        backgrounds[1] = new Background(mountains, cam, 0.1f);
+        backgrounds[2] = new Background(treeLayer, cam, 0.2f);
 
-       /* setup box2dcam
-        b2dCam = new BoundedCamera();
-        b2dCam.setToOrtho(false, Game.V_WIDTH / PPM, Game.V_HEIGHT / PPM);
-        b2dCam.setBounds(0,(tileMapWidth * tileSize) / PPM,0,(tileMapHeight * tileSize ) / PPM);*/
+
+
+        ///setup box2dcam
+        //b2dCam = new BoundedCamera();
+        //b2dCam.setToOrtho(false, Game.V_WIDTH / PPM, Game.V_HEIGHT / PPM);
+        //b2dCam.setBounds(0,(tileMapWidth * tileSize) / PPM,0,(tileMapHeight * tileSize ) / PPM);
 
         // set up hud
         hud = new HUD(player);
@@ -139,7 +142,7 @@ public class Play extends GameState {
 
                         if (player.getBody().getLinearVelocity().x < 0.5f) {
                             float posX = player.getBody().getPosition().x;
-                            player.getBody().setTransform(posX - 1, player.getBody().getPosition().y, 0);
+                           // player.getBody().setTransform(posX - 0.75f, player.getBody().getPosition().y, 0);
                             player.getBody().setLinearVelocity(1.5f, 0);
                         }
 
@@ -175,7 +178,7 @@ public class Play extends GameState {
         }
 
         if (player.getBody().getPosition().y < 0) {
-            gsm.setState(GameStateManager.MENU);
+            gsm.setState(GameStateManager.GAMEOVER);
         }
 
         if (cl.isPlayerWin() == true) {
@@ -185,6 +188,7 @@ public class Play extends GameState {
                 gsm.setState(GameStateManager.MENU);
             }
         }
+
     }
 
     private boolean rightSideTouched(float x, float y) {
@@ -211,7 +215,7 @@ public class Play extends GameState {
         //set cam to follow player
         cam.position.set(
                 player.getposition().x * PPM + Game.V_WIDTH / 4,
-                Game.V_HEIGHT / 2, 0);
+                /*Game.V_HEIGHT / 2*/player.getposition().y * PPM +Game.V_HEIGHT/4, 0);
         cam.update();
 
         // draw bgs
@@ -255,7 +259,7 @@ public class Play extends GameState {
         PolygonShape shape = new PolygonShape();
         FixtureDef fdef = new FixtureDef();
 
-        bdef.position.set(70 / PPM, 250 / PPM);
+        bdef.position.set(70 / PPM, 100 / PPM);
         bdef.linearVelocity.set(1.5f, 0);
         bdef.type = BodyDef.BodyType.DynamicBody;
         Body body = world.createBody(bdef);
@@ -264,7 +268,7 @@ public class Play extends GameState {
         shape.setAsBox(13 / PPM, 15 / PPM);
         fdef.shape = shape;
         fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-        fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_CRYSTAL;
+        fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_CRYSTAL | B2DVars.BIT_CORNER;
         body.createFixture(fdef).setUserData("player");
         shape.dispose();
 
@@ -301,6 +305,11 @@ public class Play extends GameState {
 
         if (layer != null)
         createBlocks(layer, B2DVars.BIT_GROUND);
+
+        layer = (TiledMapTileLayer) tileMap.getLayers().get("corner");
+
+        if (layer != null)
+        createCorners(layer, B2DVars.BIT_CORNER);
     }
 
 
@@ -336,6 +345,46 @@ public class Play extends GameState {
                 fd.filter.categoryBits = bits;
                 fd.filter.maskBits = B2DVars.BIT_PLAYER;
                 world.createBody(bdef).createFixture(fd).setUserData("Ground");
+                cs.dispose();
+
+            }
+        }
+
+    }
+
+    private void createCorners(TiledMapTileLayer layer, short bits) {
+
+        // tile size
+        float ts = layer.getTileWidth();
+
+        // go through all cells in layer
+        for (int row = 0; row < layer.getHeight(); row++) {
+            for (int col = 0; col < layer.getWidth(); col++) {
+
+                // get cell
+                TiledMapTileLayer.Cell cell = layer.getCell(col, row);
+
+                // check that there is a cell
+                if (cell == null) continue;
+                if (cell.getTile() == null) continue;
+
+                // create body from cell
+                BodyDef bdef = new BodyDef();
+                bdef.type = BodyDef.BodyType.StaticBody;
+                bdef.position.set((col + 0.5f) * ts / PPM, (row + 0.5f) * ts / PPM);
+                ChainShape cs = new ChainShape();
+                Vector2[] v = new Vector2[3];
+                v[0] = new Vector2(-ts / 2 / PPM, -ts / 2 / PPM);
+                v[1] = new Vector2(-ts / 2 / PPM, ts / 2 / PPM);
+                v[2] = new Vector2(ts / 2 / PPM, ts / 2 / PPM);
+                cs.createChain(v);
+                FixtureDef fd = new FixtureDef();
+                fd.friction = 0;
+                fd.shape = cs;
+                fd.restitution = 1;
+                fd.filter.categoryBits = bits;
+                fd.filter.maskBits = B2DVars.BIT_PLAYER;
+                world.createBody(bdef).createFixture(fd).setUserData("corner");
                 cs.dispose();
 
             }
