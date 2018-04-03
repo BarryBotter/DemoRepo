@@ -94,11 +94,10 @@ public class MyContacListener implements ContactListener {
                 //  bulletBodiesToRemove.add(fa.getBody());
             }
         }
-        if (fa.getUserData() != null && fa.getUserData().equals("jump")) {
-            System.out.print("jump baby");
-        }
-        if (fb.getUserData() != null && fb.getUserData().equals("jump")) {
-            System.out.print("jump baby");
+        if (fb.getUserData() != null && fb.getUserData().equals("trap")) {
+            if (fa.getUserData().equals("player")) {
+                Player.loseHealth();
+            }
         }
         if (fa.getUserData() != null && fa.getUserData().equals("corner")) {
            // cornerCollision = true;

@@ -7,7 +7,7 @@
  </tileset>
  <layer name="corner" width="200" height="8">
   <data encoding="base64" compression="zlib">
-   eJzt0cEJADAIBEF/9t9xSkhAIfeYeR+yYBUAAAAAzPXvgEebnbdbvbSZSvxNUlNSC7DnAI1DAEc=
+   eJzt06ERAAAIAzEc+2+MR2FQTe66Qb8KAACAT70G6TRBksvPNQHwYwAqYQBj
   </data>
  </layer>
  <layer name="platforms" width="200" height="8">

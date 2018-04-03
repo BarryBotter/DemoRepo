@@ -38,8 +38,11 @@ import my.game.handlers.BoundedCamera;
 import my.game.handlers.GameStateManager;
 import my.game.handlers.MyContacListener;
 
+import static my.game.handlers.B2DVars.BIT_CORNER;
+import static my.game.handlers.B2DVars.BIT_CRYSTAL;
 import static my.game.handlers.B2DVars.BIT_ENEMY;
 import static my.game.handlers.B2DVars.BIT_GROUND;
+import static my.game.handlers.B2DVars.BIT_JUMP;
 import static my.game.handlers.B2DVars.BIT_PLAYER;
 import static my.game.handlers.B2DVars.BIT_TRAP;
 import static my.game.handlers.B2DVars.LVL_UNLOCKED;
@@ -379,7 +382,7 @@ public class Play extends GameState {
         shape.setAsBox(13 / PPM, 15 / PPM);
         fdef.shape = shape;
         fdef.filter.categoryBits = BIT_PLAYER;
-        fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_CRYSTAL | B2DVars.BIT_CORNER | BIT_ENEMY;;
+        fdef.filter.maskBits = BIT_GROUND | BIT_CRYSTAL | BIT_CORNER | BIT_ENEMY | BIT_TRAP;
         body.createFixture(fdef).setUserData("player");
         shape.dispose();
 
@@ -387,7 +390,7 @@ public class Play extends GameState {
         shape.setAsBox(15 / PPM, 2 / PPM, new Vector2(0, -17 / PPM), 0);
         fdef.shape = shape;
         fdef.filter.categoryBits = BIT_PLAYER;
-        fdef.filter.maskBits = B2DVars.BIT_GROUND;
+        fdef.filter.maskBits = BIT_GROUND | BIT_CORNER;
         fdef.isSensor = true;
         body.createFixture(fdef).setUserData("foot");
         shape.dispose();
@@ -415,17 +418,17 @@ public class Play extends GameState {
         layer = (TiledMapTileLayer) tileMap.getLayers().get("platforms");
 
         if (layer != null)
-        createBlocks(layer, B2DVars.BIT_GROUND);
+        createBlocks(layer, BIT_GROUND);
 
         layer = (TiledMapTileLayer) tileMap.getLayers().get("corner");
 
         if (layer != null)
-        createCorners(layer, B2DVars.BIT_CORNER);
+        createCorners(layer, BIT_CORNER);
 
         layer = (TiledMapTileLayer) tileMap.getLayers().get("jumps");
 
         if (layer != null)
-            createJump(layer, B2DVars.BIT_JUMP);
+            createJump(layer, BIT_JUMP);
     }
 
 
@@ -572,7 +575,7 @@ public class Play extends GameState {
 
             fdef.shape = cshape;
             fdef.isSensor = true;
-            fdef.filter.categoryBits = B2DVars.BIT_CRYSTAL;
+            fdef.filter.categoryBits = BIT_CRYSTAL;
             fdef.filter.maskBits = BIT_PLAYER;
 
             Body body = world.createBody(bdef);
@@ -645,7 +648,7 @@ public class Play extends GameState {
 
             fdef.shape = cshape;
             fdef.isSensor = true;
-            fdef.filter.categoryBits = B2DVars.BIT_CRYSTAL;
+            fdef.filter.categoryBits = BIT_CRYSTAL;
             fdef.filter.maskBits = BIT_PLAYER;
 
             Body body = world.createBody(bdef);
@@ -725,6 +728,7 @@ public class Play extends GameState {
         levelS = game.lvls.getInteger("key");
 
         if(level < levelS){
+            //LVL_UNLOCKED = level;
         }
         else if (level >= levelS)
         LVL_UNLOCKED = LVL_UNLOCKED +1;
