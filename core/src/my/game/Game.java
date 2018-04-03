@@ -2,12 +2,15 @@ package my.game;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import my.game.handlers.BoundedCamera;
 import my.game.handlers.Content;
 import my.game.handlers.GameStateManager;
+
+import static my.game.handlers.B2DVars.LVL_UNLOCKED;
 
 public class Game implements ApplicationListener {
 
@@ -23,6 +26,7 @@ public class Game implements ApplicationListener {
 	private GameStateManager gsm;
 
 	public static Content res;
+	public static Preferences lvls;
 
 	public SpriteBatch getSpriteBatch(){return sb;}
 	public static BoundedCamera getCamera(){return cam;}
@@ -70,6 +74,10 @@ public class Game implements ApplicationListener {
 		hudCam.setToOrtho(false, V_WIDTH,V_HEIGHT);
 
 		gsm = new GameStateManager(this);
+
+		lvls = Gdx.app.getPreferences("mylvls");
+		if(!lvls.contains("key")) lvls.putInteger("key", LVL_UNLOCKED);
+		lvls.flush();
 
 	}
 

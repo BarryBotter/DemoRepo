@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.3" orientation="orthogonal" renderorder="right-down" width="100" height="8" tilewidth="32" tileheight="32" infinite="0" nextobjectid="12">
+<map version="1.0" tiledversion="2018.03.21" orientation="orthogonal" renderorder="right-down" width="200" height="8" tilewidth="32" tileheight="32" infinite="0" nextobjectid="53">
  <tileset firstgid="1" source="blocks.tsx"/>
- <layer name="platforms" width="100" height="8">
+ <tileset firstgid="4" source="demoblock.tsx"/>
+ <tileset firstgid="8" name="blocks" tilewidth="32" tileheight="32" tilecount="3" columns="3">
+  <image source="blocks.png" width="96" height="32"/>
+ </tileset>
+ <layer name="corner" width="200" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo4B6gJEAHgXUBZSG92hckQYGMn2PxLw1VP081NwLA0M1vMkBg8GfIym8yQXUDKPR8KYtIBS+6BgACo4AaQ==
+   eJzt0cEJADAIBEF/9t9xSkhAIfeYeR+yYBUAAAAAzPXvgEebnbdbvbSZSvxNUlNSC7DnAI1DAEc=
   </data>
  </layer>
+ <layer name="platforms" width="200" height="8">
+  <data encoding="base64" compression="zlib">
+   eJztwzEJAAAMA7Be9S+5CiZgkEASAAAAAAA+qnoedckEsQ==
+  </data>
+ </layer>
+ <objectgroup name="trap">
+  <object id="24" x="1625" y="24" width="104" height="56"/>
+ </objectgroup>
  <objectgroup name="win">
-  <object id="1" x="3076" y="152" width="112" height="52"/>
+  <object id="12" x="6243" y="136" width="148" height="77"/>
  </objectgroup>
 </map>

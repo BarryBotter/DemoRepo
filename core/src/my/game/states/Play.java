@@ -38,6 +38,11 @@ import my.game.handlers.BoundedCamera;
 import my.game.handlers.GameStateManager;
 import my.game.handlers.MyContacListener;
 
+import static my.game.handlers.B2DVars.BIT_ENEMY;
+import static my.game.handlers.B2DVars.BIT_GROUND;
+import static my.game.handlers.B2DVars.BIT_PLAYER;
+import static my.game.handlers.B2DVars.BIT_TRAP;
+import static my.game.handlers.B2DVars.LVL_UNLOCKED;
 import static my.game.handlers.B2DVars.PPM;
 
 /**
@@ -47,6 +52,7 @@ import static my.game.handlers.B2DVars.PPM;
 public class Play extends GameState {
 
     public static int level;
+    private int levelS;
     private World world;
     private Box2DDebugRenderer b2dr;
 
@@ -73,6 +79,7 @@ public class Play extends GameState {
     private Array<Enemy> enemies;
     // private Array<Projectile> bullets;
     private TextureDraw win;
+    private TextureDraw traps;
     private Vector3 touchPoint;
 
     private Background[] backgrounds;
@@ -97,6 +104,8 @@ public class Play extends GameState {
         //create crystals
         createCrystals();
         player.setTotalCrystals(crystals.size);
+
+        createTrap();
 
         //create winblock
         createWin();
@@ -133,6 +142,7 @@ public class Play extends GameState {
 
     }
 
+
     @Override
     public void handleInput() {
     }
@@ -168,12 +178,12 @@ public class Play extends GameState {
                     Gdx.app.log("Puoli:", "vasen");
                     if (cl.isPlayerOnGround()) {
                         player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
-                        player.getBody().applyLinearImpulse(0.3f, 6, 0, 0, true);
+                        player.getBody().applyLinearImpulse(0.4f, 6, 0, 0, true);
 
                         if (player.getBody().getLinearVelocity().x < 0.5f) {
                             float posX = player.getBody().getPosition().x;
                            // player.getBody().setTransform(posX - 0.75f, player.getBody().getPosition().y, 0);
-                            player.getBody().setLinearVelocity(1.5f, 0);
+                            player.getBody().setLinearVelocity(2f, 0);
                         }
 
                     }
@@ -266,10 +276,13 @@ public class Play extends GameState {
         // Win stuff
         if (cl.isPlayerWin() == true) {
             if (level == 1) {
-                gsm.setState(GameStateManager.LEVEL_SELECT);
-            } else if (level == 3) {
+                unlockLevel();
                 gsm.setState(GameStateManager.MENU);
-            } else if (level == 8) {
+            } else if (level == 2) {
+                unlockLevel();
+                gsm.setState(GameStateManager.MENU);
+            } else if (level == 3) {
+                unlockLevel();
                 gsm.setState(GameStateManager.MENU);
             }
         }
@@ -330,6 +343,9 @@ public class Play extends GameState {
         //draw win
         win.render(sb);
 
+        //draw traps
+        traps.render(sb);
+
         //draw hud
         sb.setProjectionMatrix(hudCam.combined);
         hud.render(sb);
@@ -362,15 +378,15 @@ public class Play extends GameState {
 
         shape.setAsBox(13 / PPM, 15 / PPM);
         fdef.shape = shape;
-        fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-        fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_CRYSTAL | B2DVars.BIT_CORNER | B2DVars.BIT_ENEMY;;
+        fdef.filter.categoryBits = BIT_PLAYER;
+        fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_CRYSTAL | B2DVars.BIT_CORNER | BIT_ENEMY;;
         body.createFixture(fdef).setUserData("player");
         shape.dispose();
 
         //create foot sensor
-        shape.setAsBox(15 / PPM, 2 / PPM, new Vector2(0, -15 / PPM), 0);
+        shape.setAsBox(15 / PPM, 2 / PPM, new Vector2(0, -17 / PPM), 0);
         fdef.shape = shape;
-        fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
+        fdef.filter.categoryBits = BIT_PLAYER;
         fdef.filter.maskBits = B2DVars.BIT_GROUND;
         fdef.isSensor = true;
         body.createFixture(fdef).setUserData("foot");
@@ -443,7 +459,7 @@ public class Play extends GameState {
                 fd.friction = 0;
                 fd.shape = cs;
                 fd.filter.categoryBits = bits;
-                fd.filter.maskBits = B2DVars.BIT_PLAYER | B2DVars.BIT_ENEMY;;
+                fd.filter.maskBits = BIT_PLAYER | BIT_ENEMY | BIT_TRAP;
                 world.createBody(bdef).createFixture(fd).setUserData("Ground");
                 cs.dispose();
 
@@ -483,7 +499,7 @@ public class Play extends GameState {
                 fd.shape = cs;
                 fd.restitution = 1;
                 fd.filter.categoryBits = bits;
-                fd.filter.maskBits = B2DVars.BIT_PLAYER;
+                fd.filter.maskBits = BIT_PLAYER;
                 world.createBody(bdef).createFixture(fd).setUserData("corner");
                 cs.dispose();
 
@@ -523,7 +539,7 @@ public class Play extends GameState {
                 fd.shape = cs;
                 fd.restitution = 3;
                 fd.filter.categoryBits = bits;
-                fd.filter.maskBits = B2DVars.BIT_PLAYER;
+                fd.filter.maskBits = BIT_PLAYER;
                 world.createBody(bdef).createFixture(fd).setUserData("jump");
                 cs.dispose();
 
@@ -557,7 +573,7 @@ public class Play extends GameState {
             fdef.shape = cshape;
             fdef.isSensor = true;
             fdef.filter.categoryBits = B2DVars.BIT_CRYSTAL;
-            fdef.filter.maskBits = B2DVars.BIT_PLAYER;
+            fdef.filter.maskBits = BIT_PLAYER;
 
             Body body = world.createBody(bdef);
             body.createFixture(fdef).setUserData("crystal");
@@ -569,6 +585,42 @@ public class Play extends GameState {
             body.setUserData(c);
         }
     }}
+    private void createTrap() {
+
+        MapLayer layer = tileMap.getLayers().get("trap");
+
+        if (layer != null) {
+
+            BodyDef bdef = new BodyDef();
+            FixtureDef fdef = new FixtureDef();
+
+            for (MapObject mo : layer.getObjects()) {
+
+                bdef.type = BodyDef.BodyType.DynamicBody;
+
+                float x = mo.getProperties().get("x", float.class) / PPM;
+                float y = mo.getProperties().get("y", float.class) / PPM;
+
+                bdef.position.set(x, y);
+
+                CircleShape cshape = new CircleShape();
+                cshape.setRadius(8 / PPM);
+
+                fdef.shape = cshape;
+                fdef.restitution = 1;
+                fdef.filter.categoryBits = BIT_TRAP;
+                fdef.filter.maskBits = BIT_PLAYER | BIT_GROUND;
+
+                Body body = world.createBody(bdef);
+                body.createFixture(fdef).setUserData("trap");
+                cshape.dispose();
+
+                 traps = new TextureDraw(body,"olvi");
+
+                body.setUserData(traps);
+            }
+        }
+    }
 
     private void createWin() {
 
@@ -594,7 +646,7 @@ public class Play extends GameState {
             fdef.shape = cshape;
             fdef.isSensor = true;
             fdef.filter.categoryBits = B2DVars.BIT_CRYSTAL;
-            fdef.filter.maskBits = B2DVars.BIT_PLAYER;
+            fdef.filter.maskBits = BIT_PLAYER;
 
             Body body = world.createBody(bdef);
             body.createFixture(fdef).setUserData("win");
@@ -622,7 +674,7 @@ public class Play extends GameState {
         shape.setAsBox(13 / PPM, 15 / PPM);
         fdef.shape = shape;
         fdef.filter.categoryBits = B2DVars.BIT_BULLET;
-        fdef.filter.maskBits = B2DVars.BIT_ENEMY;
+        fdef.filter.maskBits = BIT_ENEMY;
         body.createFixture(fdef).setUserData("bullet");
         shape.dispose();
 
@@ -647,8 +699,8 @@ public class Play extends GameState {
 
         shape.setAsBox(13 / PPM, 15 / PPM);
         fdef.shape = shape;
-        fdef.filter.categoryBits = B2DVars.BIT_ENEMY;
-        fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER | B2DVars.BIT_BULLET;
+        fdef.filter.categoryBits = BIT_ENEMY;
+        fdef.filter.maskBits = B2DVars.BIT_GROUND | BIT_PLAYER | B2DVars.BIT_BULLET;
         body.createFixture(fdef).setUserData("enemy");
         shape.dispose();
 
@@ -666,6 +718,18 @@ public class Play extends GameState {
             accumulator -= Game.STEP;
             world.step(Game.STEP, 1, 1);
         }
+    }
+
+    public void unlockLevel(){
+
+        levelS = game.lvls.getInteger("key");
+
+        if(level < levelS){
+        }
+        else if (level >= levelS)
+        LVL_UNLOCKED = LVL_UNLOCKED +1;
+        game.lvls.putInteger("key",LVL_UNLOCKED);
+        game.lvls.flush();
     }
 }
 
