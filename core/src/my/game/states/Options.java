@@ -5,10 +5,12 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -17,6 +19,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import my.game.Game;
+import my.game.entities.Background;
 import my.game.handlers.GameStateManager;
 import my.game.handlers.MyTextInputListener;
 
@@ -28,26 +32,29 @@ public class Options extends GameState {
 
     OrthographicCamera camera;
     ExtendViewport viewport;
-    SpriteBatch batch;
-    Texture logo;
+    Image logo;
+    private Background bg;
     String Name = "", soundvalue = "",difficultyString = "",hintname = "Your Name";
-    private Stage stage;
-    private int row_height,col_width,fpsInt = 0;
+    private Stage optionsStage;
+    private int row_height,col_width;
     private Label nameLabel,soundLabel,difficultyLabel;
-
 
     public Options(final GameStateManager gsm){
         super(gsm);
-        //getSettings();
+        getSettings();
 
         row_height = 1080 / 12;
         col_width = 1920 / 12;
 
-        logo = new Texture("res/UI_final/logo2.png");
+        Texture tex = Game.res.getTexture("menubg");
+        bg = new Background(new TextureRegion(tex),hudCam,5 );
+        bg.setVector(0, 0);
+
+        logo = new Image(new Texture("res/UI_final/menu_logo.png"));;
 
         //skin and stage
-        stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
+        optionsStage = new Stage(new ScreenViewport());
+        Gdx.input.setInputProcessor(optionsStage);
         Skin mySkin = new Skin(Gdx.files.internal("res/skin/glassy-ui.json"));
 
         //exitbutton (not in the table)
@@ -66,7 +73,7 @@ public class Options extends GameState {
                 return true;
             }
         });
-        stage.addActor(exitButton);
+        optionsStage.addActor(exitButton);
 
         //nameEditbutton, makes a textinputthing
         ImageButton nameEditButton = new ImageButton(mySkin);
@@ -85,7 +92,7 @@ public class Options extends GameState {
         });
 
         //name label
-        Name = game.prefs.getString("name", "no name stored");  //getting name from preferences
+        //Name = game.prefs.getString("name", "no name stored");  //getting name from preferences
         nameLabel = new Label(Name,mySkin); //labeltest
         nameLabel.setFontScale(5,5);
 
@@ -122,27 +129,36 @@ public class Options extends GameState {
                 return true;
             }
         });
-        stage.addActor(difficultyButton);
+        optionsStage.addActor(difficultyButton);
 
         //difficultylabel
         difficultyLabel = new Label(difficultyString, mySkin); //labeltest
         difficultyLabel.setFontScale(5,5);
 
-        //todo better layouting for options
+        optionsLayout(nameEditButton,difficultyButton,soundButton);
+    }
+
+    private void optionsLayout(ImageButton nameEditButton,ImageButton difficultyButton, ImageButton soundButton){
         Table table = new Table();
         table.center();
         table.row();//first row
+        table.add(logo).colspan(4).height(500);
+        table.row();//filler row
+        table.add().height(200);
+        table.row();//second row
         table.add(nameEditButton);
         table.add(nameLabel).width(col_width*2);
         table.add(difficultyButton);
         table.add(difficultyLabel).width(col_width*2);
-        table.row();//second row
+        table.row();//third row
         table.add(soundButton);
         table.add(soundLabel);
         table.add().width(col_width*2);
+        table.row();//filler row
+        table.add().height(200);
         table.setFillParent(true);
-        stage.addActor(table);
-        table.debug();      // Turn on all debug lines (table, cell, and widget).
+        optionsStage.addActor(table);
+        //table.debug();      // Turn on all debug lines (table, cell, and widget).
     }
 
     private void difficultyChange(){
@@ -205,7 +221,6 @@ public class Options extends GameState {
         }
     }
 
-
     @Override
     public void handleInput() {
 
@@ -220,18 +235,19 @@ public class Options extends GameState {
     public void render() {
         Gdx.gl.glClearColor(0.57f, 0.95f, 0.45f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        getSettings();
-        batch.begin();
-        fpsInt = Gdx.graphics.getFramesPerSecond();
-        //Name = game.prefs.getString("name", "no name stored");  //getting name from preferences
-        batch.draw(logo, col_width*4, row_height*9, col_width*3, row_height*4); //logo
-        batch.end();
 
+        sb.setProjectionMatrix(cam.combined);
+        // draw background
+        bg.render(sb);
+        sb.begin();
+        sb.end();
+
+        Name = game.prefs.getString("name", "no name stored");  //getting name from preferences
         difficultyLabel.setText(difficultyString);
         nameLabel.setText(Name);
         soundLabel.setText(soundvalue);
-        stage.act();
-        stage.draw();
+        optionsStage.act();
+        optionsStage.draw();
     }
 
     @Override
