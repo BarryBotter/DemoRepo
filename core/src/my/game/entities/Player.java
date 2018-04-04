@@ -11,12 +11,12 @@ import my.game.Game;
  */
 
 public class Player extends  B2DSprite{
-    static final int MAX_HEALTH = 3;
-    static final int MAX_NUMBER_OF_AMMO = 3;
-    static int numberOfAmmo = MAX_NUMBER_OF_AMMO;
-    static int playerHealth = MAX_HEALTH;
+    private static final int MAX_HEALTH = 3;
+    private static final int MAX_NUMBER_OF_AMMO = 3;
+    private static int numberOfAmmo = MAX_NUMBER_OF_AMMO;
+    private static int playerHealth = MAX_HEALTH;
     private int enemyKillCount = 0;
-    public static boolean gameOver = false;
+    private static boolean gameOver = false;
 
     private int numCrystals;
     private int totalCrystals;
@@ -26,9 +26,7 @@ public class Player extends  B2DSprite{
         Texture tex = Game.res.getTexture("char");
         TextureRegion[] sprites = TextureRegion.split(tex,32,32)[0];
         setAnimation(sprites, 1/12f);
-        gameOver = false;
-        numberOfAmmo = MAX_NUMBER_OF_AMMO;
-        playerHealth = MAX_HEALTH;
+        resetPlayer();
     }
 
     public void collectCrystal(){numCrystals++;}
@@ -53,6 +51,10 @@ public class Player extends  B2DSprite{
         if(numberOfAmmo < MAX_NUMBER_OF_AMMO) {
             numberOfAmmo++;
         }
+    }
+
+    public static void decreaseAmmo() {
+        numberOfAmmo--;
     }
 
     public static void loseHealth() {
@@ -95,5 +97,11 @@ public class Player extends  B2DSprite{
 
     public static boolean gameIsOver() {
         return gameOver;
+    }
+
+    private void resetPlayer() {
+        gameOver = false;
+        numberOfAmmo = MAX_NUMBER_OF_AMMO;
+        playerHealth = MAX_HEALTH;
     }
 }

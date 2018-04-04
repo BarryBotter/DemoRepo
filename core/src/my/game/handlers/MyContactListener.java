@@ -22,18 +22,21 @@ import static my.game.handlers.B2DVars.PPM;
 
 
 
-public class MyContacListener implements ContactListener {
+public class MyContactListener implements ContactListener {
 
     private int numFootContacts;
-    public boolean wincontact;
+    private boolean wincontact;
     private Array<Body> bodiesToRemove;
     private Array<Body> enemyBodiesToRemove;
     private Array<Body> bulletBodiesToRemove;
+    private Array<Body> meleeBodiesToRemove;
 
-    public MyContacListener() {
+    public MyContactListener() {
         bodiesToRemove = new Array<Body>();
         enemyBodiesToRemove = new Array<Body>();
         bulletBodiesToRemove = new Array<Body>();
+        meleeBodiesToRemove = new Array<Body>();
+
     }
 
     @Override
@@ -67,7 +70,7 @@ public class MyContacListener implements ContactListener {
             wincontact = true;
         }
 
-        // Check collisions between enemy and player/bullet.
+        // Check collisions between enemy and player/bullet/melee attack.
         if(fa.getUserData() != null && fa.getUserData().equals("enemy")) {
             if(fb.getUserData().equals("player")) {
                 enemyBodiesToRemove.add(fa.getBody());
@@ -77,8 +80,12 @@ public class MyContacListener implements ContactListener {
             else if(fb.getUserData().equals("bullet")) {
                 enemyBodiesToRemove.add(fa.getBody());
                 Game.res.getSound("hit").play();
-                Projectile.bulletHit();
-                // bulletBodiesToRemove.add(fb.getBody());
+                bulletBodiesToRemove.add(fb.getBody());
+            }
+            else if(fb.getUserData().equals("melee")) {
+                enemyBodiesToRemove.add(fa.getBody());
+                Game.res.getSound("hit").play();
+                meleeBodiesToRemove.add(fb.getBody());
             }
         }
         if(fb.getUserData() != null && fb.getUserData().equals("enemy")) {
@@ -90,8 +97,12 @@ public class MyContacListener implements ContactListener {
             else if(fa.getUserData().equals("bullet")) {
                 enemyBodiesToRemove.add(fb.getBody());
                 Game.res.getSound("hit").play();
-                Projectile.bulletHit();
-                //  bulletBodiesToRemove.add(fa.getBody());
+                bulletBodiesToRemove.add(fa.getBody());
+            }
+            else if(fa.getUserData().equals("melee")) {
+                enemyBodiesToRemove.add(fb.getBody());
+                Game.res.getSound("hit").play();
+                meleeBodiesToRemove.add(fa.getBody());
             }
         }
         if (fa.getUserData() != null && fa.getUserData().equals("jump")) {
@@ -102,6 +113,7 @@ public class MyContacListener implements ContactListener {
         }
         if (fa.getUserData() != null && fa.getUserData().equals("corner")) {
            // cornerCollision = true;
+
 
             float player_bottom = fa.getBody().getPosition().y + 15 / PPM;
             float tiles_bottom = fb.getBody().getPosition().y + 32/ PPM;
@@ -148,6 +160,18 @@ public class MyContacListener implements ContactListener {
             }
 
         }
+
+        // Check collision between bullet and ground
+        if(fa.getUserData() != null && fa.getUserData().equals("ground")){
+            if(fb.getUserData().equals("bullet")) {
+                bulletBodiesToRemove.add(fb.getBody());
+            }
+        }
+        if(fb.getUserData() != null && fb.getUserData().equals("ground")){
+            if(fa.getUserData().equals("bullet")) {
+                bulletBodiesToRemove.add(fa.getBody());
+            }
+        }
     }
 
     @Override
@@ -173,6 +197,7 @@ public class MyContacListener implements ContactListener {
     }
     public Array<Body> getEnemyBodiesToRemove(){return enemyBodiesToRemove;}
     public Array<Body> getBulletBodiesToRemove(){return bulletBodiesToRemove;}
+    public Array<Body> getMeleeHitBoxesToRemove(){return meleeBodiesToRemove;}
     public boolean isPlayerWin() {
         return wincontact;
     }
