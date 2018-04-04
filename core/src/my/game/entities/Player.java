@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
 
 import my.game.Game;
-import my.game.handlers.MyContacListener;
+
 
 /**
  * Created by Katriina on 22.3.2018.
@@ -17,12 +17,8 @@ public class Player extends  B2DSprite{
     private static int numberOfAmmo = MAX_NUMBER_OF_AMMO;
     private static int playerHealth = MAX_HEALTH;
     private int enemyKillCount = 0;
-<<<<<<< HEAD
+
     public static boolean gameOver = false;
-    private MyContacListener cl;
-=======
-    private static boolean gameOver = false;
->>>>>>> 708bbdd5199fae91ae22537b6e8cc7ef8673f9a3
 
     private int numCrystals;
     private int totalCrystals;
@@ -31,18 +27,16 @@ public class Player extends  B2DSprite{
         super(body);
 
         Texture tex = Game.res.getTexture("char");
-<<<<<<< HEAD
+
         TextureRegion[] sprites = TextureRegion.split(tex, 32, 32)[0];
         setAnimation(sprites, 1 / 12f);
 
         gameOver = false;
         numberOfAmmo = MAX_NUMBER_OF_AMMO;
         playerHealth = MAX_HEALTH;
-=======
-        TextureRegion[] sprites = TextureRegion.split(tex,32,32)[0];
-        setAnimation(sprites, 1/12f);
+
         resetPlayer();
->>>>>>> 708bbdd5199fae91ae22537b6e8cc7ef8673f9a3
+
     }
 
     public void collectCrystal(){numCrystals++;}

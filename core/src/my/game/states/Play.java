@@ -266,13 +266,12 @@ public class Play extends GameState {
     @Override
     public void render() {
         //set cam to follow player
-<<<<<<< HEAD
+
         cam.position.set(
                 player.getposition().x * PPM + Game.V_WIDTH / 4,
                 game.V_HEIGHT / 2/*player.getposition().y * PPM +Game.V_HEIGHT/4*/, 0);
-=======
         cam.position.set(player.getposition().x * PPM + Game.V_WIDTH / 4, Game.V_HEIGHT / 2, 0);
->>>>>>> 708bbdd5199fae91ae22537b6e8cc7ef8673f9a3
+
         cam.update();
 
         // draw bgs

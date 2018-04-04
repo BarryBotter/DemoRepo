@@ -14,12 +14,10 @@ import my.game.entities.Player;
 public class MyContactListener implements ContactListener {
 
     private int numFootContacts;
-<<<<<<< HEAD:core/src/my/game/handlers/MyContacListener.java
+
     public boolean wincontact;
     public boolean playerShoot;
-=======
-    private boolean wincontact;
->>>>>>> 708bbdd5199fae91ae22537b6e8cc7ef8673f9a3:core/src/my/game/handlers/MyContactListener.java
+
     private Array<Body> bodiesToRemove;
     private Array<Body> enemyBodiesToRemove;
     private Array<Body> bulletBodiesToRemove;
@@ -48,11 +46,10 @@ public class MyContactListener implements ContactListener {
 
         // Check collision between player and pickups.
         if(fa.getUserData() != null && fa.getUserData().equals("crystal")){
-<<<<<<< HEAD:core/src/my/game/handlers/MyContacListener.java
+
             //remove pickup
             playerShoot = true;
-=======
->>>>>>> 708bbdd5199fae91ae22537b6e8cc7ef8673f9a3:core/src/my/game/handlers/MyContactListener.java
+
             bodiesToRemove.add(fa.getBody());
             Player.increaseAmmo();
         }
