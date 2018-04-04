@@ -332,7 +332,7 @@ public class Play extends GameState {
         Body body = world.createBody(bdef);
         body.setGravityScale(3);
 
-        shape.setAsBox(13 / PPM, 15 / PPM);
+        shape.setAsBox(20 / PPM, 15 / PPM);
         fdef.shape = shape;
         fdef.filter.categoryBits = BIT_PLAYER;
         fdef.filter.maskBits = BIT_GROUND | BIT_CRYSTAL | BIT_CORNER | BIT_ENEMY | BIT_TRAP | BIT_JUMP;
@@ -436,10 +436,11 @@ public class Play extends GameState {
                 bdef.type = BodyDef.BodyType.StaticBody;
                 bdef.position.set((col + 0.4f) * ts / PPM, (row + 0.4f) * ts / PPM);
                 ChainShape cs = new ChainShape();
-                Vector2[] v = new Vector2[3];
+                Vector2[] v = new Vector2[4];
                 v[0] = new Vector2(-ts / 2 / PPM, -ts / 2 / PPM);
                 v[1] = new Vector2(-ts / 2 / PPM, ts / 2 / PPM);
                 v[2] = new Vector2(ts / 2 / PPM, ts / 2 / PPM);
+                v[3] = new Vector2(ts / 2 / PPM, -ts / 2 / PPM);
                 cs.createChain(v);
                 FixtureDef fd = new FixtureDef();
                 fd.friction = 0;
