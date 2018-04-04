@@ -60,7 +60,7 @@ public class Menu extends GameState{
 
         viewport = new ExtendViewport(1920, 1080, cam);
 
-        logo = new Image(new Texture("res/UI_final/menu_logo.png"));;
+        logo = new Image(new Texture("res/UI_final/menu_logo.png"));
 
         row_height = 1080 / 12;
         col_width = 1920 / 12;
