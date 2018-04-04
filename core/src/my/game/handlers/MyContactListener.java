@@ -1,6 +1,5 @@
 package my.game.handlers;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
@@ -11,16 +10,6 @@ import com.badlogic.gdx.utils.Array;
 
 import my.game.Game;
 import my.game.entities.Player;
-import my.game.entities.Projectile;
-import my.game.states.Play;
-
-import static my.game.handlers.B2DVars.PPM;
-
-/**
- * Created by Katriina on 21.3.2018.
- */
-
-
 
 public class MyContactListener implements ContactListener {
 
@@ -30,13 +19,14 @@ public class MyContactListener implements ContactListener {
     private Array<Body> enemyBodiesToRemove;
     private Array<Body> bulletBodiesToRemove;
     private Array<Body> meleeBodiesToRemove;
+    private Array<Body> trapBodiesToRemove;
 
     public MyContactListener() {
         bodiesToRemove = new Array<Body>();
         enemyBodiesToRemove = new Array<Body>();
         bulletBodiesToRemove = new Array<Body>();
         meleeBodiesToRemove = new Array<Body>();
-
+        trapBodiesToRemove = new Array<Body>();
     }
 
     @Override
@@ -53,7 +43,6 @@ public class MyContactListener implements ContactListener {
 
         // Check collision between player and pickups.
         if(fa.getUserData() != null && fa.getUserData().equals("crystal")){
-            //remove pickup
             bodiesToRemove.add(fa.getBody());
             Player.increaseAmmo();
         }
@@ -105,20 +94,30 @@ public class MyContactListener implements ContactListener {
                 meleeBodiesToRemove.add(fa.getBody());
             }
         }
+        // Check collision between player/bullet and traps.
         if (fb.getUserData() != null && fb.getUserData().equals("trap")) {
             if (fa.getUserData().equals("player")) {
+                System.out.println("Player is hit by trap");
                 Player.loseHealth();
+                trapBodiesToRemove.add(fb.getBody());
+            }
+            else if (fa.getUserData().equals("bullet")) {
+                System.out.println("Trap is hit by bullet");
+                trapBodiesToRemove.add(fb.getBody());
+                bulletBodiesToRemove.add(fa.getBody());
             }
         }
         if (fa.getUserData() != null && fa.getUserData().equals("trap")) {
             if (fb.getUserData().equals("player")) {
+                System.out.println("Player is hit by trap");
                 Player.loseHealth();
+                trapBodiesToRemove.add(fa.getBody());
             }
-            if (t_collision < b_collision && t_collision < l_collision && t_collision > r_collision )
-            {
-                Game.res.getSound("hit").play();
+            else if (fb.getUserData().equals("bullet")) {
+                System.out.println("Trap is hit by bullet");
+                trapBodiesToRemove.add(fa.getBody());
+                bulletBodiesToRemove.add(fb.getBody());
             }
-
         }
 
         // Check collision between bullet and ground
@@ -163,6 +162,7 @@ public class MyContactListener implements ContactListener {
     public Array<Body> getEnemyBodiesToRemove(){return enemyBodiesToRemove;}
     public Array<Body> getBulletBodiesToRemove(){return bulletBodiesToRemove;}
     public Array<Body> getMeleeHitBoxesToRemove(){return meleeBodiesToRemove;}
+    public Array<Body> getTrapsToRemove(){return trapBodiesToRemove;}
     public boolean isPlayerWin() {
         return wincontact;
     }

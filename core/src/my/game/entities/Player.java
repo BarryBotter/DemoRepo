@@ -11,7 +11,7 @@ import my.game.Game;
  */
 
 public class Player extends  B2DSprite{
-    private static final int MAX_HEALTH = 3;
+    private static final int MAX_HEALTH = 10;
     private static final int MAX_NUMBER_OF_AMMO = 3;
     private static int numberOfAmmo = MAX_NUMBER_OF_AMMO;
     private static int playerHealth = MAX_HEALTH;
