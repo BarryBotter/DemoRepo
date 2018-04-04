@@ -337,7 +337,7 @@ public class Play extends GameState {
         Body body = world.createBody(bdef);
         body.setGravityScale(3);
 
-        shape.setAsBox(20 / PPM, 15 / PPM);
+        shape.setAsBox(14 / PPM, 15 / PPM);
         fdef.shape = shape;
         fdef.filter.categoryBits = BIT_PLAYER;
         fdef.filter.maskBits = BIT_GROUND | BIT_CRYSTAL | BIT_CORNER | BIT_ENEMY | BIT_TRAP | BIT_JUMP;
@@ -439,7 +439,7 @@ public class Play extends GameState {
                 // create body from cell
                 BodyDef bdef = new BodyDef();
                 bdef.type = BodyDef.BodyType.StaticBody;
-                bdef.position.set((col + 0.4f) * ts / PPM, (row + 0.4f) * ts / PPM);
+                bdef.position.set((col + 0.6f) * ts / PPM, (row + 0.4f) * ts / PPM);
                 ChainShape cs = new ChainShape();
                 Vector2[] v = new Vector2[4];
                 v[0] = new Vector2(-ts / 2 / PPM, -ts / 2 / PPM);

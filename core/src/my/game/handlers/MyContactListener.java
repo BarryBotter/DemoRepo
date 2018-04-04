@@ -117,12 +117,10 @@ public class MyContactListener implements ContactListener {
         }
         if (fa.getUserData() != null && fa.getUserData().equals("trap")) {
             if (fb.getUserData().equals("player")) {
-                System.out.println("Player is hit by trap");
                 Player.loseHealth();
                 trapBodiesToRemove.add(fa.getBody());
             }
             else if (fb.getUserData().equals("bullet")) {
-                System.out.println("Trap is hit by bullet");
                 trapBodiesToRemove.add(fa.getBody());
                 bulletBodiesToRemove.add(fb.getBody());
             }
