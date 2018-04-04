@@ -104,6 +104,11 @@ public class MyContacListener implements ContactListener {
                 Player.loseHealth();
             }
         }
+        if (fa.getUserData() != null && fa.getUserData().equals("jump")) {
+            if (fb.getUserData().equals("player")) {
+                fb.getBody().applyLinearImpulse(1,6,0,0,true);
+            }
+        }
     }
 
     @Override
