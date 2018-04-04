@@ -345,7 +345,7 @@ public class Play extends GameState {
         shape.setAsBox(13 / PPM, 15 / PPM);
         fdef.shape = shape;
         fdef.filter.categoryBits = BIT_PLAYER;
-        fdef.filter.maskBits = BIT_GROUND | BIT_CRYSTAL | BIT_CORNER | BIT_ENEMY | BIT_TRAP;
+        fdef.filter.maskBits = BIT_GROUND | BIT_CRYSTAL | BIT_CORNER | BIT_ENEMY | BIT_TRAP | BIT_JUMP;
         body.createFixture(fdef).setUserData("player");
         shape.dispose();
 
@@ -353,7 +353,7 @@ public class Play extends GameState {
         shape.setAsBox(15 / PPM, 2 / PPM, new Vector2(0, -17 / PPM), 0);
         fdef.shape = shape;
         fdef.filter.categoryBits = BIT_PLAYER;
-        fdef.filter.maskBits = BIT_GROUND | BIT_CORNER;
+        fdef.filter.maskBits = BIT_GROUND | BIT_CORNER | BIT_JUMP;
         fdef.isSensor = true;
         body.createFixture(fdef).setUserData("foot");
         shape.dispose();
@@ -388,7 +388,7 @@ public class Play extends GameState {
         if (layer != null)
         createCorners(layer, BIT_CORNER);
 
-        layer = (TiledMapTileLayer) tileMap.getLayers().get("jumps");
+        layer = (TiledMapTileLayer) tileMap.getLayers().get("jump");
 
         if (layer != null)
             createJump(layer, BIT_JUMP);
@@ -414,7 +414,7 @@ public class Play extends GameState {
                 // create body from cell
                 BodyDef bdef = new BodyDef();
                 bdef.type = BodyDef.BodyType.StaticBody;
-                bdef.position.set((col + 0.5f) * ts / PPM, (row + 0.5f) * ts / PPM);
+                bdef.position.set((col + 0.4f) * ts / PPM, (row + 0.4f) * ts / PPM);
                 ChainShape cs = new ChainShape();
                 Vector2[] v = new Vector2[3];
                 v[0] = new Vector2(-ts / 2 / PPM, -ts / 2 / PPM);
@@ -496,7 +496,7 @@ public class Play extends GameState {
                 // create body from cell
                 BodyDef bdef = new BodyDef();
                 bdef.type = BodyDef.BodyType.StaticBody;
-                bdef.position.set((col + 0.5f) * ts / PPM, (row + 0.5f) * ts / PPM);
+                bdef.position.set((col + 0.4f) * ts / PPM, (row + 0.4f) * ts / PPM);
                 ChainShape cs = new ChainShape();
                 Vector2[] v = new Vector2[3];
                 v[0] = new Vector2(-ts / 2 / PPM, -ts / 2 / PPM);
@@ -506,7 +506,7 @@ public class Play extends GameState {
                 FixtureDef fd = new FixtureDef();
                 fd.friction = 0;
                 fd.shape = cs;
-                fd.restitution = 3;
+                fd.restitution = 2.4f;
                 fd.filter.categoryBits = bits;
                 fd.filter.maskBits = BIT_PLAYER;
                 world.createBody(bdef).createFixture(fd).setUserData("jump");
