@@ -39,6 +39,7 @@ import my.game.handlers.BoundedCamera;
 import my.game.handlers.GameStateManager;
 import my.game.handlers.MyContacListener;
 
+import static my.game.handlers.B2DVars.BIT_BULLET;
 import static my.game.handlers.B2DVars.BIT_CORNER;
 import static my.game.handlers.B2DVars.BIT_CRYSTAL;
 import static my.game.handlers.B2DVars.BIT_ENEMY;
@@ -494,7 +495,7 @@ public class Play extends GameState {
                 // create body from cell
                 BodyDef bdef = new BodyDef();
                 bdef.type = BodyDef.BodyType.StaticBody;
-                bdef.position.set((col + 0.5f) * ts / PPM, (row + 0.5f) * ts / PPM);
+                bdef.position.set((col + 0.4f) * ts / PPM, (row + 0.4f) * ts / PPM);
                 ChainShape cs = new ChainShape();
                 Vector2[] v = new Vector2[3];
                 v[0] = new Vector2(-ts / 2 / PPM, -ts / 2 / PPM);
@@ -506,7 +507,7 @@ public class Play extends GameState {
                 fd.shape = cs;
                 fd.restitution = 1;
                 fd.filter.categoryBits = bits;
-                fd.filter.maskBits = BIT_PLAYER;
+                fd.filter.maskBits = BIT_PLAYER | BIT_ENEMY;
                 world.createBody(bdef).createFixture(fd).setUserData("corner");
                 cs.dispose();
 
@@ -684,7 +685,7 @@ public class Play extends GameState {
 
         shape.setAsBox(13 / PPM, 15 / PPM);
         fdef.shape = shape;
-        fdef.filter.categoryBits = B2DVars.BIT_BULLET;
+        fdef.filter.categoryBits = BIT_BULLET;
         fdef.filter.maskBits = BIT_ENEMY;
         body.createFixture(fdef).setUserData("bullet");
         shape.dispose();
@@ -711,7 +712,7 @@ public class Play extends GameState {
         shape.setAsBox(13 / PPM, 15 / PPM);
         fdef.shape = shape;
         fdef.filter.categoryBits = BIT_ENEMY;
-        fdef.filter.maskBits = B2DVars.BIT_GROUND | BIT_PLAYER | B2DVars.BIT_BULLET;
+        fdef.filter.maskBits = BIT_GROUND | BIT_PLAYER | BIT_BULLET | BIT_CORNER;
         body.createFixture(fdef).setUserData("enemy");
         shape.dispose();
 

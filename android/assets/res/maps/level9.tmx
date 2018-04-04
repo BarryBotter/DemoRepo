@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="2018.03.21" orientation="orthogonal" renderorder="right-down" width="100" height="10" tilewidth="32" tileheight="32" infinite="0" nextobjectid="3">
+ <tileset firstgid="1" source="demoblock.tsx"/>
+ <layer name="corner" width="100" height="10">
+  <data encoding="base64" compression="zlib">
+   eJztwzEJAAAMA7Ae9a+5NgZLIAkAAAAf1VMHS08BkQ==
+  </data>
+ </layer>
+ <objectgroup name="win">
+  <object id="1" x="3024.24" y="172.727" width="142.424" height="81.8182"/>
+ </objectgroup>
+</map>

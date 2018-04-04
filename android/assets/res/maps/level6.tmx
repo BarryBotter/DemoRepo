@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="2018.03.21" orientation="orthogonal" renderorder="right-down" width="200" height="8" tilewidth="32" tileheight="32" infinite="0" nextobjectid="53">
+<map version="1.0" tiledversion="2018.03.21" orientation="orthogonal" renderorder="right-down" width="200" height="8" tilewidth="32" tileheight="32" infinite="0" nextobjectid="58">
  <tileset firstgid="1" source="blocks.tsx"/>
  <tileset firstgid="4" source="demoblock.tsx"/>
  <tileset firstgid="8" name="blocks" tilewidth="32" tileheight="32" tilecount="3" columns="3">
@@ -17,6 +17,11 @@
  </layer>
  <objectgroup name="trap">
   <object id="24" x="1625" y="24" width="104" height="56"/>
+  <object id="53" x="642.424" y="24.2424" width="81.8182" height="45.4545"/>
+  <object id="54" x="836.364" y="33.3333" width="69.697" height="36.3636"/>
+  <object id="55" x="1060.61" y="21.2121" width="96.9697" height="48.4848"/>
+  <object id="56" x="363.636" y="12.1212" width="109.091" height="42.4242"/>
+  <object id="57" x="1378.79" y="24.2424" width="78.7879" height="48.4848"/>
  </objectgroup>
  <objectgroup name="win">
   <object id="12" x="6243" y="136" width="148" height="77"/>

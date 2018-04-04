@@ -104,54 +104,6 @@ public class MyContacListener implements ContactListener {
                 Player.loseHealth();
             }
         }
-       /* if (fa.getUserData() != null && fa.getUserData().equals("corner")) {
-           // cornerCollision = true;
-
-            float player_bottom = fa.getBody().getPosition().y + 15 / PPM;
-            float tiles_bottom = fb.getBody().getPosition().y + 32/ PPM;
-            float player_right = fa.getBody().getPosition().x + 13 / PPM;
-            float tiles_right = fb.getBody().getPosition().x + 32 / PPM;
-
-            float b_collision = tiles_bottom -fa.getBody().getPosition().y;
-            float t_collision = player_bottom - fb.getBody().getPosition().y;
-            float l_collision = player_right - fa.getBody().getPosition().x;
-            float r_collision = tiles_right - fb.getBody().getPosition().x;
-
-
-            if (l_collision < r_collision && l_collision < t_collision && l_collision < b_collision)
-            {
-                Game.res.getSound("hit").play();
-            }
-            if (t_collision < b_collision && t_collision < l_collision && t_collision < r_collision )
-            {
-                Game.res.getSound("hit").play();
-            }
-
-        }
-        if (fb.getUserData() != null && fb.getUserData().equals("corner")) {
-           // cornerCollision = true;
-
-            float player_bottom = fb.getBody().getPosition().y+ 15 / PPM;
-            float tiles_bottom = fa.getBody().getPosition().y + 32 /PPM;
-            float player_right = fb.getBody().getPosition().x + 13 / PPM;
-            float tiles_right = fa.getBody().getPosition().x + 32 / PPM;
-
-            float b_collision = tiles_bottom -fb.getBody().getPosition().y;
-            float t_collision = player_bottom - fa.getBody().getPosition().y;
-            float l_collision = player_right - fb.getBody().getPosition().x;
-            float r_collision = tiles_right - fa.getBody().getPosition().x;
-
-
-            if (l_collision < r_collision && l_collision < t_collision && l_collision < b_collision)
-            {
-                Game.res.getSound("hit").play();
-            }
-            if (t_collision < b_collision && t_collision < l_collision && t_collision > r_collision )
-            {
-                Game.res.getSound("hit").play();
-            }
-
-        }*/
     }
 
     @Override
