@@ -12,14 +12,14 @@ android {
             jniLibs.srcDirs = ['libs']
         }
 
-        instrumentTest.setRoot('tests')
+       // instrumentTest.setRoot('tests')
     }
     packagingOptions {
         exclude 'META-INF/robovm/ios/robovm.xml'
     }
     defaultConfig {
         applicationId "my.game"
-        minSdkVersion 9
+        minSdkVersion 20
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
