@@ -38,29 +38,8 @@ public class Game implements ApplicationListener {
 	public void create() {
 
 		res = new Content();
-		res.loadTexture("res/images/trap.png","trap");
-		res.loadTexture("res/images/crystal.png", "Crystal");
-		res.loadTexture("res/images/hud.png","hud");
-		res.loadTexture("res/images/bgs.png","bg");
-		res.loadTexture("res/images/menu.png","menu");
-		res.loadTexture("kuva.png","olvi");
-		res.loadTexture("res/UI_final/rebg.png","menubg");
-		res.loadTexture("res/UI_final/resized_paavalikko.png","main");
-		res.loadTexture("res/UI_final/resized_hammas.png","tooth");
-		res.loadTexture("res/images/Game_Over.png", "gameover");
-		res.loadTexture("res/background/testimaa.png","bgone");
-		res.loadTexture("res/background/rsz_karkkimaas.png","bgones");
-		res.loadTexture("res/background/mountains.png", "mountain");
-		res.loadTexture("res/images/char.png","char");
-		res.loadTexture("res/images/bullet.png","bullet");
-		res.loadTexture("res/UI_assets/heartSilhoutte.png","heartSilhoutte");
-		res.loadTexture("res/UI_assets/ammoSilhoutte.png","ammoSilhoutte");
-		res.loadTexture("res/UI_assets/heart.png","heart");
-		res.loadTexture("res/UI_assets/ammo.png","ammo");
-		res.loadTexture("res/images/happyTooth.png","happyTooth");
-
-		res.loadSound("res/sfx/necksnap.mp3","snap");
-		res.loadSound("res/sfx/hit.wav","hit");
+		loadTextures();
+		loadSounds();
 
 		res.loadMusic("res/music/bbsong.ogg", "bbsong");
 		res.getMusic("bbsong").setLooping(true);
@@ -80,6 +59,7 @@ public class Game implements ApplicationListener {
 		lvls.flush();
 
 	}
+
 
 	@Override
 	public void resize(int width, int height) {
@@ -109,5 +89,33 @@ public class Game implements ApplicationListener {
 		res.removeAll();
 	}
 
+	public void loadTextures(){
 
+		res.loadTexture("res/images/trap.png","trap");
+		res.loadTexture("res/images/crystal.png", "Crystal");
+		res.loadTexture("res/images/hud.png","hud");
+		res.loadTexture("res/images/bgs.png","bg");
+		res.loadTexture("res/images/menu.png","menu");
+		res.loadTexture("kuva.png","olvi");
+		res.loadTexture("res/UI_final/rebg.png","menubg");
+		res.loadTexture("res/UI_final/resized_paavalikko.png","main");
+		res.loadTexture("res/UI_final/resized_hammas.png","tooth");
+		res.loadTexture("res/images/Game_Over.png", "gameover");
+		res.loadTexture("res/background/testimaa.png","bgone");
+		res.loadTexture("res/background/rsz_karkkimaas.png","bgones");
+		res.loadTexture("res/background/mountains.png", "mountain");
+		res.loadTexture("res/images/char.png","char");
+		res.loadTexture("res/images/bullet.png","bullet");
+		res.loadTexture("res/UI_assets/heartSilhoutte.png","heartSilhoutte");
+		res.loadTexture("res/UI_assets/ammoSilhoutte.png","ammoSilhoutte");
+		res.loadTexture("res/UI_assets/heart.png","heart");
+		res.loadTexture("res/UI_assets/ammo.png","ammo");
+		res.loadTexture("res/images/happyTooth.png","happyTooth");
+
+	}
+
+	private void loadSounds(){
+		res.loadSound("res/sfx/necksnap.mp3","snap");
+		res.loadSound("res/sfx/hit.wav","hit");
+	}
 }
