@@ -11,6 +11,7 @@ import my.game.entities.PickUp;
 import my.game.entities.Player;
 import my.game.entities.Projectile;
 import my.game.entities.TextureDraw;
+import my.game.entities.Traps;
 import my.game.handlers.B2DVars;
 
 import com.badlogic.gdx.graphics.Texture;
@@ -80,9 +81,9 @@ public class Play extends GameState {
     private Enemy enemy;
     private Array<PickUp> crystals;
     private Array<Enemy> enemies;
+    private Array<Traps> traps;
     // private Array<Projectile> bullets;
     private TextureDraw win;
-    private TextureDraw traps;
     private Vector3 touchPoint;
 
     private Background[] backgrounds;
@@ -108,6 +109,7 @@ public class Play extends GameState {
         createCrystals();
         player.setTotalCrystals(crystals.size);
 
+        //create traps
         createTrap();
 
         //create winblock
@@ -347,7 +349,9 @@ public class Play extends GameState {
         win.render(sb);
 
         //draw traps
-        traps.render(sb);
+        for (int i = 0; i < traps.size; i++) {
+            traps.get(i).render(sb);
+        }
 
         //draw hud
         sb.setProjectionMatrix(hudCam.combined);
@@ -590,6 +594,9 @@ public class Play extends GameState {
     }}
     private void createTrap() {
 
+        traps = new Array<Traps>();
+
+
         MapLayer layer = tileMap.getLayers().get("trap");
 
         if (layer != null) {
@@ -618,9 +625,10 @@ public class Play extends GameState {
                 body.createFixture(fdef).setUserData("trap");
                 cshape.dispose();
 
-                 traps = new TextureDraw(body,"olvi");
+                Traps trap = new Traps(body);
+                traps.add(trap);
 
-                body.setUserData(traps);
+                body.setUserData(trap);
             }
         }
     }

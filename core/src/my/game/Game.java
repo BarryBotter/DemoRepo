@@ -38,7 +38,7 @@ public class Game implements ApplicationListener {
 	public void create() {
 
 		res = new Content();
-		res.loadTexture("res/images/bunny.png","bunny");
+		res.loadTexture("res/images/trap.png","trap");
 		res.loadTexture("res/images/crystal.png", "Crystal");
 		res.loadTexture("res/images/hud.png","hud");
 		res.loadTexture("res/images/bgs.png","bg");

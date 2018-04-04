@@ -1,10 +1,10 @@
 package my.game.entities;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.physics.box2d.Body;
+        import com.badlogic.gdx.graphics.g2d.TextureRegion;
+        import com.badlogic.gdx.physics.box2d.Body;
 
-import my.game.Game;
+        import my.game.Game;
 
 /**
  * Created by Katriina on 22.3.2018.

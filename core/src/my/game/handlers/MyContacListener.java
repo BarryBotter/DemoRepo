@@ -99,7 +99,12 @@ public class MyContacListener implements ContactListener {
                 Player.loseHealth();
             }
         }
-        if (fa.getUserData() != null && fa.getUserData().equals("corner")) {
+        if (fa.getUserData() != null && fa.getUserData().equals("trap")) {
+            if (fb.getUserData().equals("player")) {
+                Player.loseHealth();
+            }
+        }
+       /* if (fa.getUserData() != null && fa.getUserData().equals("corner")) {
            // cornerCollision = true;
 
             float player_bottom = fa.getBody().getPosition().y + 15 / PPM;
@@ -146,7 +151,7 @@ public class MyContacListener implements ContactListener {
                 Game.res.getSound("hit").play();
             }
 
-        }
+        }*/
     }
 
     @Override
