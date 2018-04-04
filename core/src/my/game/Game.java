@@ -35,8 +35,6 @@ public class Game implements ApplicationListener {
 	public static BoundedCamera getCamera(){return cam;}
 	public OrthographicCamera getHUDCamera(){return hudCam;}
 
-
-
 	@Override
 	public void create() {
 
@@ -70,14 +68,12 @@ public class Game implements ApplicationListener {
 		res.getMusic("bbsong").setVolume(0.5f);
 		res.getMusic("bbsong").play();
 
-		snap = my.game.Game.res.getSound("snap");
-
-
 		sb = new SpriteBatch();
 		cam = new BoundedCamera();
-		cam.setToOrtho(false, V_WIDTH,V_HEIGHT);
+		cam.setToOrtho(false, V_WIDTH, V_HEIGHT);
 		hudCam = new OrthographicCamera();
-		hudCam.setToOrtho(false, V_WIDTH,V_HEIGHT);
+		hudCam.setToOrtho(false, V_WIDTH, V_HEIGHT);
+		snap = my.game.Game.res.getSound("snap");
 
 		gsm = new GameStateManager(this);
 

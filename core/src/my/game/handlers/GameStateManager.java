@@ -14,6 +14,7 @@ import my.game.states.LevelSelect;
 import my.game.states.Menu;
 import my.game.states.Options;
 import my.game.states.Play;
+import my.game.states.cutScene;
 
 /**
  * Created by Katriina on 20.3.2018.
@@ -30,6 +31,7 @@ public class GameStateManager {
     public static final int LEVEL_SELECT = 323971;
     public static final int GAMEOVER = 213212;
     public static final int OPTIONS = 345678;
+    public static final int CUTSCENE = 555768;
 
     public ImageButton.ImageButtonStyle playButtonStyle, optionButtonStyle,exitButtonStyle,toothStyle;
     Texture tex;
@@ -72,6 +74,10 @@ public class GameStateManager {
         if (state == OPTIONS)
         {
             return new Options(this);
+        }
+        if (state == CUTSCENE)
+        {
+            return new cutScene(this);
         }
         return null;
     }

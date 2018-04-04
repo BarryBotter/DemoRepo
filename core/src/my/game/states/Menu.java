@@ -58,7 +58,7 @@ public class Menu extends GameState{
 
         cam.setToOrtho(false, Game.V_WIDTH, Game.V_HEIGHT);
 
-        //viewport = new ExtendViewport(1920, 1080, cam);
+        viewport = new ExtendViewport(1920, 1080, cam);
 
         logo = new Image(new Texture("res/UI_final/menu_logo.png"));;
 
