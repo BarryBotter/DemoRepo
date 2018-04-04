@@ -3,6 +3,7 @@ package my.game;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -26,6 +27,8 @@ public class Game implements ApplicationListener {
 	private GameStateManager gsm;
 
 	public static Content res;
+	public Sound snap;
+	public Preferences prefs;
 	public static Preferences lvls;
 
 	public SpriteBatch getSpriteBatch(){return sb;}
@@ -67,6 +70,9 @@ public class Game implements ApplicationListener {
 		res.getMusic("bbsong").setVolume(0.5f);
 		res.getMusic("bbsong").play();
 
+		snap = my.game.Game.res.getSound("snap");
+
+
 		sb = new SpriteBatch();
 		cam = new BoundedCamera();
 		cam.setToOrtho(false, V_WIDTH,V_HEIGHT);
@@ -78,6 +84,15 @@ public class Game implements ApplicationListener {
 		lvls = Gdx.app.getPreferences("mylvls");
 		if(!lvls.contains("key")) lvls.putInteger("key", LVL_UNLOCKED);
 		lvls.flush();
+
+		prefs = Gdx.app.getPreferences("My Preferences");
+		//dont insert preferences here this is just to set default values if there is none (maybe works)
+		if(!prefs.contains("name")) {
+			prefs.putInteger("difficulty", 1);
+			prefs.putBoolean("sound", true);
+			prefs.putString("name", "Eero");
+			prefs.flush();
+		}
 
 	}
 
