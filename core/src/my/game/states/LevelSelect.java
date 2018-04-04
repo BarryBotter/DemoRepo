@@ -1,6 +1,7 @@
 package my.game.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -43,11 +44,25 @@ public class LevelSelect extends GameState {
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-
-                return true;
-            }
+                return true;}
         });
         stage.addActor(exitButton);
+
+        //button for testing cutscene (not in the table)
+        Button cutSceneButton = new TextButton("cutSceneDemo",mySkin,"default");
+        cutSceneButton.setSize(200, 100);
+        cutSceneButton.setPosition(100,250);
+        cutSceneButton.addListener(new InputListener(){
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                dispose();
+                gsm.setState(GameStateManager.CUTSCENE);
+            }
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                return true;}
+        });
+        stage.addActor(cutSceneButton);
 
         reg = new TextureRegion(Game.res.getTexture("menubg"), 0, 0, 320, 240);
         //todo levelselectgrid has some hitboxproblems
@@ -81,13 +96,10 @@ public class LevelSelect extends GameState {
     }
 
     public void render() {
-
         sb.setProjectionMatrix(cam.combined);
-
         sb.begin();
         sb.draw(reg, 0, 0);
         sb.end();
-
         for(int row = 0; row < buttons.length; row++) {
             for(int col = 0; col < buttons[0].length; col++) {
                 buttons[row][col].render(sb);

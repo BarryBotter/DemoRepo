@@ -1,6 +1,7 @@
 package my.game.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -93,8 +94,8 @@ public class Menu extends GameState{
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 game.snap.play(1f);
-/*                dispose(); todo Options menu not working atm might be about preferences
-                gsm.setState(GameStateManager.OPTIONS);*/
+                dispose();
+                gsm.setState(GameStateManager.OPTIONS);
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -163,6 +164,7 @@ public class Menu extends GameState{
         //stage for menubutton layout
         stage.act();
         stage.draw();
+
     }
 
     public void dispose() {

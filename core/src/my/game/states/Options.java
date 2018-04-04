@@ -1,6 +1,7 @@
 package my.game.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -92,7 +93,6 @@ public class Options extends GameState {
         });
 
         //name label
-        //Name = game.prefs.getString("name", "no name stored");  //getting name from preferences
         nameLabel = new Label(Name,mySkin); //labeltest
         nameLabel.setFontScale(5,5);
 
@@ -248,6 +248,7 @@ public class Options extends GameState {
         soundLabel.setText(soundvalue);
         optionsStage.act();
         optionsStage.draw();
+
     }
 
     @Override
