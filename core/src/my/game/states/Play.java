@@ -280,7 +280,7 @@ public class Play extends GameState {
         }
 
         // Win stuff
-        if (cl.isPlayerWin() == true) {
+        if (cl.isPlayerWin()) {
             if (level == 1) {
                 unlockLevel();
                 gsm.setState(GameStateManager.MENU);
@@ -319,7 +319,7 @@ public class Play extends GameState {
         //set cam to follow player
         cam.position.set(
                 player.getposition().x * PPM + Game.V_WIDTH / 4,
-                Game.V_HEIGHT / 2/*player.getposition().y * PPM +Game.V_HEIGHT/4*/, 0);
+                game.V_HEIGHT / 2/*player.getposition().y * PPM +Game.V_HEIGHT/4*/, 0);
         cam.update();
 
         // draw bgs
@@ -503,6 +503,10 @@ public class Play extends GameState {
                 v[2] = new Vector2(ts / 2 / PPM, ts / 2 / PPM);
                 v[3] = new Vector2(ts / 2 / PPM, -ts / 2 / PPM);
                 cs.createChain(v);
+
+                //PolygonShape cs = new PolygonShape();
+                //cs.setAsBox(32,32);
+
                 FixtureDef fd = new FixtureDef();
                 fd.friction = 0;
                 fd.shape = cs;

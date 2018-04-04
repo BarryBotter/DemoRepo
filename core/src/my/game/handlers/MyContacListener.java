@@ -26,6 +26,7 @@ public class MyContacListener implements ContactListener {
 
     private int numFootContacts;
     public boolean wincontact;
+    public boolean playerShoot;
     private Array<Body> bodiesToRemove;
     private Array<Body> enemyBodiesToRemove;
     private Array<Body> bulletBodiesToRemove;
@@ -51,10 +52,12 @@ public class MyContacListener implements ContactListener {
         // Check collision between player and pickups.
         if(fa.getUserData() != null && fa.getUserData().equals("crystal")){
             //remove pickup
+            playerShoot = true;
             bodiesToRemove.add(fa.getBody());
             Player.increaseAmmo();
         }
         if(fb.getUserData() != null && fb.getUserData().equals("crystal")){
+            playerShoot = true;
             bodiesToRemove.add(fb.getBody());
             Player.increaseAmmo();
         }
