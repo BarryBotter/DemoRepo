@@ -16,6 +16,7 @@ import my.game.entities.Traps;
 import my.game.handlers.B2DVars;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -64,6 +65,8 @@ public class Play extends GameState {
     public static int level;
     private int levelS;
     private int crystalsAmount;
+    private int enemiesDestroyed;
+    private int hearthsLeft;
     private World world;
     private Box2DDebugRenderer b2dr;
 
@@ -133,13 +136,17 @@ public class Play extends GameState {
         // create backgrounds
         Texture bgs = Game.res.getTexture("bgones");
         TextureRegion sky = new TextureRegion(bgs, 0, 0, 320, 240);
-        TextureRegion mountains = new TextureRegion(bgs, 0,235 , 320, 240);
+        TextureRegion mountains = new TextureRegion(bgs, 0, 235, 320, 240);
         Texture trees = Game.res.getTexture("bgone");
-        TextureRegion  treeLayer = new TextureRegion(trees, 0, 27, 320, 240);
+        TextureRegion treeLayer = new TextureRegion(trees, 0, 27, 320, 240);
         backgrounds = new Background[2];
         backgrounds[0] = new Background(sky, cam, 0f);
         backgrounds[1] = new Background(mountains, cam, 0.1f);
-       // backgrounds[2] = new Background(treeLayer, cam, 0.2f);
+        // backgrounds[2] = new Background(treeLayer, cam, 0.2f);
+
+
+
+
 
         // set up hud
         hud = new HUD(player);
@@ -227,7 +234,7 @@ public class Play extends GameState {
             gsm.setState(GameStateManager.GAMEOVER);
         }
 
-        if(Player.gameIsOver()) {
+        if (Player.gameIsOver()) {
             Game.res.getSound("snap").play();
             gsm.setState(GameStateManager.GAMEOVER);
         }
@@ -236,7 +243,7 @@ public class Play extends GameState {
         if (cl.isPlayerWin()) {
             if (level == 1) {
                 unlockLevel();
-                Colledted();
+                Collected();
                 gsm.setState(GameStateManager.LEVEL_COMPLETE);
             } else if (level == 2) {
                 unlockLevel();
@@ -281,9 +288,11 @@ public class Play extends GameState {
 
         // draw bgs
         sb.setProjectionMatrix(hudCam.combined);
-        for (int i = 0; i < backgrounds.length; i++) {
-            backgrounds[i].render(sb);
+        for (Background background : backgrounds) {
+            background.render(sb);
         }
+
+
 
         //draw tile map
         tmRenderer.setView(cam);
@@ -378,12 +387,12 @@ public class Play extends GameState {
         layer = (TiledMapTileLayer) tileMap.getLayers().get("platforms");
 
         if (layer != null)
-        createBlocks(layer, BIT_GROUND);
+            createBlocks(layer, BIT_GROUND);
 
         layer = (TiledMapTileLayer) tileMap.getLayers().get("corner");
 
         if (layer != null)
-        createCorners(layer, BIT_CORNER);
+            createCorners(layer, BIT_CORNER);
 
         layer = (TiledMapTileLayer) tileMap.getLayers().get("jump");
 
@@ -508,37 +517,38 @@ public class Play extends GameState {
         crystals = new Array<PickUp>();
         MapLayer layer = tileMap.getLayers().get("crystals");
 
-        if(layer != null){
+        if (layer != null) {
 
-        BodyDef bdef = new BodyDef();
-        FixtureDef fdef = new FixtureDef();
+            BodyDef bdef = new BodyDef();
+            FixtureDef fdef = new FixtureDef();
 
-        for (MapObject mo : layer.getObjects()) {
+            for (MapObject mo : layer.getObjects()) {
 
-            bdef.type = BodyDef.BodyType.StaticBody;
+                bdef.type = BodyDef.BodyType.StaticBody;
 
-            float x = mo.getProperties().get("x", float.class) / PPM;
-            float y = mo.getProperties().get("y", float.class) / PPM;
+                float x = mo.getProperties().get("x", float.class) / PPM;
+                float y = mo.getProperties().get("y", float.class) / PPM;
 
-            bdef.position.set(x, y);
+                bdef.position.set(x, y);
 
-            CircleShape cshape = new CircleShape();
-            cshape.setRadius(8 / PPM);
+                CircleShape cshape = new CircleShape();
+                cshape.setRadius(8 / PPM);
 
-            fdef.shape = cshape;
-            fdef.isSensor = true;
-            fdef.filter.categoryBits = BIT_CRYSTAL;
-            fdef.filter.maskBits = BIT_PLAYER;
+                fdef.shape = cshape;
+                fdef.isSensor = true;
+                fdef.filter.categoryBits = BIT_CRYSTAL;
+                fdef.filter.maskBits = BIT_PLAYER;
 
-            Body body = world.createBody(bdef);
-            body.createFixture(fdef).setUserData("crystal");
-            cshape.dispose();
+                Body body = world.createBody(bdef);
+                body.createFixture(fdef).setUserData("crystal");
+                cshape.dispose();
 
-            PickUp c = new PickUp(body);
-            crystals.add(c);
+                PickUp c = new PickUp(body);
+                crystals.add(c);
 
-            body.setUserData(c);
-        }}
+                body.setUserData(c);
+            }
+        }
     }
 
     private void createTrap() {
@@ -582,37 +592,37 @@ public class Play extends GameState {
 
         MapLayer layer = tileMap.getLayers().get("win");
 
-        if (layer != null){
+        if (layer != null) {
 
-        BodyDef bdef = new BodyDef();
-        FixtureDef fdef = new FixtureDef();
+            BodyDef bdef = new BodyDef();
+            FixtureDef fdef = new FixtureDef();
 
-        for (MapObject mo : layer.getObjects()) {
+            for (MapObject mo : layer.getObjects()) {
 
-            bdef.type = BodyDef.BodyType.StaticBody;
+                bdef.type = BodyDef.BodyType.StaticBody;
 
-            float x = mo.getProperties().get("x", float.class) / PPM;
-            float y = mo.getProperties().get("y", float.class) / PPM;
+                float x = mo.getProperties().get("x", float.class) / PPM;
+                float y = mo.getProperties().get("y", float.class) / PPM;
 
-            bdef.position.set(x, y);
+                bdef.position.set(x, y);
 
-            CircleShape cshape = new CircleShape();
-            cshape.setRadius(8 / PPM);
+                CircleShape cshape = new CircleShape();
+                cshape.setRadius(8 / PPM);
 
-            fdef.shape = cshape;
-            fdef.isSensor = true;
-            fdef.filter.categoryBits = BIT_CRYSTAL;
-            fdef.filter.maskBits = BIT_PLAYER;
+                fdef.shape = cshape;
+                fdef.isSensor = true;
+                fdef.filter.categoryBits = BIT_CRYSTAL;
+                fdef.filter.maskBits = BIT_PLAYER;
 
-            Body body = world.createBody(bdef);
-            body.createFixture(fdef).setUserData("win");
-            cshape.dispose();
+                Body body = world.createBody(bdef);
+                body.createFixture(fdef).setUserData("win");
+                cshape.dispose();
 
-            win = new TextureDraw(body, "olvi");
+                win = new TextureDraw(body, "olvi");
 
-            body.setUserData(win);
+                body.setUserData(win);
+            }
         }
-    }
     }
 
     private void createBullet() {
@@ -699,22 +709,23 @@ public class Play extends GameState {
         }
     }
 
-    public void unlockLevel(){
+    public void unlockLevel() {
 
         levelS = game.lvls.getInteger("key");
 
-        if(level < levelS){
+        if (level < levelS) {
             //LVL_UNLOCKED = level;
-        }
-        else if (level >= levelS)
-        LVL_UNLOCKED = LVL_UNLOCKED +1;
-        game.lvls.putInteger("key",LVL_UNLOCKED);
+        } else if (level >= levelS)
+            LVL_UNLOCKED = LVL_UNLOCKED + 1;
+        game.lvls.putInteger("key", LVL_UNLOCKED);
         game.lvls.flush();
     }
 
-    public void Colledted(){
+    public void Collected() {
 
         crystalsAmount = game.lvls.getInteger("crystals");
+        enemiesDestroyed = game.lvls.getInteger("enemies");
+        hearthsLeft = game.lvls.getInteger("hearths");
 
         CRYSTALS_COLLECTED = player.getNumCrystals();
         ENEMIES_DESTROYED = Player.getEnemyKC();
@@ -729,7 +740,7 @@ public class Play extends GameState {
     private void enemyManager() {
         // Remove enemies.
         Array<Body> enemyBodies = cl.getEnemyBodiesToRemove();
-        if(enemyBodies.size > 0) {
+        if (enemyBodies.size > 0) {
             Body b = enemy.getBody();
             enemies.removeValue((Enemy) b.getUserData(), true);
             world.destroyBody(b);
@@ -739,7 +750,7 @@ public class Play extends GameState {
         enemyBodies.clear();
 
         // If enemy falls out of boundaries, respawn it.
-        if(enemies.get(0).getBody().getPosition().y < 0) {
+        if (enemies.get(0).getBody().getPosition().y < 0) {
             Body b = enemy.getBody();
             enemies.removeValue((Enemy) b.getUserData(), true);
             world.destroyBody(b);
@@ -747,7 +758,7 @@ public class Play extends GameState {
         }
 
         //If enemy gets left behind player undestroyed, respawn it.
-        if(enemies.get(0).getBody().getPosition().x < player.getposition().x - 2) {
+        if (enemies.get(0).getBody().getPosition().x < player.getposition().x - 2) {
             Body b = enemy.getBody();
             enemies.removeValue((Enemy) b.getUserData(), true);
             world.destroyBody(b);
@@ -755,14 +766,14 @@ public class Play extends GameState {
         }
 
         //Move enemy towards left side of the screen.
-        enemies.get(0).getBody().setTransform(enemy.getposition().x - 0.01f,enemy.getposition().y -0.01f, 0);
+        enemies.get(0).getBody().setTransform(enemy.getposition().x - 0.01f, enemy.getposition().y - 0.01f, 0);
 
         //If enemy roll is true, then spawn the enemy near the player.
-        if(!enemy.returnEnemyRollState()) {
+        if (!enemy.returnEnemyRollState()) {
             enemy.enemySpawnRoller();
         }
 
-        if(enemy.returnEnemySpawnState() && enemy.returnEnemyRollState()) {
+        if (enemy.returnEnemySpawnState() && enemy.returnEnemyRollState()) {
             Body b = enemy.getBody();
             enemies.removeValue((Enemy) b.getUserData(), true);
             world.destroyBody(b);
@@ -776,15 +787,13 @@ public class Play extends GameState {
         if (Player.returnNumberOfAmmo() > 0 && !bullet.returnCoolDownState() && !meleeHitBox.returnMeleeCoolDownState()) {
             bullet.resetBullet(player.getposition().x, player.getposition().y);
             // Check if the touch is below or above player.
-            if(touchPoint.y / PPM >= player.getposition().y) {
+            if (touchPoint.y / PPM >= player.getposition().y) {
                 bullet.shootBullet(touchPoint.x / PPM, touchPoint.y / PPM, false);
-            }
-            else {
-                bullet.shootBullet(touchPoint.x / PPM, (touchPoint.y / PPM) - player.getposition().y , true);
+            } else {
+                bullet.shootBullet(touchPoint.x / PPM, (touchPoint.y / PPM) - player.getposition().y, true);
             }
 
-        }
-        else {
+        } else {
             // After teh bullet's been shot, deploy a little cool down.
             bullet.checkBulletCoolDown();
         }
@@ -794,9 +803,8 @@ public class Play extends GameState {
         //If melee swing is not on cooldown make melee hitbox appear in front of the player.
         if (!meleeHitBox.returnMeleeCoolDownState() && !bullet.returnCoolDownState()) {
             meleeHitBox.meleeSwing();
-            meleeHitBox.getBody().setTransform(player.getposition().x+ 0.4f , player.getposition().y, 0);
-        }
-        else {
+            meleeHitBox.getBody().setTransform(player.getposition().x + 0.4f, player.getposition().y, 0);
+        } else {
             // Keep checking the cooldwon until it's ready to be used again.
             meleeHitBox.checkMeleeCoolDown();
         }
@@ -816,7 +824,7 @@ public class Play extends GameState {
     private void bulletRemover() {
         Array<Body> bulletBodies = cl.getBulletBodiesToRemove();
 
-        if(bulletBodies.size > 0) {
+        if (bulletBodies.size > 0) {
             Body b = bullet.getBody();
             bullets.removeValue((Projectile) b.getUserData(), true);
             world.destroyBody(b);
@@ -828,7 +836,7 @@ public class Play extends GameState {
     private void meleeHitBoxRemover() {
         Array<Body> meleeBodies = cl.getMeleeHitBoxesToRemove();
 
-        if(meleeBodies.size > 0) {
+        if (meleeBodies.size > 0) {
             Body b = meleeHitBox.getBody();
             meleeHitBoxes.removeValue((Melee) b.getUserData(), true);
             world.destroyBody(b);
@@ -849,4 +857,3 @@ public class Play extends GameState {
         trapBodies.clear();
     }
 }
-

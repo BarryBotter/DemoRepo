@@ -119,7 +119,7 @@ public class Game implements ApplicationListener {
 		res.loadTexture("res/images/happyTooth.png","happyTooth");
 		res.loadTexture("res/images/attack.png", "attack");
 		res.loadTexture("res/images/complete.png", "complete");
-
+		res.loadTexture("res/images/testibg.png", "testibg");
 	}
 
 	private void loadSounds(){

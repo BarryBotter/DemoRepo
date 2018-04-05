@@ -20,9 +20,6 @@ public class B2DVars {
     public static final short BIT_ENEMY = 256;
     public static final short BIT_MELEE = 512;
 
-    public static final short BIT_TOP_BLOCK = 2;
-    public static final short BIT_TOP_PLATFORM = 8;
-
     //other vars
      public static int LVL_UNLOCKED = 10;
      public static int CRYSTALS_COLLECTED = 0;

@@ -15,7 +15,7 @@ public class Player extends  B2DSprite{
     private static final int MAX_HEALTH = 10;
     private static final int MAX_NUMBER_OF_AMMO = 3;
     private static int numberOfAmmo = MAX_NUMBER_OF_AMMO;
-    private static int playerHealth = MAX_HEALTH;
+    private static int playerHealth;
     private static int enemyKillCount = 0;
 
     public static boolean gameOver = false;
@@ -70,7 +70,7 @@ public class Player extends  B2DSprite{
     public static void loseHealth() {
         // Decrease player health by 1 when hit.
         if(playerHealth != 0) {
-            playerHealth--;
+            //playerHealth--;
         }
         // If the player health hits 0, start game over procedure.
         if(playerHealth == 0) {
@@ -113,5 +113,6 @@ public class Player extends  B2DSprite{
         gameOver = false;
         numberOfAmmo = MAX_NUMBER_OF_AMMO;
         playerHealth = MAX_HEALTH;
+        enemyKillCount = 0;
     }
 }

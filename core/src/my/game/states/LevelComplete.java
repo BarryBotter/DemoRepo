@@ -106,13 +106,13 @@ public class LevelComplete extends GameState {
 
         sb.begin();
         textFont.draw(sb,"crystals collected", 130,200);
-        textFont.draw(sb, "enemies destroyed",130, 185);
-        textFont.draw(sb, "Hearths left",130,170);
+        textFont.draw(sb, "enemies destroyed",130, 180);
+        textFont.draw(sb, "Hearths left",130,160);
 
         // draw crystal amount
-        drawString(sb, game.lvls.getInteger("crystals") + "", 110, 192);
-        drawString(sb, game.lvls.getInteger("enemies") + "", 110, 177);
-        //drawString(sb,game.lvls.getInteger("hearths") + "",110,162);
+        drawString(sb, game.lvls.getInteger("crystals") + "", 110, 184);
+        drawString(sb, game.lvls.getInteger("enemies") + "", 110, 164);
+        drawString(sb,game.lvls.getInteger("hearths") + "",108,144);
         sb.end();
 
     }

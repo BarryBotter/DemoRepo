@@ -97,12 +97,13 @@ public class MyContactListener implements ContactListener {
                 enemyBodiesToRemove.add(fb.getBody());
                 Game.res.getSound("hit").play();
                 bulletBodiesToRemove.add(fa.getBody());
-
+                Player.increaseEnemyKC();
             }
             else if(fa.getUserData().equals("melee")) {
                 enemyBodiesToRemove.add(fb.getBody());
                 Game.res.getSound("hit").play();
                 meleeBodiesToRemove.add(fa.getBody());
+                Player.increaseEnemyKC();
             }
         }
         // Check collision between player/bullet and traps.
