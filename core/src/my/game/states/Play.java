@@ -49,6 +49,9 @@ import static my.game.handlers.B2DVars.BIT_JUMP;
 import static my.game.handlers.B2DVars.BIT_MELEE;
 import static my.game.handlers.B2DVars.BIT_PLAYER;
 import static my.game.handlers.B2DVars.BIT_TRAP;
+import static my.game.handlers.B2DVars.CRYSTALS_COLLECTED;
+import static my.game.handlers.B2DVars.ENEMIES_DESTROYED;
+import static my.game.handlers.B2DVars.HEARTHS_LEFT;
 import static my.game.handlers.B2DVars.LVL_UNLOCKED;
 import static my.game.handlers.B2DVars.PPM;
 
@@ -60,6 +63,7 @@ public class Play extends GameState {
 
     public static int level;
     private int levelS;
+    private int crystalsAmount;
     private World world;
     private Box2DDebugRenderer b2dr;
 
@@ -232,7 +236,8 @@ public class Play extends GameState {
         if (cl.isPlayerWin()) {
             if (level == 1) {
                 unlockLevel();
-                gsm.setState(GameStateManager.MENU);
+                Colledted();
+                gsm.setState(GameStateManager.LEVEL_COMPLETE);
             } else if (level == 2) {
                 unlockLevel();
                 gsm.setState(GameStateManager.MENU);
@@ -705,6 +710,20 @@ public class Play extends GameState {
         LVL_UNLOCKED = LVL_UNLOCKED +1;
         game.lvls.putInteger("key",LVL_UNLOCKED);
         game.lvls.flush();
+    }
+
+    public void Colledted(){
+
+        crystalsAmount = game.lvls.getInteger("crystals");
+
+        CRYSTALS_COLLECTED = player.getNumCrystals();
+        ENEMIES_DESTROYED = Player.getEnemyKC();
+        HEARTHS_LEFT = player.returnHealth();
+        game.lvls.putInteger("crystals", CRYSTALS_COLLECTED);
+        game.lvls.putInteger("enemies", ENEMIES_DESTROYED);
+        game.lvls.putInteger("hearths", HEARTHS_LEFT);
+        game.lvls.flush();
+
     }
 
     private void enemyManager() {

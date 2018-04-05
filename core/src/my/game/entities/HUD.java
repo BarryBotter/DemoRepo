@@ -60,7 +60,7 @@ public class HUD {
         for(int i = 0; i < Player.returnMaxHealth(); i++) {
             sb.draw(heartSilhoutteTexture, 5 + (i*17),222, 12,12);
         }
-        for(int i = 0; i < Player.returnHealth(); i++) {
+        for(int i = 0; i < player.returnHealth(); i++) {
             sb.draw(heartTexture, 5 + (i*17),222, 12,12);
         }
 

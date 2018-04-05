@@ -16,7 +16,7 @@ public class Player extends  B2DSprite{
     private static final int MAX_NUMBER_OF_AMMO = 3;
     private static int numberOfAmmo = MAX_NUMBER_OF_AMMO;
     private static int playerHealth = MAX_HEALTH;
-    private int enemyKillCount = 0;
+    private static int enemyKillCount = 0;
 
     public static boolean gameOver = false;
 
@@ -88,7 +88,7 @@ public class Player extends  B2DSprite{
         }
     }
 
-    public static int returnHealth() {
+    public int returnHealth() {
         return playerHealth;
     }
 
@@ -96,12 +96,12 @@ public class Player extends  B2DSprite{
         return MAX_HEALTH;
     }
 
-    public void increaseEnemyKC() {
+    public static void increaseEnemyKC() {
         enemyKillCount++;
         System.out.println(enemyKillCount);
     }
 
-    public int getEnemyKC() {
+    public static int getEnemyKC() {
         return enemyKillCount;
     }
 
