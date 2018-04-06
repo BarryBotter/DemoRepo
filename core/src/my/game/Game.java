@@ -4,17 +4,11 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-
 import my.game.handlers.BoundedCamera;
 import my.game.handlers.Content;
 import my.game.handlers.GameStateManager;
-
 import static my.game.handlers.B2DVars.CRYSTALS_COLLECTED;
 import static my.game.handlers.B2DVars.ENEMIES_DESTROYED;
 import static my.game.handlers.B2DVars.HEARTHS_LEFT;
@@ -108,7 +102,6 @@ public class Game implements ApplicationListener {
 	}
 
 	public void loadTextures(){
-
 		res.loadTexture("res/images/trap.png","trap");
 		res.loadTexture("res/images/crystal.png", "Crystal");
 		res.loadTexture("res/images/hud.png","hud");
@@ -118,6 +111,7 @@ public class Game implements ApplicationListener {
 		res.loadTexture("res/UI_final/rebg.png","menubg");
 		res.loadTexture("res/UI_final/resized_paavalikko.png","main");
 		res.loadTexture("res/UI_final/resized_hammas.png","tooth");
+		res.loadTexture("res/UI_final/menu_logo.png","menulogo");
 		res.loadTexture("res/images/Game_Over.png", "gameover");
 		res.loadTexture("res/background/testimaa.png","bgone");
 		res.loadTexture("res/background/rsz_karkkimaas.png","bgones");
@@ -132,6 +126,7 @@ public class Game implements ApplicationListener {
 		res.loadTexture("res/images/attack.png", "attack");
 		res.loadTexture("res/images/complete.png", "complete");
 		res.loadTexture("res/images/testibg.png", "testibg");
+
 	}
 
 	private void loadSounds(){
