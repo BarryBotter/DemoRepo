@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
 
 import my.game.Game;
+import my.game.handlers.B2DVars;
+
 
 
 /**
@@ -16,6 +18,7 @@ public class Player extends  B2DSprite{
     private static final int MAX_NUMBER_OF_AMMO = 3;
     private static int numberOfAmmo = MAX_NUMBER_OF_AMMO;
     private static int playerHealth;
+    private static int healthCount = 0;
     private static int enemyKillCount = 0;
 
     public static boolean gameOver = false;
@@ -71,11 +74,16 @@ public class Player extends  B2DSprite{
         // Decrease player health by 1 when hit.
         if(playerHealth != 0) {
             playerHealth--;
+            countHealth();
         }
         // If the player health hits 0, start game over procedure.
         if(playerHealth == 0) {
             gameOver = true;
         }
+    }
+
+    public static void countHealth(){
+        healthCount++;
     }
 
     public static void fullHeal() {
@@ -88,7 +96,11 @@ public class Player extends  B2DSprite{
         }
     }
 
-    public int returnHealth() {
+    public static int counterHealth(){
+        return healthCount;
+    }
+
+    public static int returnHealth() {
         return playerHealth;
     }
 
@@ -114,5 +126,6 @@ public class Player extends  B2DSprite{
         numberOfAmmo = MAX_NUMBER_OF_AMMO;
         playerHealth = MAX_HEALTH;
         enemyKillCount = 0;
+        healthCount = 0;
     }
 }

@@ -53,7 +53,7 @@ import static my.game.handlers.B2DVars.BIT_PLAYER;
 import static my.game.handlers.B2DVars.BIT_TRAP;
 import static my.game.handlers.B2DVars.CRYSTALS_COLLECTED;
 import static my.game.handlers.B2DVars.ENEMIES_DESTROYED;
-import static my.game.handlers.B2DVars.HEARTHS_LEFT;
+import static my.game.handlers.B2DVars.HITS_TAKEN;
 import static my.game.handlers.B2DVars.LVL_UNLOCKED;
 import static my.game.handlers.B2DVars.PPM;
 
@@ -65,9 +65,6 @@ public class Play extends GameState {
 
     public static int level;
     private int levelS;
-    private int crystalsAmount;
-    private int enemiesDestroyed;
-    private int hearthsLeft;
     private World world;
     private Box2DDebugRenderer b2dr;
 
@@ -143,7 +140,7 @@ public class Play extends GameState {
         backgrounds = new Background[2];
         backgrounds[0] = new Background(sky, cam, 0f);
         backgrounds[1] = new Background(mountains, cam, 0.1f);
-        // backgrounds[2] = new Background(treeLayer, cam, 0.2f);
+        //backgrounds[2] = new Background(treeLayer, cam, 0.2f);
 
 
 
@@ -725,20 +722,21 @@ public class Play extends GameState {
             LVL_UNLOCKED = LVL_UNLOCKED + 1;
         game.lvls.putInteger("key", LVL_UNLOCKED);
         game.lvls.flush();
+
     }
 
     public void Collected() {
 
         game.lvls.getInteger("crystals");
         game.lvls.getInteger("enemies");
-        game.lvls.getInteger("hearths");
+        game.lvls.getInteger("hits");
 
         CRYSTALS_COLLECTED = player.getNumCrystals();
         ENEMIES_DESTROYED = Player.getEnemyKC();
-        HEARTHS_LEFT = player.returnHealth();
+        HITS_TAKEN =  Player.counterHealth();
         game.lvls.putInteger("crystals", CRYSTALS_COLLECTED);
         game.lvls.putInteger("enemies", ENEMIES_DESTROYED);
-        game.lvls.putInteger("hearths", HEARTHS_LEFT);
+        Game.lvls.putInteger("hits", HITS_TAKEN);
         game.lvls.flush();
 
     }

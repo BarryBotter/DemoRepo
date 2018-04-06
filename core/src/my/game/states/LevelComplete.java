@@ -8,12 +8,15 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Timer;
 
 import my.game.Game;
 import my.game.entities.Background;
 import my.game.entities.Player;
 import my.game.handlers.GameButton;
 import my.game.handlers.GameStateManager;
+
+import static my.game.handlers.B2DVars.MAX_HEALTH;
 
 public class LevelComplete extends GameState {
 
@@ -30,6 +33,15 @@ public class LevelComplete extends GameState {
     private TextureRegion crystal;
     private TextureRegion[] font;
     private BitmapFont textFont;
+
+    private int crystalScore;
+    private int enemyScore;
+    private int hitScore;
+    private int scoreCounter = 0;
+    private int hearthScore;
+    private int totalScore;
+
+    float delay = 5;
 
 
     public LevelComplete(GameStateManager gsm) {
@@ -50,12 +62,14 @@ public class LevelComplete extends GameState {
 
         textFont = new BitmapFont(Gdx.files.internal("res/images/fontstyle.fnt"), false);
 
+        hearthScore =  Game.lvls.getInteger("hits");
+
         tex = Game.res.getTexture("main");
         menuButtons = new TextureRegion[5];
         menuButtons[0] = new TextureRegion(tex, 340, 40, 200, 100);
         menuButtons[1] = new TextureRegion(tex, 340, 125, 200, 100);
-        playButton = new GameButton(menuButtons[0], 250, 100, cam);
-        exitButton = new GameButton(menuButtons[1], 150, 110, cam);
+        playButton = new GameButton(menuButtons[0], 300, 100, cam);
+        exitButton = new GameButton(menuButtons[1], 100, 110, cam);
 
 
         cam.setToOrtho(false, Game.V_WIDTH, Game.V_HEIGHT);
@@ -107,12 +121,14 @@ public class LevelComplete extends GameState {
         sb.begin();
         textFont.draw(sb,"crystals collected", 130,200);
         textFont.draw(sb, "enemies destroyed",130, 180);
-        textFont.draw(sb, "Hearths left",130,160);
+        textFont.draw(sb, "Hits taken",130,160);
 
         // draw crystal amount
         drawString(sb, game.lvls.getInteger("crystals") + "", 110, 184);
         drawString(sb, game.lvls.getInteger("enemies") + "", 110, 164);
-        //drawString(sb,game.lvls.getInteger("hearths") + "",108,144);
+        drawString(sb, hearthScore + "",108,144);
+        drawString(sb, getScore() + " ",110, 100);
+
         sb.end();
 
     }
@@ -130,5 +146,20 @@ public class LevelComplete extends GameState {
             else continue;
             sb.draw(font[c], x + i * 9, y);
         }
+    }
+
+    public int getScore()
+    {
+        crystalScore = Game.lvls.getInteger("crystals") * 100;
+        enemyScore = Game.lvls.getInteger("enemies") * 100;
+        hitScore = Game.lvls.getInteger("hits");
+
+
+        if (hitScore != 0)
+            totalScore = (crystalScore + enemyScore) * 5;
+        else if(hitScore == 0)
+            totalScore = (crystalScore + enemyScore) * 15;
+
+        return totalScore;
     }
 }

@@ -35,7 +35,6 @@ public class Menu extends GameState{
     private GameButton exitButton;
 
     private World world;
-    private Box2DDebugRenderer b2dRenderer;
 
     private TextureRegion[] menuButtons;
 
@@ -59,8 +58,6 @@ public class Menu extends GameState{
         cam.setToOrtho(false, Game.V_WIDTH, Game.V_HEIGHT);
 
         world = new World(new Vector2(0, -9.8f * 5), true);
-        //world = new World(new Vector2(0, 0), true);
-        b2dRenderer = new Box2DDebugRenderer();
 
 
     }
@@ -94,13 +91,6 @@ public class Menu extends GameState{
 
         // draw button
         playButton.render(sb);
-
-        // debug draw box2d
-        if(debug) {
-            cam.setToOrtho(false, Game.V_WIDTH / PPM, Game.V_HEIGHT / PPM);
-            b2dRenderer.render(world, cam.combined);
-            cam.setToOrtho(false, Game.V_WIDTH, Game.V_HEIGHT);
-        }
 
     }
 

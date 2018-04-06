@@ -12,7 +12,7 @@ import my.game.handlers.GameStateManager;
 
 import static my.game.handlers.B2DVars.CRYSTALS_COLLECTED;
 import static my.game.handlers.B2DVars.ENEMIES_DESTROYED;
-import static my.game.handlers.B2DVars.HEARTHS_LEFT;
+import static my.game.handlers.B2DVars.HITS_TAKEN;
 import static my.game.handlers.B2DVars.LVL_UNLOCKED;
 
 public class Game implements ApplicationListener {
@@ -60,7 +60,7 @@ public class Game implements ApplicationListener {
 		lvls = Gdx.app.getPreferences("mylvls");
 		if(!lvls.contains("key")) lvls.putInteger("key", LVL_UNLOCKED);
 		if(!lvls.contains("crystals")) lvls.putInteger("crystals", CRYSTALS_COLLECTED);
-		if(!lvls.contains("hearths")) lvls.putInteger("hearths", HEARTHS_LEFT);
+		if(!lvls.contains("hits")) lvls.putInteger("hits", HITS_TAKEN);
 		if(!lvls.contains("enemies")) lvls.putInteger("enemies", ENEMIES_DESTROYED);
 		lvls.flush();
 
