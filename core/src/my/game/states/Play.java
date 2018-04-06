@@ -270,12 +270,12 @@ public class Play extends GameState {
 
         // Game over stuff
         if (player.getBody().getPosition().y < 0) {
-            Game.res.getSound("snap").play();
+            Game.res.getSound("scream").play();
             gsm.setState(GameStateManager.GAMEOVER);
         }
 
         if(Player.gameIsOver()) {
-            Game.res.getSound("snap").play();
+            Game.res.getSound("scream").play();
             gsm.setState(GameStateManager.GAMEOVER);
         }
 

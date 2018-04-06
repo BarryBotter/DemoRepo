@@ -3,16 +3,23 @@ package my.game.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Colors;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Blending;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+
+import java.awt.Rectangle;
 
 import my.game.Game;
 import my.game.entities.Background;
@@ -24,35 +31,33 @@ import my.game.handlers.GameStateManager;
 
 public class cutScene extends GameState {
 
-    OrthographicCamera camera;
     ExtendViewport viewport;
     private Background bg;
-
-    TextureRegion rect;
-    Texture fontTex;
-    BitmapFont font;
-    public String dialogString = "default_string";
-    int screenWidth = 1920,screenHeight = 1080;
+    private BitmapFont font;
+    private String dialogString = "default_string";
+    private int screenWidth = 1920,screenHeight = 1080;
+    private static Pixmap pixmap;
+    private Texture pixmaptex;
 
     public cutScene(final GameStateManager gsm){
         super(gsm);
 
-        Texture tex = Game.res.getTexture("menubg");
+        Texture tex = Game.res.getTexture("menubg"); //background
         bg = new Background(new TextureRegion(tex),hudCam,5 );
         bg.setVector(0, 0);
 
         //camera
-        camera = new OrthographicCamera();
-        viewport = new ExtendViewport(1920, 1080, camera);
+        viewport = new ExtendViewport(screenWidth, screenHeight,screenWidth,screenHeight, cam);
 
-        //?????
-        fontTex = new Texture("kuva.png");
-        rect = new TextureRegion(fontTex, 250, 250, 1, 1);
+        //rectanglebox for dialogs
+        getPixmapRoundedRectangle(250,250,50, Color.LIGHT_GRAY);
+        pixmaptex = new Texture( pixmap );
+        //pixmaptex.
+        pixmap.dispose();
 
         //Text in the box
         font = new BitmapFont();
         font.getData().setScale(1f,1f);
-
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
@@ -63,7 +68,6 @@ public class cutScene extends GameState {
             }
         });
         TextChange();
-
     }
 
     void TextChange() {
@@ -93,16 +97,36 @@ public class cutScene extends GameState {
     public void render() {
         bg.render(sb);
         sb.begin();
-        sb.draw(rect, (float) (screenWidth*0.01), 25, (float) (screenWidth*0.1), 50);
+        sb.draw(pixmaptex,10,10,300,80);
         font.draw(sb,dialogString,(float) (screenWidth*0.01) ,60);
         sb.end();
     }
 
     @Override
     public void dispose() {
-        fontTex.dispose();
+        pixmaptex.dispose();
         font.dispose();
-        //backgroundTexture.dispose();
-        Gdx.input.setInputProcessor(null);
+        //Gdx.input.setInputProcessor(null);
     }
+
+    public void getPixmapRoundedRectangle(int width, int height, int radius, Color color) {
+        // todo transparency
+        pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+        //pixmap = new Pixmap(width, height, Pixmap.Format.Alpha);
+        pixmap.setBlending(Blending.None);
+        pixmap.setColor(color);
+        // Pink rectangle
+        pixmap.fillRectangle(0, radius, pixmap.getWidth(), pixmap.getHeight()-2*radius);
+        // Green rectangle
+        pixmap.fillRectangle(radius, 0, pixmap.getWidth() - 2*radius, pixmap.getHeight());
+        // Bottom-left circle
+        pixmap.fillCircle(radius, radius, radius);
+        // Top-left circle
+        pixmap.fillCircle(radius, pixmap.getHeight()-radius, radius);
+        // Bottom-right circle
+        pixmap.fillCircle(pixmap.getWidth()-radius, radius, radius);
+        // Top-right circle
+        pixmap.fillCircle(pixmap.getWidth()-radius, pixmap.getHeight()-radius, radius);
+    }
+
 }

@@ -3,9 +3,13 @@ package my.game;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import my.game.handlers.BoundedCamera;
 import my.game.handlers.Content;
@@ -27,13 +31,14 @@ public class Game implements ApplicationListener {
 	private GameStateManager gsm;
 
 	public static Content res;
-	public Sound snap;
 	public Preferences prefs;
 	public static Preferences lvls;
 
 	public SpriteBatch getSpriteBatch(){return sb;}
 	public static BoundedCamera getCamera(){return cam;}
 	public OrthographicCamera getHUDCamera(){return hudCam;}
+
+	public Skin mySkin;
 
 	@Override
 	public void create() {
@@ -48,6 +53,7 @@ public class Game implements ApplicationListener {
 		res.loadTexture("res/UI_final/rebg.png","menubg");
 		res.loadTexture("res/UI_final/resized_paavalikko.png","main");
 		res.loadTexture("res/UI_final/resized_hammas.png","tooth");
+		res.loadTexture("res/UI_final/menu_logo.png","menulogo");
 		res.loadTexture("res/images/Game_Over.png", "gameover");
 		res.loadTexture("res/background/testimaa.png","bgone");
 		res.loadTexture("res/background/rsz_karkkimaas.png","bgones");
@@ -61,8 +67,8 @@ public class Game implements ApplicationListener {
 		res.loadTexture("res/images/happyTooth.png","happyTooth");
 
 		res.loadSound("res/sfx/necksnap.mp3","snap");
+		res.loadSound("res/sfx/scream.ogg","scream");
 		res.loadSound("res/sfx/hit.wav","hit");
-
 		res.loadMusic("res/music/bbsong.ogg", "bbsong");
 		res.getMusic("bbsong").setLooping(true);
 		res.getMusic("bbsong").setVolume(0.5f);
@@ -73,7 +79,7 @@ public class Game implements ApplicationListener {
 		cam.setToOrtho(false, V_WIDTH, V_HEIGHT);
 		hudCam = new OrthographicCamera();
 		hudCam.setToOrtho(false, V_WIDTH, V_HEIGHT);
-		snap = my.game.Game.res.getSound("snap");
+		mySkin = new Skin(Gdx.files.internal("res/skin/glassy-ui.json"));
 
 		gsm = new GameStateManager(this);
 
@@ -89,7 +95,6 @@ public class Game implements ApplicationListener {
 			prefs.putString("name", "Eero");
 			prefs.flush();
 		}
-
 	}
 
 	@Override
@@ -99,10 +104,8 @@ public class Game implements ApplicationListener {
 
 	@Override
 	public void render() {
-
 		gsm.update(Gdx.graphics.getDeltaTime());
 		gsm.render();
-
 	}
 
 	@Override
@@ -119,6 +122,5 @@ public class Game implements ApplicationListener {
 	public void dispose() {
 		res.removeAll();
 	}
-
 
 }

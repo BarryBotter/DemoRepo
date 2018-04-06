@@ -1,7 +1,6 @@
 package my.game.states;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -12,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import my.game.Game;
-import my.game.handlers.Content;
 import my.game.handlers.GameButton;
 import my.game.handlers.GameStateManager;
 
@@ -22,21 +20,29 @@ public class LevelSelect extends GameState {
     private TextureRegion reg;
     private GameButton[][] buttons;
     private int lvl;
+    Skin mySkin;
     Stage stage;
+    private Button exitButton,cutSceneButton;
 
     public LevelSelect(final GameStateManager gsm) {
-
         super(gsm);
-
         lvl = game.lvls.getInteger("key");
-
         //skin and stage
+        mySkin = game.mySkin;
+        stage = gsm.stage;
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
-        Skin mySkin = new Skin(Gdx.files.internal("res/skin/glassy-ui.json"));
+        reg = new TextureRegion(Game.res.getTexture("menubg"), 0, 0, 320, 240);
+        cam.setToOrtho(false, Game.V_WIDTH, Game.V_HEIGHT);
 
-        //backbutton (not in the table)
-        Button exitButton = new TextButton("BACK",mySkin,"default");
+        buttons();
+        lvlSelectGrid();
+
+    }
+
+    private void buttons(){
+        //backbutton (not in lvlgridthingy)
+        exitButton = new TextButton("BACK",mySkin,"default");
         exitButton.setSize(200, 100);
         exitButton.setPosition(100,100);
         exitButton.addListener(new InputListener(){
@@ -51,8 +57,8 @@ public class LevelSelect extends GameState {
         });
         stage.addActor(exitButton);
 
-        //button for testing cutscene (not in the table)
-        Button cutSceneButton = new TextButton("cutSceneDemo",mySkin,"default");
+        //button for testing cutscene (not in lvlgridthingy)
+        cutSceneButton = new TextButton("cutSceneDemo",mySkin,"default");
         cutSceneButton.setSize(200, 100);
         cutSceneButton.setPosition(100,250);
         cutSceneButton.addListener(new InputListener(){
@@ -66,8 +72,9 @@ public class LevelSelect extends GameState {
                 return true;}
         });
         stage.addActor(cutSceneButton);
+    }
 
-        reg = new TextureRegion(Game.res.getTexture("menubg"), 0, 0, 320, 240);
+    private void lvlSelectGrid(){
         //todo levelselectgrid has some hitboxproblems
         TextureRegion buttonReg = new TextureRegion(Game.res.getTexture("hud"), 0, 0, 32, 32);
         buttons = new GameButton[3][3];
@@ -77,9 +84,6 @@ public class LevelSelect extends GameState {
                 buttons[row][col].setText(row * buttons[0].length + col + 1 + "");
             }
         }
-
-        cam.setToOrtho(false, Game.V_WIDTH, Game.V_HEIGHT);
-
     }
 
     public void handleInput() {
@@ -117,6 +121,7 @@ public class LevelSelect extends GameState {
 
     @Override
     public void dispose() {
+        stage.clear();
     }
 
 }

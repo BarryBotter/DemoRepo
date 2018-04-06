@@ -3,11 +3,10 @@ package my.game.handlers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-
 import java.util.Stack;
-
 import my.game.states.GameOver;
 import my.game.states.GameState;
 import my.game.states.LevelSelect;
@@ -36,10 +35,12 @@ public class GameStateManager {
     public ImageButton.ImageButtonStyle playButtonStyle, optionButtonStyle,exitButtonStyle,toothStyle;
     Texture tex;
     TextureRegion menuButtons[];
+    public  Stage stage;
 
     public GameStateManager(my.game.Game game){
         this.game = game;
         makeStyles();
+        stage = new Stage();
         gameStates = new Stack<GameState>();
         pushState(MENU);
     }
