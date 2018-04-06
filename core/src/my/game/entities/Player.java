@@ -70,7 +70,7 @@ public class Player extends  B2DSprite{
     public static void loseHealth() {
         // Decrease player health by 1 when hit.
         if(playerHealth != 0) {
-            //playerHealth--;
+            playerHealth--;
         }
         // If the player health hits 0, start game over procedure.
         if(playerHealth == 0) {

@@ -15,6 +15,7 @@ import my.game.entities.TextureDraw;
 import my.game.entities.Traps;
 import my.game.handlers.B2DVars;
 
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -158,6 +159,9 @@ public class Play extends GameState {
 
     @Override
     public void handleInput() {
+
+        Gdx.gl.glClearColor(0,0,0,1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
     @Override
@@ -180,6 +184,7 @@ public class Play extends GameState {
                     if (cl.isPlayerOnGround()) {
                         player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
                         player.getBody().applyLinearImpulse(0.4f, 6, 0, 0, true);
+                        Gdx.app.debug("hearths", "vasen");
 
                         if (player.getBody().getLinearVelocity().x < 0.7f) {
                             player.getBody().setLinearVelocity(1.5f, 0);
@@ -247,7 +252,8 @@ public class Play extends GameState {
                 gsm.setState(GameStateManager.LEVEL_COMPLETE);
             } else if (level == 2) {
                 unlockLevel();
-                gsm.setState(GameStateManager.MENU);
+                Collected();
+                gsm.setState(GameStateManager.LEVEL_COMPLETE);
             } else if (level == 3) {
                 unlockLevel();
                 gsm.setState(GameStateManager.MENU);
@@ -723,9 +729,9 @@ public class Play extends GameState {
 
     public void Collected() {
 
-        crystalsAmount = game.lvls.getInteger("crystals");
-        enemiesDestroyed = game.lvls.getInteger("enemies");
-        hearthsLeft = game.lvls.getInteger("hearths");
+        game.lvls.getInteger("crystals");
+        game.lvls.getInteger("enemies");
+        game.lvls.getInteger("hearths");
 
         CRYSTALS_COLLECTED = player.getNumCrystals();
         ENEMIES_DESTROYED = Player.getEnemyKC();

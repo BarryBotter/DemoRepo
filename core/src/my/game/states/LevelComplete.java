@@ -112,7 +112,7 @@ public class LevelComplete extends GameState {
         // draw crystal amount
         drawString(sb, game.lvls.getInteger("crystals") + "", 110, 184);
         drawString(sb, game.lvls.getInteger("enemies") + "", 110, 164);
-        drawString(sb,game.lvls.getInteger("hearths") + "",108,144);
+        //drawString(sb,game.lvls.getInteger("hearths") + "",108,144);
         sb.end();
 
     }
