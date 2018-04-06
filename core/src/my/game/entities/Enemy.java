@@ -21,37 +21,34 @@ import my.game.states.Play;
  */
 
 public class Enemy extends B2DSprite{
-    private static final float ENEMY_SPEED = 0.9f;
-    private static final float MAX_ENEMY_RIGHT_MOVEMENT = 75;
-    private static final float MIN_ENEMY_RIGHT_MOVEMENT = 0;
-
     // The possibility of spawning an enemy per one render cycle. 1/100
-    private static final int ROLL_MULTIPLIER = 1;
-    private static final int CHANCES_OUT_OF = 100;
+    private final int ROLL_MULTIPLIER = 1;
+    private final int CHANCES_OUT_OF = 100;
 
-    Random rand = new Random();
-    public static boolean enemySpawned = false;
-    public static boolean rollComplete = false;
-    public static boolean enemyReadyToBeDestroyed = false;
+    private Random rand = new Random();
+    private boolean enemySpawned = true;
+    private boolean rollState = false;
 
     public Enemy(Body body) {
         super(body);
         Texture tex = Game.res.getTexture("happyTooth");
         TextureRegion[] sprites = TextureRegion.split(tex,35,34)[0];
         setAnimation(sprites, 1/12f);
+        enemySpawned = true;
+        rollState = false;
     }
 
-    public void enemyManager() {
+    public void enemySpawnRoller() {
         // Keep rolling until the enemy is spawned.
         if (!enemySpawned) {
             if (rand.nextInt(CHANCES_OUT_OF) == ROLL_MULTIPLIER) {
-                rollComplete = true;
                 enemySpawned = true;
+                rollState = true;
             }
         }
     }
 
-    public void enemyDestroyed() {
+    public void enemySpawnState() {
         enemySpawned = false;
     }
 
@@ -59,24 +56,11 @@ public class Enemy extends B2DSprite{
         return enemySpawned;
     }
 
-    public boolean returnRollState() {
-        return rollComplete;
+    public void readyToRoll() {
+        rollState = false;
     }
 
-    public void revertRollState() {
-        rollComplete = false;
-    }
-
-    public static void setDestroyState() {
-        enemyReadyToBeDestroyed = true;
-    }
-
-    public void revertDestroyState() {
-        enemyReadyToBeDestroyed = false;
-    }
-
-
-    public boolean returnDestroyState() {
-        return enemyReadyToBeDestroyed;
+    public boolean returnEnemyRollState() {
+        return rollState;
     }
 }

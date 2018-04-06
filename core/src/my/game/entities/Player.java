@@ -6,16 +6,18 @@ import com.badlogic.gdx.physics.box2d.Body;
 
 import my.game.Game;
 
+
 /**
  * Created by Katriina on 22.3.2018.
  */
 
 public class Player extends  B2DSprite{
-    static final int MAX_HEALTH = 3;
-    static final int MAX_NUMBER_OF_AMMO = 3;
-    static int numberOfAmmo = MAX_NUMBER_OF_AMMO;
-    static int playerHealth = MAX_HEALTH;
-    private int enemyKillCount = 0;
+    private static final int MAX_HEALTH = 10;
+    private static final int MAX_NUMBER_OF_AMMO = 3;
+    private static int numberOfAmmo = MAX_NUMBER_OF_AMMO;
+    private static int playerHealth;
+    private static int enemyKillCount = 0;
+
     public static boolean gameOver = false;
 
     private int numCrystals;
@@ -23,12 +25,18 @@ public class Player extends  B2DSprite{
 
     public Player(Body body){
         super(body);
+
         Texture tex = Game.res.getTexture("char");
-        TextureRegion[] sprites = TextureRegion.split(tex,32,32)[0];
-        setAnimation(sprites, 1/12f);
+
+        TextureRegion[] sprites = TextureRegion.split(tex, 32, 32)[0];
+        setAnimation(sprites, 1 / 12f);
+
         gameOver = false;
         numberOfAmmo = MAX_NUMBER_OF_AMMO;
         playerHealth = MAX_HEALTH;
+
+        resetPlayer();
+
     }
 
     public void collectCrystal(){numCrystals++;}
@@ -55,6 +63,10 @@ public class Player extends  B2DSprite{
         }
     }
 
+    public static void decreaseAmmo() {
+        numberOfAmmo--;
+    }
+
     public static void loseHealth() {
         // Decrease player health by 1 when hit.
         if(playerHealth != 0) {
@@ -76,7 +88,7 @@ public class Player extends  B2DSprite{
         }
     }
 
-    public static int returnHealth() {
+    public int returnHealth() {
         return playerHealth;
     }
 
@@ -84,16 +96,23 @@ public class Player extends  B2DSprite{
         return MAX_HEALTH;
     }
 
-    public void increaseEnemyKC() {
+    public static void increaseEnemyKC() {
         enemyKillCount++;
         System.out.println(enemyKillCount);
     }
 
-    public int getEnemyKC() {
+    public static int getEnemyKC() {
         return enemyKillCount;
     }
 
     public static boolean gameIsOver() {
         return gameOver;
+    }
+
+    private void resetPlayer() {
+        gameOver = false;
+        numberOfAmmo = MAX_NUMBER_OF_AMMO;
+        playerHealth = MAX_HEALTH;
+        enemyKillCount = 0;
     }
 }

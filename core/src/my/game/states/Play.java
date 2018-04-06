@@ -7,6 +7,7 @@ import my.game.Game;
 import my.game.entities.Background;
 import my.game.entities.Enemy;
 import my.game.entities.HUD;
+import my.game.entities.Melee;
 import my.game.entities.PickUp;
 import my.game.entities.Player;
 import my.game.entities.Projectile;
@@ -14,7 +15,9 @@ import my.game.entities.TextureDraw;
 import my.game.entities.Traps;
 import my.game.handlers.B2DVars;
 
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -37,7 +40,7 @@ import com.badlogic.gdx.utils.Array;
 
 import my.game.handlers.BoundedCamera;
 import my.game.handlers.GameStateManager;
-import my.game.handlers.MyContacListener;
+import my.game.handlers.MyContactListener;
 
 import static my.game.handlers.B2DVars.BIT_BULLET;
 import static my.game.handlers.B2DVars.BIT_CORNER;
@@ -45,8 +48,12 @@ import static my.game.handlers.B2DVars.BIT_CRYSTAL;
 import static my.game.handlers.B2DVars.BIT_ENEMY;
 import static my.game.handlers.B2DVars.BIT_GROUND;
 import static my.game.handlers.B2DVars.BIT_JUMP;
+import static my.game.handlers.B2DVars.BIT_MELEE;
 import static my.game.handlers.B2DVars.BIT_PLAYER;
 import static my.game.handlers.B2DVars.BIT_TRAP;
+import static my.game.handlers.B2DVars.CRYSTALS_COLLECTED;
+import static my.game.handlers.B2DVars.ENEMIES_DESTROYED;
+import static my.game.handlers.B2DVars.HEARTHS_LEFT;
 import static my.game.handlers.B2DVars.LVL_UNLOCKED;
 import static my.game.handlers.B2DVars.PPM;
 
@@ -58,13 +65,13 @@ public class Play extends GameState {
 
     public static int level;
     private int levelS;
+    private int crystalsAmount;
+    private int enemiesDestroyed;
+    private int hearthsLeft;
     private World world;
     private Box2DDebugRenderer b2dr;
 
     public static float accumulator = 0;
-
-    //private OrthographicCamera b2dCam;
-    private BoundedCamera b2dCam;
 
     private Rectangle screenRightSide;
     private Rectangle screenLeftSide;
@@ -75,15 +82,17 @@ public class Play extends GameState {
     private int tileSize;
     private OrthogonalTiledMapRenderer tmRenderer;
 
-    private MyContacListener cl;
+    private MyContactListener cl;
 
     private Player player;
     private Projectile bullet;
     private Enemy enemy;
+    private Melee meleeHitBox;
     private Array<PickUp> crystals;
     private Array<Enemy> enemies;
+    private Array<Projectile> bullets;
+    private Array<Melee> meleeHitBoxes;
     private Array<Traps> traps;
-    // private Array<Projectile> bullets;
     private TextureDraw win;
     private Vector3 touchPoint;
 
@@ -95,12 +104,12 @@ public class Play extends GameState {
         super(gsm);
 
         world = new World(new Vector2(0, -9.81f), true);
-        cl = new MyContacListener();
+        cl = new MyContactListener();
         world.setContactListener(cl);
         b2dr = new Box2DDebugRenderer();
 
         // create player
-        cretePlayer();
+        createPlayer();
 
         //create tile
         createWalls();
@@ -122,35 +131,37 @@ public class Play extends GameState {
         //Create enemy
         createEnemy();
 
+        //create melee hitbox
+        createMeleeHitBox();
+
         // create backgrounds
         Texture bgs = Game.res.getTexture("bgones");
         TextureRegion sky = new TextureRegion(bgs, 0, 0, 320, 240);
-        TextureRegion mountains = new TextureRegion(bgs, 0,235 , 320, 240);
+        TextureRegion mountains = new TextureRegion(bgs, 0, 235, 320, 240);
         Texture trees = Game.res.getTexture("bgone");
-        TextureRegion  treeLayer = new TextureRegion(trees, 0, 27, 320, 240);
+        TextureRegion treeLayer = new TextureRegion(trees, 0, 27, 320, 240);
         backgrounds = new Background[2];
         backgrounds[0] = new Background(sky, cam, 0f);
         backgrounds[1] = new Background(mountains, cam, 0.1f);
-       // backgrounds[2] = new Background(treeLayer, cam, 0.2f);
+        // backgrounds[2] = new Background(treeLayer, cam, 0.2f);
 
 
 
-        ///setup box2dcam
-        //b2dCam = new BoundedCamera();
-        //b2dCam.setToOrtho(false, Game.V_WIDTH / PPM, Game.V_HEIGHT / PPM);
-        //b2dCam.setBounds(0,(tileMapWidth * tileSize) / PPM,0,(tileMapHeight * tileSize ) / PPM);
+
 
         // set up hud
         hud = new HUD(player);
 
         //setup touch areas
         setupTouchControlAreas();
-
     }
 
 
     @Override
     public void handleInput() {
+
+        Gdx.gl.glClearColor(0,0,0,1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
     @Override
@@ -162,40 +173,30 @@ public class Play extends GameState {
                 translateScreenToWorldCoordinates(x, y);
 
                 if (rightSideTouched(touchPoint.x, touchPoint.y)) {
-                    // If the player has ammo and bullet is not on cooldown, shoot the bullet.
-                    if (player.returnNumberOfAmmo() > 0 && !bullet.returnCoolDownState()) {
-                        bullet.resetBullet(player.getposition().x, player.getposition().y);
-                        // Check if the touch is below or above player.
-                        if(touchPoint.y / PPM >= player.getposition().y) {
-                            bullet.shootBullet(touchPoint.x / PPM, touchPoint.y / PPM, false);
-                        }
-                        else {
-                            bullet.shootBullet(touchPoint.x / PPM, (touchPoint.y / PPM) - player.getposition().y , true);
-                        }
-
+                    //When player runs out of ammo, start melee mode.
+                    if (Player.returnNumberOfAmmo() == 0) {
+                        meleeManager();
+                    } else if (Player.returnNumberOfAmmo() <= Player.returnMaxAmmo()) {
+                        bulletManager();
                     }
-                    else {
-                        // After teh bullet's been shot, deploy a little cool down.
-                        bullet.checkBulletCoolDown();
-                    }
-
 
                 } else if (leftSideTouched(touchPoint.x, touchPoint.y)) {
-                    Gdx.app.log("Puoli:", "vasen");
                     if (cl.isPlayerOnGround()) {
                         player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
                         player.getBody().applyLinearImpulse(0.4f, 6, 0, 0, true);
+                        Gdx.app.debug("hearths", "vasen");
 
-                        if (player.getBody().getLinearVelocity().x < 0.5f) {
-                            float posX = player.getBody().getPosition().x;
-                           // player.getBody().setTransform(posX - 0.75f, player.getBody().getPosition().y, 0);
-                            player.getBody().setLinearVelocity(2f, 0);
+                        if (player.getBody().getLinearVelocity().x < 0.7f) {
+                            player.getBody().setLinearVelocity(1.5f, 0);
+                            if (player.getBody().getLinearVelocity().x < 0.5f) {
+                                player.getBody().setLinearVelocity(2f, 0);
+                            }
+
                         }
 
                     }
 
                 }
-
                 return super.touchDown(x, y, pointer, button);
             }
 
@@ -206,59 +207,23 @@ public class Play extends GameState {
         });
 
         stepWorld();
+        pickUpRemover();
+        bulletRemover();
+        meleeHitBoxRemover();
+        trapRemover();
+        enemyManager();
 
-        //remove pickups
-        Array<Body> bodies = cl.getBodiesToRemove();
-        for (int i = 0; i < bodies.size; i++) {
-            Body b = bodies.get(i);
-            crystals.removeValue((PickUp) b.getUserData(), true);
-            world.destroyBody(b);
-            player.collectCrystal();
-        }
-        bodies.clear();
-
-        Array<Body> enemyBodies = cl.getEnemyBodiesToRemove();
-
-        if(enemyBodies.size > 0) {
-            Body b = enemy.getBody();
-            enemies.removeValue((Enemy) b.getUserData(), true);
-            world.destroyBody(b);
-            enemy.enemyDestroyed();
-            createEnemy();
-        }
-        else {
-            if(enemies.get(0).getBody().getPosition().y < 0) {
-                enemies.get(0).getBody().setTransform(player.getposition().x + 5, player.getposition().y + 5, 0);
-            }
-            enemies.get(0).getBody().setTransform(enemy.getposition().x - 0.01f,enemy.getposition().y, 0);
-        }
-        enemyBodies.clear();
-
-        /*
-        Array<Body> bulletBodies = cl.getBulletBodiesToRemove();
-
-        if(bulletBodies.size > 0) {
-            Body b = bullet.getBody();
-            bullets.removeValue((Projectile) b.getUserData(), true);
-            world.destroyBody(b);
-            createBullet();
-        }
-        bulletBodies.clear();*/
-        /*
+        player.update(dt);
 
         for (int i = 0; i < bullets.size; i++) {
             bullets.get(i).update(dt);
             bullet.checkBulletCoolDown();
-        }*/
-
-        player.update(dt);
-
-        if(Projectile.returnBulletHitState()) {
-            bullet.getBody().setTransform(-100,-100,0);
-            Projectile.bulletNotHit();
         }
-        bullet.update(dt);
-        bullet.checkBulletCoolDown();
+
+        for (int i = 0; i < meleeHitBoxes.size; i++) {
+            meleeHitBoxes.get(i).update(dt);
+            meleeHitBox.checkMeleeCoolDown();
+        }
 
         for (int i = 0; i < crystals.size; i++) {
             crystals.get(i).update(dt);
@@ -274,19 +239,23 @@ public class Play extends GameState {
             gsm.setState(GameStateManager.GAMEOVER);
         }
 
-        if(Player.gameIsOver()) {
+/*        if(Player.gameIsOver()) {
+            Game.res.getSound("scream").play();*/
+        if (Player.gameIsOver()) {
             Game.res.getSound("scream").play();
             gsm.setState(GameStateManager.GAMEOVER);
         }
 
         // Win stuff
-        if (cl.isPlayerWin() == true) {
+        if (cl.isPlayerWin()) {
             if (level == 1) {
                 unlockLevel();
-                gsm.setState(GameStateManager.MENU);
+                Collected();
+                gsm.setState(GameStateManager.LEVEL_COMPLETE);
             } else if (level == 2) {
                 unlockLevel();
-                gsm.setState(GameStateManager.MENU);
+                Collected();
+                gsm.setState(GameStateManager.LEVEL_COMPLETE);
             } else if (level == 3) {
                 unlockLevel();
                 gsm.setState(GameStateManager.MENU);
@@ -317,26 +286,34 @@ public class Play extends GameState {
     @Override
     public void render() {
         //set cam to follow player
+
         cam.position.set(
                 player.getposition().x * PPM + Game.V_WIDTH / 4,
-                Game.V_HEIGHT / 2/*player.getposition().y * PPM +Game.V_HEIGHT/4*/, 0);
+                game.V_HEIGHT / 2/*player.getposition().y * PPM +Game.V_HEIGHT/4*/, 0);
+        cam.position.set(player.getposition().x * PPM + Game.V_WIDTH / 4, Game.V_HEIGHT / 2, 0);
+
         cam.update();
 
         // draw bgs
         sb.setProjectionMatrix(hudCam.combined);
-        for (int i = 0; i < backgrounds.length; i++) {
-            backgrounds[i].render(sb);
+        for (Background background : backgrounds) {
+            background.render(sb);
         }
+
+
 
         //draw tile map
         tmRenderer.setView(cam);
         tmRenderer.render();
 
+        //draw hud
+        hud.render(sb);
+
         //draw player
         sb.setProjectionMatrix(cam.combined);
         player.render(sb);
 
-        //draw crystals
+        //draw pickups
         for (int i = 0; i < crystals.size; i++) {
             crystals.get(i).render(sb);
         }
@@ -346,34 +323,32 @@ public class Play extends GameState {
             enemies.get(i).render(sb);
         }
 
-        //draw win
-        win.render(sb);
-
         //draw traps
         for (int i = 0; i < traps.size; i++) {
             traps.get(i).render(sb);
         }
 
-        //draw hud
-        sb.setProjectionMatrix(hudCam.combined);
-        hud.render(sb);
-
         //draw enemy
         sb.setProjectionMatrix(cam.combined);
-        /*
+
         for (int i = 0; i < bullets.size; i++) {
             bullets.get(i).render(sb);
-        }*/
-        bullet.render(sb);
+        }
 
+        //draw melee hit box
+        for (int i = 0; i < meleeHitBoxes.size; i++) {
+            meleeHitBoxes.get(i).render(sb);
+        }
+
+        //draw win
+        win.render(sb);
     }
 
     @Override
     public void dispose() {
     }
 
-    private void cretePlayer() {
-
+    private void createPlayer() {
         BodyDef bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();
         FixtureDef fdef = new FixtureDef();
@@ -384,10 +359,10 @@ public class Play extends GameState {
         Body body = world.createBody(bdef);
         body.setGravityScale(3);
 
-        shape.setAsBox(13 / PPM, 15 / PPM);
+        shape.setAsBox(14 / PPM, 15 / PPM);
         fdef.shape = shape;
         fdef.filter.categoryBits = BIT_PLAYER;
-        fdef.filter.maskBits = BIT_GROUND | BIT_CRYSTAL | BIT_CORNER | BIT_ENEMY | BIT_TRAP;
+        fdef.filter.maskBits = BIT_GROUND | BIT_CRYSTAL | BIT_CORNER | BIT_ENEMY | BIT_TRAP | BIT_JUMP;
         body.createFixture(fdef).setUserData("player");
         shape.dispose();
 
@@ -395,17 +370,15 @@ public class Play extends GameState {
         shape.setAsBox(15 / PPM, 2 / PPM, new Vector2(0, -17 / PPM), 0);
         fdef.shape = shape;
         fdef.filter.categoryBits = BIT_PLAYER;
-        fdef.filter.maskBits = BIT_GROUND | BIT_CORNER;
+        fdef.filter.maskBits = BIT_GROUND | BIT_CORNER | BIT_JUMP;
         fdef.isSensor = true;
         body.createFixture(fdef).setUserData("foot");
         shape.dispose();
 
-        //create player
         player = new Player(body);
     }
 
     private void createWalls() {
-
         // load tile map and map renderer
         try {
             tileMap = new TmxMapLoader().load("res/maps/level" + level + ".tmx");
@@ -418,19 +391,18 @@ public class Play extends GameState {
         tileSize = tileMap.getProperties().get("tilewidth", Integer.class);
         tmRenderer = new OrthogonalTiledMapRenderer(tileMap);
 
-
         TiledMapTileLayer layer;
         layer = (TiledMapTileLayer) tileMap.getLayers().get("platforms");
 
         if (layer != null)
-        createBlocks(layer, BIT_GROUND);
+            createBlocks(layer, BIT_GROUND);
 
         layer = (TiledMapTileLayer) tileMap.getLayers().get("corner");
 
         if (layer != null)
-        createCorners(layer, BIT_CORNER);
+            createCorners(layer, BIT_CORNER);
 
-        layer = (TiledMapTileLayer) tileMap.getLayers().get("jumps");
+        layer = (TiledMapTileLayer) tileMap.getLayers().get("jump");
 
         if (layer != null)
             createJump(layer, BIT_JUMP);
@@ -438,47 +410,6 @@ public class Play extends GameState {
 
 
     private void createBlocks(TiledMapTileLayer layer, short bits) {
-
-        // tile size
-        float ts = layer.getTileWidth();
-
-        // go through all cells in layer
-        for (int row = 0; row < layer.getHeight(); row++) {
-            for (int col = 0; col < layer.getWidth(); col++) {
-
-                // get cell
-                TiledMapTileLayer.Cell cell = layer.getCell(col, row);
-
-                // check that there is a cell
-                if (cell == null) continue;
-                if (cell.getTile() == null) continue;
-
-                // create body from cell
-                BodyDef bdef = new BodyDef();
-                bdef.type = BodyDef.BodyType.StaticBody;
-                bdef.position.set((col + 0.5f) * ts / PPM, (row + 0.5f) * ts / PPM);
-                ChainShape cs = new ChainShape();
-                Vector2[] v = new Vector2[3];
-                v[0] = new Vector2(-ts / 2 / PPM, -ts / 2 / PPM);
-                v[1] = new Vector2(-ts / 2 / PPM, ts / 2 / PPM);
-                v[2] = new Vector2(ts / 2 / PPM, ts / 2 / PPM);
-                cs.createChain(v);
-                FixtureDef fd = new FixtureDef();
-                fd.friction = 0;
-                fd.shape = cs;
-                fd.filter.categoryBits = bits;
-                fd.filter.maskBits = BIT_PLAYER | BIT_ENEMY | BIT_TRAP;
-                world.createBody(bdef).createFixture(fd).setUserData("Ground");
-                cs.dispose();
-
-            }
-        }
-
-    }
-
-    private void createCorners(TiledMapTileLayer layer, short bits) {
-
-        // tile size
         float ts = layer.getTileWidth();
 
         // go through all cells in layer
@@ -505,20 +436,15 @@ public class Play extends GameState {
                 FixtureDef fd = new FixtureDef();
                 fd.friction = 0;
                 fd.shape = cs;
-                fd.restitution = 1;
                 fd.filter.categoryBits = bits;
-                fd.filter.maskBits = BIT_PLAYER | BIT_ENEMY;
-                world.createBody(bdef).createFixture(fd).setUserData("corner");
+                fd.filter.maskBits = BIT_PLAYER | BIT_ENEMY | BIT_BULLET | BIT_TRAP;
+                world.createBody(bdef).createFixture(fd).setUserData("ground");
                 cs.dispose();
-
             }
         }
-
     }
 
-    private void createJump(TiledMapTileLayer layer, short bits) {
-
-        // tile size
+    private void createCorners(TiledMapTileLayer layer, short bits) {
         float ts = layer.getTileWidth();
 
         // go through all cells in layer
@@ -535,7 +461,48 @@ public class Play extends GameState {
                 // create body from cell
                 BodyDef bdef = new BodyDef();
                 bdef.type = BodyDef.BodyType.StaticBody;
-                bdef.position.set((col + 0.5f) * ts / PPM, (row + 0.5f) * ts / PPM);
+                bdef.position.set((col + 0.6f) * ts / PPM, (row + 0.4f) * ts / PPM);
+                ChainShape cs = new ChainShape();
+                Vector2[] v = new Vector2[4];
+                v[0] = new Vector2(-ts / 2 / PPM, -ts / 2 / PPM);
+                v[1] = new Vector2(-ts / 2 / PPM, ts / 2 / PPM);
+                v[2] = new Vector2(ts / 2 / PPM, ts / 2 / PPM);
+                v[3] = new Vector2(ts / 2 / PPM, -ts / 2 / PPM);
+                cs.createChain(v);
+
+                //PolygonShape cs = new PolygonShape();
+                //cs.setAsBox(32,32);
+
+                FixtureDef fd = new FixtureDef();
+                fd.friction = 0;
+                fd.shape = cs;
+                fd.restitution = 1;
+                fd.filter.categoryBits = bits;
+                fd.filter.maskBits = BIT_PLAYER | BIT_ENEMY;
+                world.createBody(bdef).createFixture(fd).setUserData("corner");
+                cs.dispose();
+            }
+        }
+    }
+
+    private void createJump(TiledMapTileLayer layer, short bits) {
+        float ts = layer.getTileWidth();
+
+        // go through all cells in layer
+        for (int row = 0; row < layer.getHeight(); row++) {
+            for (int col = 0; col < layer.getWidth(); col++) {
+
+                // get cell
+                TiledMapTileLayer.Cell cell = layer.getCell(col, row);
+
+                // check that there is a cell
+                if (cell == null) continue;
+                if (cell.getTile() == null) continue;
+
+                // create body from cell
+                BodyDef bdef = new BodyDef();
+                bdef.type = BodyDef.BodyType.StaticBody;
+                bdef.position.set((col + 0.4f) * ts / PPM, (row + 0.4f) * ts / PPM);
                 ChainShape cs = new ChainShape();
                 Vector2[] v = new Vector2[3];
                 v[0] = new Vector2(-ts / 2 / PPM, -ts / 2 / PPM);
@@ -545,59 +512,55 @@ public class Play extends GameState {
                 FixtureDef fd = new FixtureDef();
                 fd.friction = 0;
                 fd.shape = cs;
-                fd.restitution = 3;
+                fd.restitution = 2.4f;
                 fd.filter.categoryBits = bits;
                 fd.filter.maskBits = BIT_PLAYER;
                 world.createBody(bdef).createFixture(fd).setUserData("jump");
                 cs.dispose();
-
             }
         }
     }
 
-
     private void createCrystals() {
         crystals = new Array<PickUp>();
-
         MapLayer layer = tileMap.getLayers().get("crystals");
 
-        if(layer != null){
+        if (layer != null) {
 
-        BodyDef bdef = new BodyDef();
-        FixtureDef fdef = new FixtureDef();
+            BodyDef bdef = new BodyDef();
+            FixtureDef fdef = new FixtureDef();
 
-        for (MapObject mo : layer.getObjects()) {
+            for (MapObject mo : layer.getObjects()) {
 
-            bdef.type = BodyDef.BodyType.StaticBody;
+                bdef.type = BodyDef.BodyType.StaticBody;
 
-            float x = mo.getProperties().get("x", float.class) / PPM;
-            float y = mo.getProperties().get("y", float.class) / PPM;
+                float x = mo.getProperties().get("x", float.class) / PPM;
+                float y = mo.getProperties().get("y", float.class) / PPM;
 
-            bdef.position.set(x, y);
+                bdef.position.set(x, y);
 
-            CircleShape cshape = new CircleShape();
-            cshape.setRadius(8 / PPM);
+                CircleShape cshape = new CircleShape();
+                cshape.setRadius(8 / PPM);
 
-            fdef.shape = cshape;
-            fdef.isSensor = true;
-            fdef.filter.categoryBits = BIT_CRYSTAL;
-            fdef.filter.maskBits = BIT_PLAYER;
+                fdef.shape = cshape;
+                fdef.isSensor = true;
+                fdef.filter.categoryBits = BIT_CRYSTAL;
+                fdef.filter.maskBits = BIT_PLAYER;
 
-            Body body = world.createBody(bdef);
-            body.createFixture(fdef).setUserData("crystal");
-            cshape.dispose();
+                Body body = world.createBody(bdef);
+                body.createFixture(fdef).setUserData("crystal");
+                cshape.dispose();
 
-            PickUp c = new PickUp(body);
-            crystals.add(c);
+                PickUp c = new PickUp(body);
+                crystals.add(c);
 
-            body.setUserData(c);
+                body.setUserData(c);
+            }
         }
-    }}
+    }
+
     private void createTrap() {
-
         traps = new Array<Traps>();
-
-
         MapLayer layer = tileMap.getLayers().get("trap");
 
         if (layer != null) {
@@ -620,7 +583,7 @@ public class Play extends GameState {
                 fdef.shape = cshape;
                 fdef.restitution = 1;
                 fdef.filter.categoryBits = BIT_TRAP;
-                fdef.filter.maskBits = BIT_PLAYER | BIT_GROUND;
+                fdef.filter.maskBits = BIT_PLAYER | BIT_GROUND | BIT_BULLET;
 
                 Body body = world.createBody(bdef);
                 body.createFixture(fdef).setUserData("trap");
@@ -628,7 +591,6 @@ public class Play extends GameState {
 
                 Traps trap = new Traps(body);
                 traps.add(trap);
-
                 body.setUserData(trap);
             }
         }
@@ -638,41 +600,41 @@ public class Play extends GameState {
 
         MapLayer layer = tileMap.getLayers().get("win");
 
-        if (layer != null){
+        if (layer != null) {
 
-        BodyDef bdef = new BodyDef();
-        FixtureDef fdef = new FixtureDef();
+            BodyDef bdef = new BodyDef();
+            FixtureDef fdef = new FixtureDef();
 
-        for (MapObject mo : layer.getObjects()) {
+            for (MapObject mo : layer.getObjects()) {
 
-            bdef.type = BodyDef.BodyType.StaticBody;
+                bdef.type = BodyDef.BodyType.StaticBody;
 
-            float x = mo.getProperties().get("x", float.class) / PPM;
-            float y = mo.getProperties().get("y", float.class) / PPM;
+                float x = mo.getProperties().get("x", float.class) / PPM;
+                float y = mo.getProperties().get("y", float.class) / PPM;
 
-            bdef.position.set(x, y);
+                bdef.position.set(x, y);
 
-            CircleShape cshape = new CircleShape();
-            cshape.setRadius(8 / PPM);
+                CircleShape cshape = new CircleShape();
+                cshape.setRadius(8 / PPM);
 
-            fdef.shape = cshape;
-            fdef.isSensor = true;
-            fdef.filter.categoryBits = BIT_CRYSTAL;
-            fdef.filter.maskBits = BIT_PLAYER;
+                fdef.shape = cshape;
+                fdef.isSensor = true;
+                fdef.filter.categoryBits = BIT_CRYSTAL;
+                fdef.filter.maskBits = BIT_PLAYER;
 
-            Body body = world.createBody(bdef);
-            body.createFixture(fdef).setUserData("win");
-            cshape.dispose();
+                Body body = world.createBody(bdef);
+                body.createFixture(fdef).setUserData("win");
+                cshape.dispose();
 
-            win = new TextureDraw(body, "olvi");
+                win = new TextureDraw(body, "olvi");
 
-            body.setUserData(win);
+                body.setUserData(win);
+            }
         }
-    }
     }
 
     private void createBullet() {
-        //bullets = new Array<Projectile>();
+        bullets = new Array<Projectile>();
         BodyDef bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();
         FixtureDef fdef = new FixtureDef();
@@ -683,17 +645,16 @@ public class Play extends GameState {
         Body body = world.createBody(bdef);
         body.setGravityScale(0);
 
-        shape.setAsBox(13 / PPM, 15 / PPM);
+        shape.setAsBox(9 / PPM, 9 / PPM);
         fdef.shape = shape;
         fdef.filter.categoryBits = BIT_BULLET;
-        fdef.filter.maskBits = BIT_ENEMY;
+        fdef.filter.maskBits = BIT_ENEMY | BIT_GROUND | BIT_TRAP;
         body.createFixture(fdef).setUserData("bullet");
         shape.dispose();
 
-        //create player
         bullet = new Projectile(body);
-        // bullets.add(bullet);
-        // body.setUserData(bullet);
+        bullets.add(bullet);
+        body.setUserData(bullet);
     }
 
 
@@ -703,16 +664,16 @@ public class Play extends GameState {
         PolygonShape shape = new PolygonShape();
         FixtureDef fdef = new FixtureDef();
 
-        bdef.position.set(player.getposition().x + 5, player.getposition().y + 5);
+        bdef.position.set(player.getposition().x + 5, player.getposition().y + 2);
         bdef.linearVelocity.set(0, 0);
         bdef.type = BodyDef.BodyType.DynamicBody;
         Body body = world.createBody(bdef);
         body.setGravityScale(3);
 
-        shape.setAsBox(13 / PPM, 15 / PPM);
+        shape.setAsBox(12 / PPM, 12 / PPM);
         fdef.shape = shape;
         fdef.filter.categoryBits = BIT_ENEMY;
-        fdef.filter.maskBits = BIT_GROUND | BIT_PLAYER | BIT_BULLET | BIT_CORNER;
+        fdef.filter.maskBits = BIT_GROUND | BIT_PLAYER | BIT_BULLET | BIT_CORNER | BIT_MELEE;
         body.createFixture(fdef).setUserData("enemy");
         shape.dispose();
 
@@ -722,7 +683,31 @@ public class Play extends GameState {
         body.setUserData(enemy);
     }
 
-    public void stepWorld() {
+    private void createMeleeHitBox() {
+        meleeHitBoxes = new Array<Melee>();
+        BodyDef bdef = new BodyDef();
+        PolygonShape shape = new PolygonShape();
+        FixtureDef fdef = new FixtureDef();
+
+        bdef.position.set(-150, -150);
+        bdef.linearVelocity.set(0, 0);
+        bdef.type = BodyDef.BodyType.StaticBody;
+        Body body = world.createBody(bdef);
+        body.setGravityScale(0);
+
+        shape.setAsBox(13 / PPM, 15 / PPM);
+        fdef.shape = shape;
+        fdef.filter.categoryBits = BIT_MELEE;
+        fdef.filter.maskBits = BIT_ENEMY;
+        body.createFixture(fdef).setUserData("melee");
+        shape.dispose();
+
+        meleeHitBox = new Melee(body);
+        meleeHitBoxes.add(meleeHitBox);
+        body.setUserData(meleeHitBox);
+    }
+
+    private void stepWorld() {
         float delta = Gdx.graphics.getDeltaTime();
         accumulator += Math.min(delta, 0.25f);
 
@@ -732,17 +717,151 @@ public class Play extends GameState {
         }
     }
 
-    public void unlockLevel(){
+    public void unlockLevel() {
 
         levelS = game.lvls.getInteger("key");
 
-        if(level < levelS){
+        if (level < levelS) {
             //LVL_UNLOCKED = level;
-        }
-        else if (level >= levelS)
-        LVL_UNLOCKED = LVL_UNLOCKED +1;
-        game.lvls.putInteger("key",LVL_UNLOCKED);
+        } else if (level >= levelS)
+            LVL_UNLOCKED = LVL_UNLOCKED + 1;
+        game.lvls.putInteger("key", LVL_UNLOCKED);
         game.lvls.flush();
     }
-}
 
+    public void Collected() {
+
+        game.lvls.getInteger("crystals");
+        game.lvls.getInteger("enemies");
+        game.lvls.getInteger("hearths");
+
+        CRYSTALS_COLLECTED = player.getNumCrystals();
+        ENEMIES_DESTROYED = Player.getEnemyKC();
+        HEARTHS_LEFT = player.returnHealth();
+        game.lvls.putInteger("crystals", CRYSTALS_COLLECTED);
+        game.lvls.putInteger("enemies", ENEMIES_DESTROYED);
+        game.lvls.putInteger("hearths", HEARTHS_LEFT);
+        game.lvls.flush();
+
+    }
+
+    private void enemyManager() {
+        // Remove enemies.
+        Array<Body> enemyBodies = cl.getEnemyBodiesToRemove();
+        if (enemyBodies.size > 0) {
+            Body b = enemy.getBody();
+            enemies.removeValue((Enemy) b.getUserData(), true);
+            world.destroyBody(b);
+            createEnemy();
+            enemy.readyToRoll();
+        }
+        enemyBodies.clear();
+
+        // If enemy falls out of boundaries, respawn it.
+        if (enemies.get(0).getBody().getPosition().y < 0) {
+            Body b = enemy.getBody();
+            enemies.removeValue((Enemy) b.getUserData(), true);
+            world.destroyBody(b);
+            createEnemy();
+        }
+
+        //If enemy gets left behind player undestroyed, respawn it.
+        if (enemies.get(0).getBody().getPosition().x < player.getposition().x - 2) {
+            Body b = enemy.getBody();
+            enemies.removeValue((Enemy) b.getUserData(), true);
+            world.destroyBody(b);
+            createEnemy();
+        }
+
+        //Move enemy towards left side of the screen.
+        enemies.get(0).getBody().setTransform(enemy.getposition().x - 0.01f, enemy.getposition().y - 0.01f, 0);
+
+        //If enemy roll is true, then spawn the enemy near the player.
+        if (!enemy.returnEnemyRollState()) {
+            enemy.enemySpawnRoller();
+        }
+
+        if (enemy.returnEnemySpawnState() && enemy.returnEnemyRollState()) {
+            Body b = enemy.getBody();
+            enemies.removeValue((Enemy) b.getUserData(), true);
+            world.destroyBody(b);
+            createEnemy();
+            enemy.enemySpawnState();
+        }
+    }
+
+    private void bulletManager() {
+        // If the player has ammo and bullet is not on cooldown, shoot the bullet.
+        if (Player.returnNumberOfAmmo() > 0 && !bullet.returnCoolDownState() && !meleeHitBox.returnMeleeCoolDownState()) {
+            bullet.resetBullet(player.getposition().x, player.getposition().y);
+            // Check if the touch is below or above player.
+            if (touchPoint.y / PPM >= player.getposition().y) {
+                bullet.shootBullet(touchPoint.x / PPM, touchPoint.y / PPM, false);
+            } else {
+                bullet.shootBullet(touchPoint.x / PPM, (touchPoint.y / PPM) - player.getposition().y, true);
+            }
+
+        } else {
+            // After teh bullet's been shot, deploy a little cool down.
+            bullet.checkBulletCoolDown();
+        }
+    }
+
+    private void meleeManager() {
+        //If melee swing is not on cooldown make melee hitbox appear in front of the player.
+        if (!meleeHitBox.returnMeleeCoolDownState() && !bullet.returnCoolDownState()) {
+            meleeHitBox.meleeSwing();
+            meleeHitBox.getBody().setTransform(player.getposition().x + 0.4f, player.getposition().y, 0);
+        } else {
+            // Keep checking the cooldwon until it's ready to be used again.
+            meleeHitBox.checkMeleeCoolDown();
+        }
+    }
+
+    private void pickUpRemover() {
+        Array<Body> bodies = cl.getBodiesToRemove();
+        for (int i = 0; i < bodies.size; i++) {
+            Body b = bodies.get(i);
+            crystals.removeValue((PickUp) b.getUserData(), true);
+            world.destroyBody(b);
+            player.collectCrystal();
+        }
+        bodies.clear();
+    }
+
+    private void bulletRemover() {
+        Array<Body> bulletBodies = cl.getBulletBodiesToRemove();
+
+        if (bulletBodies.size > 0) {
+            Body b = bullet.getBody();
+            bullets.removeValue((Projectile) b.getUserData(), true);
+            world.destroyBody(b);
+            createBullet();
+        }
+        bulletBodies.clear();
+    }
+
+    private void meleeHitBoxRemover() {
+        Array<Body> meleeBodies = cl.getMeleeHitBoxesToRemove();
+
+        if (meleeBodies.size > 0) {
+            Body b = meleeHitBox.getBody();
+            meleeHitBoxes.removeValue((Melee) b.getUserData(), true);
+            world.destroyBody(b);
+            createMeleeHitBox();
+        }
+        meleeBodies.clear();
+    }
+
+    private void trapRemover() {
+        Array<Body> trapBodies = cl.getTrapsToRemove();
+
+        for (int i = 0; i < trapBodies.size; i++) {
+            Body b = traps.get(i).getBody();
+            traps.removeValue((Traps) b.getUserData(), true);
+            world.destroyBody(b);
+            //createTrap();
+        }
+        trapBodies.clear();
+    }
+}

@@ -14,22 +14,17 @@ import my.game.states.Play;
  * Created by jimbo on 26.3.2018.
  */
 
-public class Projectile extends Player{
+public class Projectile extends B2DSprite{
     //Velocity of the bullet.
-    //private static final float BULLET_SPEED = 0.05f;
     private static final float BULLET_SPEED = 300f;
     // Cooldown between shooting bullets.
-    private static final float BULLET_COOLDOWN_TIMER = 0.45f;
+    private static final float BULLET_COOLDOWN_TIMER = 0.4f;
 
     private boolean coolDownSet = false;
     private float actionBeginTime = 0;
-    public static boolean bulletHit = false;
-
-    private BoundedCamera cam;
 
     public Projectile(Body body) {
         super(body);
-        cam =  Game.getCamera();
         Texture tex = Game.res.getTexture("bullet");
         TextureRegion[] sprites = TextureRegion.split(tex,10,10)[0];
         setAnimation(sprites, 1/8f);
@@ -55,7 +50,7 @@ public class Projectile extends Player{
     public void shootBullet(float touchPointX, float touchPointY, boolean belowPlayer) {
         if(!coolDownSet) {
             if(body.getLinearVelocity().epsilonEquals(0,0)) {
-                if (numberOfAmmo > 0) {
+                if (Player.returnNumberOfAmmo() > 0) {
                     if(belowPlayer) {
                        // body.applyLinearImpulse(touchPointX * BULLET_SPEED,-(touchPointY * BULLET_SPEED), body.getWorldCenter().x,body.getWorldCenter().y,true);
                         body.applyForceToCenter(touchPointX * BULLET_SPEED, touchPointY * BULLET_SPEED, true);
@@ -66,21 +61,9 @@ public class Projectile extends Player{
                     }
                     actionBeginTime = Play.accumulator;
                     coolDownSet = true;
-                    numberOfAmmo--;
+                    Player.decreaseAmmo();
                 }
             }
         }
-    }
-
-    public static void bulletHit() {
-        bulletHit = true;
-    }
-
-    public static void bulletNotHit() {
-        bulletHit = false;
-    }
-
-    public static boolean returnBulletHitState() {
-        return bulletHit;
     }
 }
