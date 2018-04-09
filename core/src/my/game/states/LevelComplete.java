@@ -17,6 +17,7 @@ import my.game.handlers.GameButton;
 import my.game.handlers.GameStateManager;
 
 import static my.game.handlers.B2DVars.MAX_HEALTH;
+import static my.game.handlers.B2DVars.SOUND_LEVEL;
 
 public class LevelComplete extends GameState {
 
@@ -59,6 +60,8 @@ public class LevelComplete extends GameState {
             font[i] = new TextureRegion(tex, 32 + i * 9, 16, 9, 9);
         }
 
+        game.pauseMusic();
+        Game.res.getSound("complete").play(SOUND_LEVEL);
         textFont = new BitmapFont(Gdx.files.internal("res/images/fontstyle.fnt"), false);
 
         hearthScore =  Game.lvls.getInteger("hits");
@@ -118,7 +121,7 @@ public class LevelComplete extends GameState {
         exitButton.render(sb);
 
         sb.begin();
-        textFont.draw(sb,"crystals collected", 130,215);
+        textFont.draw(sb,"toothpaste collected", 130,215);
         textFont.draw(sb, "enemies destroyed",130, 195);
         textFont.draw(sb, "Hits taken",130,175);
         textFont.draw(sb, "Hearths left", 130 ,155);

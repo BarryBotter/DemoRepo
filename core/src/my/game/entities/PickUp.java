@@ -13,8 +13,8 @@ import my.game.Game;
 public class PickUp extends B2DSprite {
     public PickUp(Body body) {
         super(body);
-        Texture tex = Game.res.getTexture("Crystal");
-        TextureRegion[] sprites = TextureRegion.split(tex,16,16)[0];
-        setAnimation(sprites, 1 / 12f);
+        Texture tex = Game.res.getTexture("toothpaste");
+        TextureRegion[] sprites = TextureRegion.split(tex,32,32)[0];
+        setAnimation(sprites, 1 / 6f);
     }
 }

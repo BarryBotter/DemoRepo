@@ -19,7 +19,7 @@ public class HUD {
 
     private Player player;
     private TextureRegion[] blocks;
-    private TextureRegion crystal;
+    private TextureRegion toothpaste;
     private TextureRegion[] font;
 
     private Texture heartTexture;
@@ -43,7 +43,8 @@ public class HUD {
             blocks[i] = new TextureRegion(tex, 32 + i * 16, 0, 16, 16);
         }
 
-        crystal = new TextureRegion(tex, 80, 0, 16, 16);
+        Texture tooth = Game.res.getTexture("toothpaste");
+        toothpaste = new TextureRegion(tooth, 0, 0, 32, 32);
 
         font = new TextureRegion[11];
         for (int i = 0; i < 6; i++) {
@@ -84,7 +85,7 @@ public class HUD {
         }
 
         // draw crystal amount
-        sb.draw(crystal, 100, 222);
+        sb.draw(toothpaste, 100, 222);
         drawString(sb, player.getNumCrystals() + " / " + player.getTotalCrystals(), 132, 222);
 
 

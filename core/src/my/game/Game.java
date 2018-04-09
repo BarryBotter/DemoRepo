@@ -13,6 +13,7 @@ import static my.game.handlers.B2DVars.CRYSTALS_COLLECTED;
 import static my.game.handlers.B2DVars.ENEMIES_DESTROYED;
 import static my.game.handlers.B2DVars.HITS_TAKEN;
 import static my.game.handlers.B2DVars.LVL_UNLOCKED;
+import static my.game.handlers.B2DVars.SOUND_LEVEL;
 
 public class Game implements ApplicationListener {
 
@@ -44,11 +45,6 @@ public class Game implements ApplicationListener {
 		loadTextures();
 		loadSounds();
 
-		res.loadMusic("res/music/bbsong.ogg", "bbsong");
-		res.getMusic("bbsong").setLooping(true);
-		res.getMusic("bbsong").setVolume(0.5f);
-		res.getMusic("bbsong").play();
-
 		sb = new SpriteBatch();
 		cam = new BoundedCamera();
 		cam.setToOrtho(false, V_WIDTH,V_HEIGHT);
@@ -73,7 +69,20 @@ public class Game implements ApplicationListener {
 			prefs.putString("name", "Eero");
 			prefs.flush();
 		}
+
+		res.loadMusic("res/music/bbsong.ogg", "bbsong");
+		res.getMusic("bbsong").setLooping(true);
+		if (prefs.getBoolean("sound")) {
+			SOUND_LEVEL = 1;
+			res.getMusic("bbsong").setVolume(1);
+			res.getMusic("bbsong").play();
+		}
+		else if (prefs.getBoolean("sound") == false) {
+			SOUND_LEVEL = 0;
+			res.getMusic("bbsong").setVolume(0);
+		}
 	}
+
 
 	@Override
 	public void resize(int width, int height) {
@@ -128,13 +137,39 @@ public class Game implements ApplicationListener {
 		res.loadTexture("res/images/attack.png", "attack");
 		res.loadTexture("res/images/complete.png", "complete");
 		res.loadTexture("res/images/testibg.png", "testibg");
+		res.loadTexture("res/images/toothpaste.png","toothpaste");
 
 	}
 
 	private void loadSounds(){
 		res.loadSound("res/sfx/necksnap.mp3","snap");
-		res.loadSound("res/sfx/hit.wav","hit");
 		res.loadSound("res/sfx/scream.ogg","scream");
+		res.loadSound("res/sfx/completeSound.mp3", "complete");
+		res.loadSound("res/sfx/enemySound.mp3","enemy");
+		res.loadSound("res/sfx/hitSound.mp3","hit");
+		res.loadSound("res/sfx/jumpSound.mp3","jump");
+		res.loadSound("res/sfx/overSound.mp3", "over");
+		res.loadSound("res/sfx/meleeHit.mp3", "melee");
+        res.loadSound("res/sfx/pickupSound.mp3", "pickup");
 
+	}
+
+	public void isMusicPlaying(){
+
+		if (prefs.getBoolean("sound")) {
+			res.getMusic("bbsong").setVolume(1);
+			res.getMusic("bbsong").play();
+		}
+		else if (prefs.getBoolean("sound") == false) {
+			res.getMusic("bbsong").setVolume(0);
+		}
+
+	}
+
+	public void pauseMusic(){
+	    res.getMusic("bbsong").pause();
+    }
+    public void resumeMusic(){
+		res.getMusic("bbsong").play();
 	}
 }

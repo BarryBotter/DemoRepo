@@ -11,6 +11,8 @@ import com.badlogic.gdx.utils.Array;
 import my.game.Game;
 import my.game.entities.Player;
 
+import static my.game.handlers.B2DVars.SOUND_LEVEL;
+
 public class MyContactListener implements ContactListener {
 
     private int numFootContacts;
@@ -49,12 +51,13 @@ public class MyContactListener implements ContactListener {
 
             //remove pickup
             playerShoot = true;
-
+            Game.res.getSound("pickup").play(SOUND_LEVEL);
             bodiesToRemove.add(fa.getBody());
             Player.increaseAmmo();
         }
         if(fb.getUserData() != null && fb.getUserData().equals("crystal")){
             playerShoot = true;
+            Game.res.getSound("pickup").play(SOUND_LEVEL);
             bodiesToRemove.add(fb.getBody());
             Player.increaseAmmo();
         }
@@ -71,7 +74,7 @@ public class MyContactListener implements ContactListener {
         if(fa.getUserData() != null && fa.getUserData().equals("enemy")) {
             if(fb.getUserData().equals("player")) {
                 enemyBodiesToRemove.add(fa.getBody());
-                Game.res.getSound("snap").play();
+                Game.res.getSound("snap").play(SOUND_LEVEL);
                 Player.loseHealth();
             }
             else if(fb.getUserData().equals("bullet")) {
@@ -82,7 +85,7 @@ public class MyContactListener implements ContactListener {
             }
             else if(fb.getUserData().equals("melee")) {
                 enemyBodiesToRemove.add(fa.getBody());
-                Game.res.getSound("hit").play();
+                Game.res.getSound("hit").play(SOUND_LEVEL);
                 meleeBodiesToRemove.add(fb.getBody());
                 Player.increaseEnemyKC();
             }
@@ -90,18 +93,18 @@ public class MyContactListener implements ContactListener {
         if(fb.getUserData() != null && fb.getUserData().equals("enemy")) {
             if(fa.getUserData().equals("player")) {
                 enemyBodiesToRemove.add(fb.getBody());
-                Game.res.getSound("snap").play();
+                Game.res.getSound("snap").play(SOUND_LEVEL);
                 Player.loseHealth();
             }
             else if(fa.getUserData().equals("bullet")) {
                 enemyBodiesToRemove.add(fb.getBody());
-                Game.res.getSound("hit").play();
+                Game.res.getSound("hit").play(SOUND_LEVEL);
                 bulletBodiesToRemove.add(fa.getBody());
                 Player.increaseEnemyKC();
             }
             else if(fa.getUserData().equals("melee")) {
                 enemyBodiesToRemove.add(fb.getBody());
-                Game.res.getSound("hit").play();
+                Game.res.getSound("hit").play(SOUND_LEVEL);
                 meleeBodiesToRemove.add(fa.getBody());
                 Player.increaseEnemyKC();
             }

@@ -16,12 +16,17 @@ import my.game.entities.Traps;
 
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapImageLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -36,6 +41,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
+import my.game.handlers.Content;
 import my.game.handlers.GameStateManager;
 import my.game.handlers.MyContactListener;
 
@@ -53,6 +59,7 @@ import static my.game.handlers.B2DVars.ENEMIES_DESTROYED;
 import static my.game.handlers.B2DVars.HITS_TAKEN;
 import static my.game.handlers.B2DVars.LVL_UNLOCKED;
 import static my.game.handlers.B2DVars.PPM;
+import static my.game.handlers.B2DVars.SOUND_LEVEL;
 
 /**
  * Created by Katriina on 20.3.2018.
@@ -97,6 +104,8 @@ public class Play extends GameState {
     private Background[] backgrounds;
 
     private HUD hud;
+    private BitmapFont textFont;
+
 
     public Play(GameStateManager gsm) {
         super(gsm);
@@ -132,6 +141,7 @@ public class Play extends GameState {
         //create melee hitbox
         createMeleeHitBox();
 
+
         // create backgrounds
         Texture bgs = Game.res.getTexture("bgones");
         TextureRegion sky = new TextureRegion(bgs, 0, 0, 320, 240);
@@ -145,7 +155,8 @@ public class Play extends GameState {
 
 
 
-
+        //create font
+        textFont = new BitmapFont(Gdx.files.internal("res/images/fontstyle.fnt"), false);
 
         // set up hud
         hud = new HUD(player);
@@ -193,6 +204,7 @@ public class Play extends GameState {
                     if (cl.isPlayerOnGround()) {
                         player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
                         player.getBody().applyLinearImpulse(0.4f, 6, 0, 0, true);
+                        Game.res.getSound("jump").play(SOUND_LEVEL);
 
                         if (player.getBody().getLinearVelocity().x < 0.7f) {
                             player.getBody().setLinearVelocity(1.5f, 0);
@@ -259,12 +271,12 @@ public class Play extends GameState {
         }
         // Game over stuff
         if (player.getBody().getPosition().y < 0) {
-            Game.res.getSound("scream").play();
+            Game.res.getSound("scream").play(SOUND_LEVEL);
             gsm.setState(GameStateManager.GAMEOVER);
         }
 
         if (Player.gameIsOver()) {
-            Game.res.getSound("scream").play();
+            Game.res.getSound("scream").play(SOUND_LEVEL);
             gsm.setState(GameStateManager.GAMEOVER);
         }
 
@@ -283,6 +295,7 @@ public class Play extends GameState {
                     gsm.setState(GameStateManager.MENU);
                 }
             }
+
         }
 
     private boolean rightSideTouched(float x, float y) {
@@ -327,13 +340,12 @@ public class Play extends GameState {
 
         cam.update();
 
+
         // draw bgs
         sb.setProjectionMatrix(hudCam.combined);
         for (Background background : backgrounds) {
             background.render(sb);
         }
-
-
 
         //draw tile maps
         tmRenderer.setView(cam);
@@ -370,6 +382,8 @@ public class Play extends GameState {
 
         //draw win
         win.render(sb);
+
+        updateText();
 
         //draw hud
         sb.setProjectionMatrix(hudCam.combined);
@@ -663,6 +677,8 @@ public class Play extends GameState {
         }
     }
 
+
+
     private void createBullet() {
         bullets = new Array<Projectile>();
         BodyDef bdef = new BodyDef();
@@ -745,6 +761,12 @@ public class Play extends GameState {
             accumulator -= Game.STEP;
             world.step(Game.STEP, 1, 1);
         }
+    }
+
+    private void updateText(){
+        sb.begin();
+        textFont.draw(sb,"Touch left side to jump", player.getposition().x + 50 , player.getposition().y  + 150);
+        sb.end();
     }
 
     private void unlockLevel(){

@@ -23,8 +23,11 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import my.game.Game;
 import my.game.entities.Background;
 import my.game.handlers.B2DVars;
+import my.game.handlers.Content;
 import my.game.handlers.GameButton;
 import my.game.handlers.GameStateManager;
+
+import static my.game.handlers.B2DVars.SOUND_LEVEL;
 
 /**
  * Created by Katriina on 23.3.2018.
@@ -76,7 +79,7 @@ public class Menu extends GameState{
         playButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                my.game.Game.res.getSound("snap").play();
+                my.game.Game.res.getSound("snap").play(SOUND_LEVEL);
                 dispose();
                 gsm.setState(GameStateManager.LEVEL_SELECT);
             }
@@ -92,7 +95,7 @@ public class Menu extends GameState{
         optionsButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                my.game.Game.res.getSound("snap").play();
+                my.game.Game.res.getSound("snap").play(SOUND_LEVEL);
                 dispose();
                 gsm.setState(GameStateManager.OPTIONS);
             }
