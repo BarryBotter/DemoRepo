@@ -5,11 +5,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import my.game.handlers.BoundedCamera;
 import my.game.handlers.Content;
 import my.game.handlers.GameStateManager;
-
 import static my.game.handlers.B2DVars.CRYSTALS_COLLECTED;
 import static my.game.handlers.B2DVars.ENEMIES_DESTROYED;
 import static my.game.handlers.B2DVars.HITS_TAKEN;
@@ -29,13 +28,14 @@ public class Game implements ApplicationListener {
 	private GameStateManager gsm;
 
 	public static Content res;
+	public Preferences prefs;
 	public static Preferences lvls;
 
 	public SpriteBatch getSpriteBatch(){return sb;}
 	public static BoundedCamera getCamera(){return cam;}
 	public OrthographicCamera getHUDCamera(){return hudCam;}
 
-
+	public Skin mySkin;
 
 	@Override
 	public void create() {
@@ -53,7 +53,8 @@ public class Game implements ApplicationListener {
 		cam = new BoundedCamera();
 		cam.setToOrtho(false, V_WIDTH,V_HEIGHT);
 		hudCam = new OrthographicCamera();
-		hudCam.setToOrtho(false, V_WIDTH,V_HEIGHT);
+		hudCam.setToOrtho(false, V_WIDTH, V_HEIGHT);
+		mySkin = new Skin(Gdx.files.internal("res/skin/glassy-ui.json"));
 
 		gsm = new GameStateManager(this);
 
@@ -64,8 +65,15 @@ public class Game implements ApplicationListener {
 		if(!lvls.contains("enemies")) lvls.putInteger("enemies", ENEMIES_DESTROYED);
 		lvls.flush();
 
+		prefs = Gdx.app.getPreferences("My Preferences");
+		//dont insert preferences here this is just to set default values if there is none (maybe works)
+		if(!prefs.contains("name")) {
+			prefs.putInteger("difficulty", 1);
+			prefs.putBoolean("sound", true);
+			prefs.putString("name", "Eero");
+			prefs.flush();
+		}
 	}
-
 
 	@Override
 	public void resize(int width, int height) {
@@ -74,10 +82,8 @@ public class Game implements ApplicationListener {
 
 	@Override
 	public void render() {
-
 		gsm.update(Gdx.graphics.getDeltaTime());
 		gsm.render();
-
 	}
 
 	@Override
@@ -96,7 +102,6 @@ public class Game implements ApplicationListener {
 	}
 
 	public void loadTextures(){
-
 		res.loadTexture("res/images/trap.png","trap");
 		res.loadTexture("res/images/crystal.png", "Crystal");
 		res.loadTexture("res/images/hud.png","hud");
@@ -106,6 +111,7 @@ public class Game implements ApplicationListener {
 		res.loadTexture("res/UI_final/rebg.png","menubg");
 		res.loadTexture("res/UI_final/resized_paavalikko.png","main");
 		res.loadTexture("res/UI_final/resized_hammas.png","tooth");
+		res.loadTexture("res/UI_final/menu_logo.png","menulogo");
 		res.loadTexture("res/images/Game_Over.png", "gameover");
 		res.loadTexture("res/background/testimaa.png","bgone");
 		res.loadTexture("res/background/rsz_karkkimaas.png","bgones");
@@ -122,10 +128,13 @@ public class Game implements ApplicationListener {
 		res.loadTexture("res/images/attack.png", "attack");
 		res.loadTexture("res/images/complete.png", "complete");
 		res.loadTexture("res/images/testibg.png", "testibg");
+
 	}
 
 	private void loadSounds(){
 		res.loadSound("res/sfx/necksnap.mp3","snap");
 		res.loadSound("res/sfx/hit.wav","hit");
+		res.loadSound("res/sfx/scream.ogg","scream");
+
 	}
 }

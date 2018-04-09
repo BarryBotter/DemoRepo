@@ -16,7 +16,6 @@ import my.game.entities.Traps;
 
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -257,16 +256,17 @@ public class Play extends GameState {
                 enemies.get(i).update(dt);
             }
 
-            // Game over stuff
-            if (player.getBody().getPosition().y < 0) {
-                Game.res.getSound("snap").play();
-                gsm.setState(GameStateManager.GAMEOVER);
-            }
+        }
+        // Game over stuff
+        if (player.getBody().getPosition().y < 0) {
+            Game.res.getSound("scream").play();
+            gsm.setState(GameStateManager.GAMEOVER);
+        }
 
-            if (Player.gameIsOver()) {
-                Game.res.getSound("snap").play();
-                gsm.setState(GameStateManager.GAMEOVER);
-            }
+        if (Player.gameIsOver()) {
+            Game.res.getSound("scream").play();
+            gsm.setState(GameStateManager.GAMEOVER);
+        }
 
             // Win stuff
             if (cl.isPlayerWin()) {
@@ -284,7 +284,6 @@ public class Play extends GameState {
                 }
             }
         }
-    }
 
     private boolean rightSideTouched(float x, float y) {
         return screenRightSide.contains(x, y);
@@ -323,7 +322,7 @@ public class Play extends GameState {
         //set cam to follow player
         cam.position.set(
                 player.getposition().x * PPM + Game.V_WIDTH / 4,
-                game.V_HEIGHT / 2, 0);
+                Game.V_HEIGHT / 2, 0);
         cam.position.set(player.getposition().x * PPM + Game.V_WIDTH / 4, Game.V_HEIGHT / 2, 0);
 
         cam.update();
@@ -750,30 +749,30 @@ public class Play extends GameState {
 
     private void unlockLevel(){
 
-        levelS = game.lvls.getInteger("key");
+        levelS = Game.lvls.getInteger("key");
 
         if (level < levelS) {
             //LVL_UNLOCKED = level;
         } else if (level >= levelS)
             LVL_UNLOCKED = LVL_UNLOCKED + 1;
-        game.lvls.putInteger("key", LVL_UNLOCKED);
-        game.lvls.flush();
+        Game.lvls.putInteger("key", LVL_UNLOCKED);
+        Game.lvls.flush();
 
     }
 
-    public void Collected() {
+    private void Collected() {
 
-        game.lvls.getInteger("crystals");
-        game.lvls.getInteger("enemies");
-        game.lvls.getInteger("hits");
+        Game.lvls.getInteger("crystals");
+        Game.lvls.getInteger("enemies");
+        Game.lvls.getInteger("hits");
 
         CRYSTALS_COLLECTED = player.getNumCrystals();
         ENEMIES_DESTROYED = Player.getEnemyKC();
         HITS_TAKEN =  Player.counterHealth();
-        game.lvls.putInteger("crystals", CRYSTALS_COLLECTED);
-        game.lvls.putInteger("enemies", ENEMIES_DESTROYED);
+        Game.lvls.putInteger("crystals", CRYSTALS_COLLECTED);
+        Game.lvls.putInteger("enemies", ENEMIES_DESTROYED);
         Game.lvls.putInteger("hits", HITS_TAKEN);
-        game.lvls.flush();
+        Game.lvls.flush();
 
     }
 
