@@ -335,7 +335,7 @@ public class Play extends GameState {
 
 
 
-        //draw tile map
+        //draw tile maps
         tmRenderer.setView(cam);
         tmRenderer.render();
 
