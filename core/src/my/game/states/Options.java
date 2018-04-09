@@ -27,15 +27,15 @@ import my.game.handlers.MyTextInputListener;
 
 public class Options extends GameState {
 
-    Image logo;
+    private Image logo;
     private Background bg;
-    String Name = "", soundvalue = "",difficultyString = "",hintname = "Your Name";
+    private String Name = "", soundvalue = "",difficultyString = "",hintname = "Your Name";
     private int row_height,col_width;
     private Label nameLabel,soundLabel,difficultyLabel;
-    Skin mySkin;
-    Stage stage;
+    private Skin mySkin;
+    private Stage stage;
     private ImageButton nameEditButton,difficultyButton,soundButton;
-    Button exitButton;
+    private Button exitButton;
 
     public Options(final GameStateManager gsm){
         super(gsm);
@@ -136,7 +136,7 @@ public class Options extends GameState {
         });
         stage.addActor(difficultyButton);
 
-        //difficultylabel
+        //difficulty label
         difficultyLabel = new Label(difficultyString, skin); //labeltest
         difficultyLabel.setFontScale(5,5);
     }
