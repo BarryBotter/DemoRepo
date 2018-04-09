@@ -13,7 +13,6 @@ import my.game.entities.Player;
 import my.game.entities.Projectile;
 import my.game.entities.TextureDraw;
 import my.game.entities.Traps;
-import my.game.handlers.B2DVars;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -36,7 +35,6 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
-import my.game.handlers.BoundedCamera;
 import my.game.handlers.GameStateManager;
 import my.game.handlers.MyContactListener;
 
@@ -67,6 +65,10 @@ public class Play extends GameState {
 
     private Rectangle screenRightSide;
     private Rectangle screenLeftSide;
+    private Rectangle screenTopRightSide;
+    private Rectangle pauseMenuRightButton;
+    private Rectangle pauseMenuLeftButton;
+    private Rectangle pauseMenuMiddleButton;
 
     private TiledMap tileMap;
     private int tileMapWidth;
@@ -142,6 +144,9 @@ public class Play extends GameState {
 
         //setup touch areas
         setupTouchControlAreas();
+
+        //Resets rendering every time play state is started.
+        Gdx.graphics.setContinuousRendering(true);
     }
 
 
@@ -157,30 +162,50 @@ public class Play extends GameState {
             public boolean touchDown(int x, int y, int pointer, int button) {
                 translateScreenToWorldCoordinates(x, y);
 
-                if (rightSideTouched(touchPoint.x, touchPoint.y)) {
+                // Pause button touched
+                if(topRightSideTouched(touchPoint.x, touchPoint.y) && Gdx.graphics.isContinuousRendering()) {
+                    Gdx.graphics.setContinuousRendering(false);
+                }
+
+                // Fighting stuff.
+                else if (rightSideTouched(touchPoint.x, touchPoint.y) && Gdx.graphics.isContinuousRendering()) {
                     //When player runs out of ammo, start melee mode.
                     if (Player.returnNumberOfAmmo() == 0) {
                         meleeManager();
                     } else if (Player.returnNumberOfAmmo() <= Player.returnMaxAmmo()) {
                         bulletManager();
                     }
+                }
 
-                } else if (leftSideTouched(touchPoint.x, touchPoint.y)) {
+                // Jumping stuff.
+                else if (leftSideTouched(touchPoint.x, touchPoint.y) && Gdx.graphics.isContinuousRendering()) {
                     if (cl.isPlayerOnGround()) {
                         player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
                         player.getBody().applyLinearImpulse(0.4f, 6, 0, 0, true);
-
                         if (player.getBody().getLinearVelocity().x < 0.7f) {
                             player.getBody().setLinearVelocity(1.5f, 0);
                             if (player.getBody().getLinearVelocity().x < 0.5f) {
                                 player.getBody().setLinearVelocity(2f, 0);
                             }
-
                         }
-
                     }
-
                 }
+
+                // Pause menu left button touched. Goes to menu.
+                else if (pauseMenuLeftButtonTouched(touchPoint.x, touchPoint.y) && !Gdx.graphics.isContinuousRendering()) {
+                    gsm.setState(GameStateManager.LEVEL_SELECT);
+                }
+
+                // Pause menu middle button touched. Restarts level.
+                else if (pauseMenuMiddleButtonTouched(touchPoint.x, touchPoint.y) && !Gdx.graphics.isContinuousRendering()) {
+                    gsm.setState(GameStateManager.PLAY);
+                }
+
+                // Pause menu right button touched. Resumes game.
+                else if (pauseMenuRightButtonTouched(touchPoint.x, touchPoint.y) && !Gdx.graphics.isContinuousRendering()) {
+                    Gdx.graphics.setContinuousRendering(true);
+                }
+
                 return super.touchDown(x, y, pointer, button);
             }
 
@@ -190,58 +215,60 @@ public class Play extends GameState {
             }
         });
 
-        stepWorld();
-        pickUpRemover();
-        bulletRemover();
-        meleeHitBoxRemover();
-        trapRemover();
-        enemyManager();
+        // While the game is not paused keep updating the game.
+        if(Gdx.graphics.isContinuousRendering()) {
+            stepWorld();
+            pickUpRemover();
+            bulletRemover();
+            meleeHitBoxRemover();
+            trapRemover();
+            enemyManager();
 
-        player.update(dt);
+            player.update(dt);
 
-        for (int i = 0; i < bullets.size; i++) {
-            bullets.get(i).update(dt);
-            bullet.checkBulletCoolDown();
-        }
+            for (int i = 0; i < bullets.size; i++) {
+                bullets.get(i).update(dt);
+                bullet.checkBulletCoolDown();
+            }
 
-        for (int i = 0; i < meleeHitBoxes.size; i++) {
-            meleeHitBoxes.get(i).update(dt);
-            meleeHitBox.checkMeleeCoolDown();
-        }
+            for (int i = 0; i < meleeHitBoxes.size; i++) {
+                meleeHitBoxes.get(i).update(dt);
+                meleeHitBox.checkMeleeCoolDown();
+            }
 
-        for (int i = 0; i < crystals.size; i++) {
-            crystals.get(i).update(dt);
-        }
+            for (int i = 0; i < crystals.size; i++) {
+                crystals.get(i).update(dt);
+            }
 
-        for (int i = 0; i < enemies.size; i++) {
-            enemies.get(i).update(dt);
-        }
+            for (int i = 0; i < enemies.size; i++) {
+                enemies.get(i).update(dt);
+            }
 
-        // Game over stuff
-        if (player.getBody().getPosition().y < 0) {
-            Game.res.getSound("snap").play();
-            gsm.setState(GameStateManager.GAMEOVER);
-        }
+            // Game over stuff
+            if (player.getBody().getPosition().y < 0) {
+                Game.res.getSound("snap").play();
+                gsm.setState(GameStateManager.GAMEOVER);
+            }
 
-        if(Player.gameIsOver()) {
-            Game.res.getSound("snap").play();
-            gsm.setState(GameStateManager.GAMEOVER);
-        }
+            if(Player.gameIsOver()) {
+                Game.res.getSound("snap").play();
+                gsm.setState(GameStateManager.GAMEOVER);
+            }
 
-        // Win stuff
-        if (cl.isPlayerWin()) {
-            if (level == 1) {
-                unlockLevel();
-                gsm.setState(GameStateManager.MENU);
-            } else if (level == 2) {
-                unlockLevel();
-                gsm.setState(GameStateManager.MENU);
-            } else if (level == 3) {
-                unlockLevel();
-                gsm.setState(GameStateManager.MENU);
+            // Win stuff
+            if (cl.isPlayerWin()) {
+                if (level == 1) {
+                    unlockLevel();
+                    gsm.setState(GameStateManager.MENU);
+                } else if (level == 2) {
+                    unlockLevel();
+                    gsm.setState(GameStateManager.MENU);
+                } else if (level == 3) {
+                    unlockLevel();
+                    gsm.setState(GameStateManager.MENU);
+                }
             }
         }
-
     }
 
     private boolean rightSideTouched(float x, float y) {
@@ -252,24 +279,36 @@ public class Play extends GameState {
         return screenLeftSide.contains(x, y);
     }
 
+    private boolean topRightSideTouched(float x, float y) { return screenTopRightSide.contains(x, y); }
+
+    private boolean pauseMenuLeftButtonTouched(float x, float y) { return pauseMenuLeftButton.contains(x, y); }
+
+    private boolean pauseMenuRightButtonTouched(float x, float y) { return pauseMenuRightButton.contains(x, y); }
+
+    private boolean pauseMenuMiddleButtonTouched(float x, float y) { return pauseMenuMiddleButton.contains(x, y); }
+
     private void translateScreenToWorldCoordinates(int x, int y) {
         game.getHUDCamera().unproject(touchPoint.set(x, y, 0));
     }
 
     private void setupTouchControlAreas() {
         touchPoint = new Vector3();
+        final int BOX_ENLARGER = 10;
+        screenTopRightSide = new Rectangle(game.getHUDCamera().viewportWidth - (hud.pauseTexture.getWidth() + BOX_ENLARGER),game.getHUDCamera().viewportHeight - (hud.pauseTexture.getHeight() + BOX_ENLARGER), hud.pauseTexture.getWidth() + BOX_ENLARGER ,hud.pauseTexture.getHeight() + BOX_ENLARGER);
         screenRightSide = new Rectangle(game.getHUDCamera().viewportWidth / 2, 0, game.getHUDCamera().viewportWidth / 2,
                 game.getHUDCamera().viewportHeight);
         screenLeftSide = new Rectangle(0, 0, game.getHUDCamera().viewportWidth / 2, game.getHUDCamera().viewportHeight);
+        pauseMenuLeftButton = new Rectangle((Game.V_WIDTH / 2) - (hud.pauseMenuTexture.getWidth() / 2 ),(Game.V_HEIGHT / 2 ) - (hud.pauseMenuTexture.getHeight() / 2), hud.pauseMenuTexture.getWidth() / 3, hud.pauseMenuTexture.getHeight() / 2);
+        pauseMenuMiddleButton =  new Rectangle((Game.V_WIDTH / 2) - (hud.pauseMenuTexture.getWidth() / 2 ) + (hud.pauseMenuTexture.getWidth() / 3),(Game.V_HEIGHT / 2 ) - (hud.pauseMenuTexture.getHeight() / 2), hud.pauseMenuTexture.getWidth() / 3, hud.pauseMenuTexture.getHeight() / 2);
+        pauseMenuRightButton =  new Rectangle((Game.V_WIDTH / 2) - (hud.pauseMenuTexture.getWidth() / 2 ) + ((hud.pauseMenuTexture.getWidth() / 3)*2),(Game.V_HEIGHT / 2 ) - (hud.pauseMenuTexture.getHeight() / 2), hud.pauseMenuTexture.getWidth() / 3, hud.pauseMenuTexture.getHeight() / 2);
     }
 
     @Override
     public void render() {
         //set cam to follow player
-
         cam.position.set(
                 player.getposition().x * PPM + Game.V_WIDTH / 4,
-                game.V_HEIGHT / 2/*player.getposition().y * PPM +Game.V_HEIGHT/4*/, 0);
+                game.V_HEIGHT / 2, 0);
         cam.position.set(player.getposition().x * PPM + Game.V_WIDTH / 4, Game.V_HEIGHT / 2, 0);
 
         cam.update();
@@ -283,9 +322,6 @@ public class Play extends GameState {
         //draw tile map
         tmRenderer.setView(cam);
         tmRenderer.render();
-
-        //draw hud
-        hud.render(sb);
 
         //draw player
         sb.setProjectionMatrix(cam.combined);
@@ -306,9 +342,7 @@ public class Play extends GameState {
             traps.get(i).render(sb);
         }
 
-        //draw enemy
-        sb.setProjectionMatrix(cam.combined);
-
+        //draw bullets
         for (int i = 0; i < bullets.size; i++) {
             bullets.get(i).render(sb);
         }
@@ -320,6 +354,10 @@ public class Play extends GameState {
 
         //draw win
         win.render(sb);
+
+        //draw hud
+        sb.setProjectionMatrix(hudCam.combined);
+        hud.render(sb);
     }
 
     @Override
@@ -574,11 +612,9 @@ public class Play extends GameState {
     }
 
     private void createWin() {
-
         MapLayer layer = tileMap.getLayers().get("win");
 
         if (layer != null){
-
         BodyDef bdef = new BodyDef();
         FixtureDef fdef = new FixtureDef();
 
@@ -694,7 +730,7 @@ public class Play extends GameState {
         }
     }
 
-    public void unlockLevel(){
+    private void unlockLevel(){
 
         levelS = game.lvls.getInteger("key");
 
@@ -715,7 +751,6 @@ public class Play extends GameState {
             enemies.removeValue((Enemy) b.getUserData(), true);
             world.destroyBody(b);
             createEnemy();
-            enemy.readyToRoll();
         }
         enemyBodies.clear();
 
@@ -728,28 +763,33 @@ public class Play extends GameState {
         }
 
         //If enemy gets left behind player undestroyed, respawn it.
-        if(enemies.get(0).getBody().getPosition().x < player.getposition().x - 2) {
+        if(enemies.get(0).getBody().getPosition().x < player.getposition().x - 2.5f) {
             Body b = enemy.getBody();
             enemies.removeValue((Enemy) b.getUserData(), true);
             world.destroyBody(b);
             createEnemy();
         }
 
-        //Move enemy towards left side of the screen.
-        enemies.get(0).getBody().setTransform(enemy.getposition().x - 0.01f,enemy.getposition().y -0.01f, 0);
-
-        //If enemy roll is true, then spawn the enemy near the player.
-        if(!enemy.returnEnemyRollState()) {
-            enemy.enemySpawnRoller();
+        //Move enemy towards left side of the screen. If it stops, switch direction.
+        if (enemy.returnCurrentLocation() - enemies.get(0).getBody().getPosition().x < 0 && enemy.returnDirection()) {
+            enemies.get(0).getBody().setTransform(enemy.getposition().x +0.05f,enemy.getposition().y -0.01f, 0);
+            enemy.switchDirection();
+        }
+        else if (enemy.returnCurrentLocation() - enemies.get(0).getBody().getPosition().x < 0 && !enemy.returnDirection()){
+            enemies.get(0).getBody().setTransform(enemy.getposition().x -0.05f,enemy.getposition().y -0.01f, 0);
+            enemy.switchDirection();
         }
 
-        if(enemy.returnEnemySpawnState() && enemy.returnEnemyRollState()) {
-            Body b = enemy.getBody();
-            enemies.removeValue((Enemy) b.getUserData(), true);
-            world.destroyBody(b);
-            createEnemy();
-            enemy.enemySpawnState();
+        // Go right
+        if(!enemy.returnDirection()) {
+            enemies.get(0).getBody().setTransform(enemy.getposition().x +0.01f,enemy.getposition().y -0.01f, 0);
         }
+        else {  //Go left
+            enemies.get(0).getBody().setTransform(enemy.getposition().x -0.01f,enemy.getposition().y -0.01f, 0);
+        }
+
+        // Set current location to compare if enemy has stopped or not.
+        enemy.setCurrentLocation(enemies.get(0).getBody().getPosition().x);
     }
 
     private void bulletManager() {
@@ -763,7 +803,6 @@ public class Play extends GameState {
             else {
                 bullet.shootBullet(touchPoint.x / PPM, (touchPoint.y / PPM) - player.getposition().y , true);
             }
-
         }
         else {
             // After teh bullet's been shot, deploy a little cool down.
@@ -773,7 +812,7 @@ public class Play extends GameState {
 
     private void meleeManager() {
         //If melee swing is not on cooldown make melee hitbox appear in front of the player.
-        if (!meleeHitBox.returnMeleeCoolDownState() && !bullet.returnCoolDownState()) {
+        if (!meleeHitBox.returnMeleeCoolDownState() && !bullet.returnCoolDownState() && Player.returnNumberOfAmmo() == 0) {
             meleeHitBox.meleeSwing();
             meleeHitBox.getBody().setTransform(player.getposition().x+ 0.4f , player.getposition().y, 0);
         }
@@ -822,10 +861,9 @@ public class Play extends GameState {
         Array<Body> trapBodies = cl.getTrapsToRemove();
 
         for (int i = 0; i < trapBodies.size; i++) {
-            Body b = traps.get(i).getBody();
+            Body b = trapBodies.get(i);
             traps.removeValue((Traps) b.getUserData(), true);
             world.destroyBody(b);
-            //createTrap();
         }
         trapBodies.clear();
     }
