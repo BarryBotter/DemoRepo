@@ -1,7 +1,5 @@
 package my.game.handlers;
 
-import com.badlogic.gdx.Game;
-
 import java.util.Stack;
 
 import my.game.states.GameOver;
@@ -16,9 +14,7 @@ import my.game.states.Play;
  */
 
 public class GameStateManager {
-
     private my.game.Game game;
-
     private Stack<GameState> gameStates;
 
     public static final int PLAY = 2182301;
@@ -26,7 +22,6 @@ public class GameStateManager {
     public static final int LEVEL_SELECT = 323971;
     public static final int GAMEOVER = 213212;
     public static final int LEVEL_COMPLETE = 281209;
-
 
     public GameStateManager(my.game.Game game){
         this.game = game;
@@ -73,11 +68,11 @@ public class GameStateManager {
         pushState(state);
     }
 
-    public void pushState(int state){
+    private void pushState(int state){
         gameStates.push(getState(state));
     }
 
-    public void popState(){
+    private void popState(){
         GameState g = gameStates.pop();
         g.dispose();
     }

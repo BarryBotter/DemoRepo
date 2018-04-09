@@ -10,12 +10,8 @@ public class Traps extends B2DSprite {
 
     public Traps(Body body) {
             super(body);
-
             Texture tex = Game.res.getTexture("trap");
             TextureRegion[] sprites = TextureRegion.split(tex,32,32)[0];
-
             setAnimation(sprites, 1 / 8f);
         }
-
-
 }

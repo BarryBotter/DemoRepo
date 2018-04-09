@@ -1,11 +1,15 @@
 package my.game.entities;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
 
 import my.game.Game;
-import my.game.handlers.B2DVars;
+import my.game.handlers.GameButton;
 
 /**
  * Created by Katriina on 22.3.2018.
@@ -22,6 +26,12 @@ public class HUD {
     private Texture heartSilhoutteTexture;
     private Texture ammoTexture;
     private Texture ammoSilhoutteTexture;
+
+    public Texture pauseTexture;
+    public Texture pauseMenuTexture;
+    private GameButton pauseButton;
+    private TextureRegion pauseButtonRegion;
+    protected OrthographicCamera hudCam;
 
     public HUD(Player player) {
         this.player = player;
@@ -47,14 +57,15 @@ public class HUD {
         heartSilhoutteTexture = Game.res.getTexture("heartSilhoutte");
         ammoTexture = Game.res.getTexture("ammo");
         ammoSilhoutteTexture = Game.res.getTexture("ammoSilhoutte");
+
+        // Setup pause button
+        pauseTexture = Game.res.getTexture("pauseButton");
+        // Setup pause menu button
+        pauseMenuTexture = Game.res.getTexture("pauseMenu");
     }
 
     public void render(SpriteBatch sb) {
-
         sb.begin();
-
-        // draw crystal
-        sb.draw(crystal, 100, 208);
 
         // Draw the hearts and empty hearts.
         for(int i = 0; i < Player.returnMaxHealth(); i++) {
@@ -73,7 +84,19 @@ public class HUD {
         }
 
         // draw crystal amount
-        drawString(sb, player.getNumCrystals() + " / " + player.getTotalCrystals(), 132, 211);
+        sb.draw(crystal, 100, 222);
+        drawString(sb, player.getNumCrystals() + " / " + player.getTotalCrystals(), 132, 222);
+
+
+
+        //draw pause menu if game is paused
+        if(!Gdx.graphics.isContinuousRendering()) {
+            sb.draw(pauseMenuTexture, (Game.V_WIDTH / 2) - (pauseMenuTexture.getWidth() / 2 ),(Game.V_HEIGHT / 2 ) - (pauseMenuTexture.getHeight() / 2), pauseMenuTexture.getWidth(),pauseMenuTexture.getHeight());
+        } else {
+            //draw pause button only when the game is not paused.
+            sb.draw(pauseTexture, 280,200, 32,32);
+        }
+
         sb.end();
     }
 
@@ -85,7 +108,5 @@ public class HUD {
             else continue;
             sb.draw(font[c], x + i * 9, y);
         }
-
     }
 }
-//

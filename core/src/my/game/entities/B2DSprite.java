@@ -15,7 +15,7 @@ import my.game.handlers.B2DVars;
 public class B2DSprite {
 
     protected Body body;
-    protected Animation animation;
+    private Animation animation;
     protected float width;
     protected float height;
 

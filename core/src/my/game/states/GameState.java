@@ -3,8 +3,6 @@ package my.game.states;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import javax.swing.BoundedRangeModel;
-
 import my.game.Game;
 import my.game.handlers.BoundedCamera;
 import my.game.handlers.GameStateManager;

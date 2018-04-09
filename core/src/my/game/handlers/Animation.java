@@ -22,7 +22,7 @@ public class Animation {
 
     }
 
-    public Animation(TextureRegion[] frames, float delay){
+    private Animation(TextureRegion[] frames, float delay){
         setFrames(frames, delay);
 
     }
@@ -43,7 +43,7 @@ public class Animation {
         }
     }
 
-    public void step(){
+    private void step(){
         time -=delay;
         currentFrame++;
         if(currentFrame == frames.length){

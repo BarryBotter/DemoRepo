@@ -3,7 +3,6 @@ package my.game.states;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import my.game.Game;
-import my.game.handlers.Content;
 import my.game.handlers.GameButton;
 import my.game.handlers.GameStateManager;
 
@@ -39,8 +38,6 @@ public class LevelSelect extends GameState {
     }
 
     public void update(float dt) {
-
-
 
         for (int row = 0; row < buttons.length; row++) {
             for (int col = 0; col < buttons[0].length; col++) {

@@ -109,12 +109,10 @@ public class MyContactListener implements ContactListener {
         // Check collision between player/bullet and traps.
         if (fb.getUserData() != null && fb.getUserData().equals("trap")) {
             if (fa.getUserData().equals("player")) {
-                System.out.println("Player is hit by trap");
                 Player.loseHealth();
                 trapBodiesToRemove.add(fb.getBody());
             }
             else if (fa.getUserData().equals("bullet")) {
-                System.out.println("Trap is hit by bullet");
                 trapBodiesToRemove.add(fb.getBody());
                 bulletBodiesToRemove.add(fa.getBody());
             }

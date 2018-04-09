@@ -2,7 +2,6 @@ package my.game.states;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -10,12 +9,9 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Array;
 
 import my.game.Game;
-import my.game.entities.B2DSprite;
 import my.game.entities.Background;
-import my.game.handlers.Animation;
 import my.game.handlers.B2DVars;
 import my.game.handlers.GameButton;
 import my.game.handlers.GameStateManager;

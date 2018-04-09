@@ -1,7 +1,6 @@
 package my.game.handlers;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,7 +14,6 @@ import my.game.Game;
  */
 
 public class GameButton {
-
     // center at x, y
     private float x;
     private float y;
@@ -24,7 +22,7 @@ public class GameButton {
 
     private TextureRegion reg;
 
-    Vector3 vec;
+    private Vector3 vec;
     private OrthographicCamera cam;
 
     private boolean clicked;
@@ -74,17 +72,12 @@ public class GameButton {
     }
 
     public void render(SpriteBatch sb) {
-
         sb.begin();
-
         sb.draw(reg, x - width / 2, y - height / 2,50,50);
-
         if(text != null) {
             drawString(sb, text, x, y);
         }
-
         sb.end();
-
     }
 
     private void drawString(SpriteBatch sb, String s, float x, float y) {

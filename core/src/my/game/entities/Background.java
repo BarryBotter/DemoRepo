@@ -56,10 +56,7 @@ public class Background {
                 sb.draw(image, x + (col + colOffset) * image.getRegionWidth(), y + (rowOffset + row) * image.getRegionHeight());
             }
         }
-
         sb.end();
-
     }
-
 }
 
