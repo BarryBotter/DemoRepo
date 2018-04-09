@@ -558,7 +558,6 @@ public class Play extends GameState {
         MapLayer layer = tileMap.getLayers().get("crystals");
 
         if (layer != null) {
-
             BodyDef bdef = new BodyDef();
             FixtureDef fdef = new FixtureDef();
 
