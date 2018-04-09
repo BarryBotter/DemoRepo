@@ -78,11 +78,13 @@ public class MyContactListener implements ContactListener {
                 enemyBodiesToRemove.add(fa.getBody());
                 Game.res.getSound("hit").play();
                 bulletBodiesToRemove.add(fb.getBody());
+                Player.increaseEnemyKC();
             }
             else if(fb.getUserData().equals("melee")) {
                 enemyBodiesToRemove.add(fa.getBody());
                 Game.res.getSound("hit").play();
                 meleeBodiesToRemove.add(fb.getBody());
+                Player.increaseEnemyKC();
             }
         }
         if(fb.getUserData() != null && fb.getUserData().equals("enemy")) {
@@ -95,11 +97,13 @@ public class MyContactListener implements ContactListener {
                 enemyBodiesToRemove.add(fb.getBody());
                 Game.res.getSound("hit").play();
                 bulletBodiesToRemove.add(fa.getBody());
+                Player.increaseEnemyKC();
             }
             else if(fa.getUserData().equals("melee")) {
                 enemyBodiesToRemove.add(fb.getBody());
                 Game.res.getSound("hit").play();
                 meleeBodiesToRemove.add(fa.getBody());
+                Player.increaseEnemyKC();
             }
         }
         // Check collision between player/bullet and traps.

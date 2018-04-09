@@ -6,6 +6,7 @@ import java.util.Stack;
 
 import my.game.states.GameOver;
 import my.game.states.GameState;
+import my.game.states.LevelComplete;
 import my.game.states.LevelSelect;
 import my.game.states.Menu;
 import my.game.states.Play;
@@ -24,6 +25,7 @@ public class GameStateManager {
     public static final int MENU = 823183;
     public static final int LEVEL_SELECT = 323971;
     public static final int GAMEOVER = 213212;
+    public static final int LEVEL_COMPLETE = 281209;
 
 
     public GameStateManager(my.game.Game game){
@@ -58,6 +60,10 @@ public class GameStateManager {
         if (state == GAMEOVER)
         {
             return new GameOver(this);
+        }
+        if (state == LEVEL_COMPLETE)
+        {
+            return new LevelComplete(this);
         }
         return null;
     }
