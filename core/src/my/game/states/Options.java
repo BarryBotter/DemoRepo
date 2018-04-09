@@ -97,7 +97,7 @@ public class Options extends GameState {
             }
         });
 
-        //name label
+        //nameLabel
         nameLabel = new Label(Name,skin);
         nameLabel.setFontScale(5,5);
 
