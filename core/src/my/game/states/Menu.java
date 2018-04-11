@@ -85,6 +85,7 @@ public class Menu extends GameState{
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                playButton.setPosition(playButton.getX(), playButton.getY() +2);
                 return true;
             }
         });

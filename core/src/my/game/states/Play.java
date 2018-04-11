@@ -102,10 +102,8 @@ public class Play extends GameState {
     private Vector3 touchPoint;
 
     private Background[] backgrounds;
-
     private HUD hud;
     private BitmapFont textFont;
-
 
     public Play(GameStateManager gsm) {
         super(gsm);
@@ -141,7 +139,6 @@ public class Play extends GameState {
         //create melee hitbox
         createMeleeHitBox();
 
-
         // create backgrounds
         Texture bgs = Game.res.getTexture("bgones");
         TextureRegion sky = new TextureRegion(bgs, 0, 0, 320, 240);
@@ -152,8 +149,6 @@ public class Play extends GameState {
         backgrounds[0] = new Background(sky, cam, 0f);
         backgrounds[1] = new Background(mountains, cam, 0.1f);
         //backgrounds[2] = new Background(treeLayer, cam, 0.2f);
-
-
 
         //create font
         textFont = new BitmapFont(Gdx.files.internal("res/images/fontstyle.fnt"), false);
@@ -167,7 +162,6 @@ public class Play extends GameState {
         //Resets rendering every time play state is started.
         Gdx.graphics.setContinuousRendering(true);
     }
-
 
     @Override
     public void handleInput() {
@@ -292,10 +286,36 @@ public class Play extends GameState {
                     gsm.setState(GameStateManager.LEVEL_COMPLETE);
                 } else if (level == 3) {
                     unlockLevel();
-                    gsm.setState(GameStateManager.MENU);
+                    Collected();
+                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
+                }
+                else if (level == 4) {
+                    unlockLevel();
+                    Collected();
+                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
+                } else if (level == 5) {
+                    unlockLevel();
+                    Collected();
+                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
+                } else if (level == 6) {
+                    unlockLevel();
+                    Collected();
+                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
+                }
+                else if (level == 7) {
+                    unlockLevel();
+                    Collected();
+                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
+                } else if (level == 8) {
+                    unlockLevel();
+                    Collected();
+                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
+                } else if (level == 9) {
+                    unlockLevel();
+                    Collected();
+                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
                 }
             }
-
         }
 
     private boolean rightSideTouched(float x, float y) {
@@ -340,7 +360,6 @@ public class Play extends GameState {
 
         cam.update();
 
-
         // draw bgs
         sb.setProjectionMatrix(hudCam.combined);
         for (Background background : backgrounds) {
@@ -359,27 +378,22 @@ public class Play extends GameState {
         for (int i = 0; i < crystals.size; i++) {
             crystals.get(i).render(sb);
         }
-
         //draw enemy
         for (int i = 0; i < enemies.size; i++) {
             enemies.get(i).render(sb);
         }
-
         //draw traps
         for (int i = 0; i < traps.size; i++) {
             traps.get(i).render(sb);
         }
-
         //draw bullets
         for (int i = 0; i < bullets.size; i++) {
             bullets.get(i).render(sb);
         }
-
         //draw melee hit box
         for (int i = 0; i < meleeHitBoxes.size; i++) {
             meleeHitBoxes.get(i).render(sb);
         }
-
         //draw win
         win.render(sb);
 
@@ -453,7 +467,6 @@ public class Play extends GameState {
         if (layer != null)
             createJump(layer, BIT_JUMP);
     }
-
 
     private void createBlocks(TiledMapTileLayer layer, short bits) {
         float ts = layer.getTileWidth();
@@ -677,8 +690,6 @@ public class Play extends GameState {
         }
     }
 
-
-
     private void createBullet() {
         bullets = new Array<Projectile>();
         BodyDef bdef = new BodyDef();
@@ -702,7 +713,6 @@ public class Play extends GameState {
         bullets.add(bullet);
         body.setUserData(bullet);
     }
-
 
     private void createEnemy() {
         enemies = new Array<Enemy>();
@@ -764,13 +774,14 @@ public class Play extends GameState {
     }
 
     private void updateText(){
+        int score = Game.scores.getInteger("score"+String.valueOf(Play.level));
+
         sb.begin();
-        textFont.draw(sb,"Touch left side to jump", player.getposition().x + 50 , player.getposition().y  + 150);
+        textFont.draw(sb,String.valueOf(score), player.getposition().x + 50 , player.getposition().y  + 150);
         sb.end();
     }
 
     private void unlockLevel(){
-
         levelS = Game.lvls.getInteger("key");
 
         if (level < levelS) {
@@ -779,11 +790,9 @@ public class Play extends GameState {
             LVL_UNLOCKED = LVL_UNLOCKED + 1;
         Game.lvls.putInteger("key", LVL_UNLOCKED);
         Game.lvls.flush();
-
     }
 
     private void Collected() {
-
         Game.lvls.getInteger("crystals");
         Game.lvls.getInteger("enemies");
         Game.lvls.getInteger("hits");
@@ -795,7 +804,6 @@ public class Play extends GameState {
         Game.lvls.putInteger("enemies", ENEMIES_DESTROYED);
         Game.lvls.putInteger("hits", HITS_TAKEN);
         Game.lvls.flush();
-
     }
 
     private void enemyManager() {

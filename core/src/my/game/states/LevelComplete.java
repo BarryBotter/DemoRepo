@@ -1,6 +1,7 @@
 package my.game.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -8,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 
 import my.game.Game;
 import my.game.entities.Background;
@@ -32,6 +33,7 @@ public class LevelComplete extends GameState {
     private TextureRegion crystal;
     private TextureRegion[] font;
     private BitmapFont textFont;
+    private FreeTypeFontGenerator generator;
 
     private int crystalScore;
     private int enemyScore;
@@ -60,9 +62,14 @@ public class LevelComplete extends GameState {
             font[i] = new TextureRegion(tex, 32 + i * 9, 16, 9, 9);
         }
 
-        game.pauseMusic();
-        Game.res.getSound("complete").play(SOUND_LEVEL);
-        textFont = new BitmapFont(Gdx.files.internal("res/images/fontstyle.fnt"), false);
+        generator = new FreeTypeFontGenerator(Gdx.files.internal("res/font/Gauge-Regular.ttf"));
+        FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+        parameter.size = 16;
+        parameter.shadowOffsetX = 3;
+        parameter.shadowOffsetY = 3;
+        parameter.color = Color.GREEN;
+        textFont = generator.generateFont(parameter); // font size 12 pixels
+
 
         hearthScore =  Game.lvls.getInteger("hits");
 
@@ -75,6 +82,9 @@ public class LevelComplete extends GameState {
 
 
         cam.setToOrtho(false, Game.V_WIDTH, Game.V_HEIGHT);
+
+        game.pauseMusic();
+        Game.res.getSound("complete").play(SOUND_LEVEL);
 
         world = new World(new Vector2(0, -9.8f * 5), true);
     }
@@ -144,11 +154,13 @@ public class LevelComplete extends GameState {
 
         sb.end();
 
+        setScore();
+
     }
 
     @Override
     public void dispose() {
-        //dispose
+      generator.dispose();
     }
 
 
@@ -165,5 +177,13 @@ public class LevelComplete extends GameState {
             totalScore=  (crystalScore + enemyScore) * hearthsLeft;
 
         return totalScore;
+    }
+
+    public void setScore(){
+        int compareScore = Game.scores.getInteger("score"+String.valueOf(Play.level));
+        if(compareScore < totalScore) {
+            Game.scores.putInteger("score" + String.valueOf(Play.level), totalScore);
+            Game.scores.flush();
+        }
     }
 }

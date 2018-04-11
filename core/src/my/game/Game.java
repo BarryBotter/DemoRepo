@@ -31,6 +31,7 @@ public class Game implements ApplicationListener {
 	public static Content res;
 	public Preferences prefs;
 	public static Preferences lvls;
+	public static Preferences scores;
 
 	public SpriteBatch getSpriteBatch(){return sb;}
 	public static BoundedCamera getCamera(){return cam;}
@@ -68,6 +69,12 @@ public class Game implements ApplicationListener {
 			prefs.putBoolean("sound", true);
 			prefs.putString("name", "Eero");
 			prefs.flush();
+		}
+
+		scores = Gdx.app.getPreferences("highscores");
+		if (!scores.contains("score1")){
+			scores.putInteger("score1",100);
+			scores.flush();
 		}
 
 		res.loadMusic("res/music/bbsong.ogg", "bbsong");

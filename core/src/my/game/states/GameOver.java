@@ -18,11 +18,11 @@ import static my.game.handlers.B2DVars.PPM;
  */
 
 public class GameOver extends GameState {
-    private boolean debug = false;
 
     private Background bg;
     private GameButton playButton;
     private GameButton exitButton;
+    Play play;
 
     private World world;
     private TextureRegion[] menuButtons;
@@ -43,7 +43,7 @@ public class GameOver extends GameState {
         playButton = new GameButton(menuButtons[0], 250, 160, cam);
         exitButton = new GameButton(menuButtons[1], 150, 170, cam);
 
-
+        play = new Play(gsm);
 
         cam.setToOrtho(false, Game.V_WIDTH, Game.V_HEIGHT);
 
@@ -92,7 +92,7 @@ public class GameOver extends GameState {
     }
 
     public void dispose() {
-
+        play.dispose();
     }
 
 }
