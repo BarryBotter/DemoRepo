@@ -7,13 +7,15 @@ import com.badlogic.gdx.physics.box2d.Body;
 import my.game.Game;
 import my.game.handlers.B2DVars;
 
+import static my.game.handlers.B2DVars.MAX_HEALTH;
+
 
 /**
  * Created by Katriina on 22.3.2018.
  */
 
 public class Player extends  B2DSprite{
-    private static final int MAX_HEALTH = 3;
+    //private static final int MAX_HEALTH = 3;
     private static final int MAX_NUMBER_OF_AMMO = 3;
     private static int numberOfAmmo = MAX_NUMBER_OF_AMMO;
     private static int playerHealth;
@@ -32,6 +34,8 @@ public class Player extends  B2DSprite{
         setAnimation(sprites, 1 / 12f);
         resetPlayer();
     }
+
+
 
     public void collectCrystal(){numCrystals++;}
     public int getNumCrystals(){return numCrystals;}

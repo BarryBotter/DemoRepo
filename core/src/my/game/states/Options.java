@@ -23,6 +23,7 @@ import my.game.entities.Background;
 import my.game.handlers.GameStateManager;
 import my.game.handlers.MyTextInputListener;
 
+import static my.game.handlers.B2DVars.MAX_HEALTH;
 import static my.game.handlers.B2DVars.SOUND_LEVEL;
 
 /**
@@ -197,12 +198,15 @@ public class Options extends GameState {
         switch (difficulty) {
             case 0: game.prefs.putInteger("difficulty", 1);
                 difficultyString = "normal";
+                MAX_HEALTH = 2;
                 break;
             case 1: game.prefs.putInteger("difficulty", 2);
                 difficultyString = "hard";
+                MAX_HEALTH = 1;
                 break;
             case 2: game.prefs.putInteger("difficulty", 0);
                 difficultyString = "easy";
+                MAX_HEALTH = 3;
                 break;
             default: difficultyString = "Invalid ";
                 break;

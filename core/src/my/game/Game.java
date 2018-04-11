@@ -65,7 +65,7 @@ public class Game implements ApplicationListener {
 		prefs = Gdx.app.getPreferences("My Preferences");
 		//dont insert preferences here this is just to set default values if there is none (maybe works)
 		if(!prefs.contains("name")) {
-			prefs.putInteger("difficulty", 1);
+			prefs.putInteger("difficulty", 0);
 			prefs.putBoolean("sound", true);
 			prefs.putString("name", "Eero");
 			prefs.flush();

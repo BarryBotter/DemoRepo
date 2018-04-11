@@ -537,9 +537,10 @@ public class Play extends GameState {
                 fd.shape = cs;
                 fd.restitution = 1;
                 fd.filter.categoryBits = bits;
-                fd.filter.maskBits = BIT_PLAYER | BIT_ENEMY;
+                fd.filter.maskBits = BIT_PLAYER | BIT_ENEMY |BIT_BULLET;
                 world.createBody(bdef).createFixture(fd).setUserData("corner");
                 cs.dispose();
+
             }
         }
     }
@@ -704,8 +705,9 @@ public class Play extends GameState {
 
         shape.setAsBox(9 / PPM, 9 / PPM);
         fdef.shape = shape;
+        fdef.restitution = 1;
         fdef.filter.categoryBits = BIT_BULLET;
-        fdef.filter.maskBits = BIT_ENEMY | BIT_GROUND | BIT_TRAP;
+        fdef.filter.maskBits = BIT_ENEMY | BIT_GROUND | BIT_TRAP | BIT_CORNER;
         body.createFixture(fdef).setUserData("bullet");
         shape.dispose();
 
