@@ -30,7 +30,6 @@ public class LevelComplete extends GameState {
     private World world;
     private TextureRegion[] menuButtons;
 
-    private TextureRegion crystal;
     private TextureRegion[] font;
     private BitmapFont textFont;
     private FreeTypeFontGenerator generator;
@@ -51,11 +50,7 @@ public class LevelComplete extends GameState {
 
         Texture tex = Game.res.getTexture("complete");
         bg = new Background(new TextureRegion(tex), hudCam, 5);
-        bg.setVector(4, -5);
-
-        tex = Game.res.getTexture("hud");
-
-        crystal = new TextureRegion(tex, 80, 0, 16, 16);
+        bg.setVector(0, 0);
 
         font = new TextureRegion[11];
         for (int i = 0; i < 6; i++) {
