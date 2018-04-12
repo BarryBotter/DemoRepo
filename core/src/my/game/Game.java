@@ -119,10 +119,8 @@ public class Game implements ApplicationListener {
 
 	public void loadTextures(){
 		res.loadTexture("res/images/trap.png","trap");
-		res.loadTexture("res/images/crystal.png", "Crystal");
 		res.loadTexture("res/images/hud.png","hud");
 		res.loadTexture("res/images/bgs.png","bg");
-		res.loadTexture("res/images/menu.png","menu");
 		res.loadTexture("kuva.png","olvi");
 		res.loadTexture("res/UI_final/rebg.png","menubg");
 		res.loadTexture("res/UI_final/resized_paavalikko.png","main");
@@ -131,7 +129,6 @@ public class Game implements ApplicationListener {
 		res.loadTexture("res/images/Game_Over.png", "gameover");
 		res.loadTexture("res/background/testimaa.png","bgone");
 		res.loadTexture("res/background/rsz_karkkimaas.png","bgones");
-		res.loadTexture("res/background/mountains.png", "mountain");
 		res.loadTexture("res/images/char.png","char");
 		res.loadTexture("res/images/bullet.png","bullet");
 		res.loadTexture("res/UI_assets/heartSilhoutte.png","heartSilhoutte");
@@ -141,7 +138,6 @@ public class Game implements ApplicationListener {
 		res.loadTexture("res/UI_assets/pauseButton.png","pauseButton");
 		res.loadTexture("res/UI_assets/pauseMenu.png","pauseMenu");
 		res.loadTexture("res/images/happyTooth.png","happyTooth");
-		res.loadTexture("res/images/attack.png", "attack");
 		res.loadTexture("res/images/complete.png", "complete");
 		res.loadTexture("res/images/testibg.png", "testibg");
 		res.loadTexture("res/images/toothpaste.png","toothpaste");
