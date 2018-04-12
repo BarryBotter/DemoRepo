@@ -117,7 +117,7 @@ public class Game implements ApplicationListener {
 		res.removeAll();
 	}
 
-	public void loadTextures(){
+	private void loadTextures(){
 		res.loadTexture("res/images/trap.png","trap");
 		res.loadTexture("res/images/hud.png","hud");
 		res.loadTexture("res/images/bgs.png","bg");

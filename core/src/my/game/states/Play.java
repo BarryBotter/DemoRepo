@@ -108,10 +108,13 @@ public class Play extends GameState {
     public Play(GameStateManager gsm) {
         super(gsm);
 
+        //Resets rendering every time play state is started.
+        Gdx.graphics.setContinuousRendering(true);
+
+
         world = new World(new Vector2(0, -9.81f), true);
         cl = new MyContactListener();
         world.setContactListener(cl);
-        b2dr = new Box2DDebugRenderer();
 
         // create player
         createPlayer();
@@ -144,7 +147,7 @@ public class Play extends GameState {
         TextureRegion sky = new TextureRegion(bgs, 0, 0, 320, 240);
         TextureRegion mountains = new TextureRegion(bgs, 0, 235, 320, 240);
         Texture trees = Game.res.getTexture("bgone");
-        TextureRegion treeLayer = new TextureRegion(trees, 0, 27, 320, 240);
+        //TextureRegion treeLayer = new TextureRegion(trees, 0, 27, 320, 240);
         backgrounds = new Background[2];
         backgrounds[0] = new Background(sky, cam, 0f);
         backgrounds[1] = new Background(mountains, cam, 0.1f);
@@ -159,8 +162,6 @@ public class Play extends GameState {
         //setup touch areas
         setupTouchControlAreas();
 
-        //Resets rendering every time play state is started.
-        Gdx.graphics.setContinuousRendering(true);
     }
 
     @Override
