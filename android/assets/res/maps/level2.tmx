@@ -11,7 +11,7 @@
  </layer>
  <layer name="corner" width="78" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjYBgF9AIsVMCjYBSMAtqD0Xw6CkbBKBjsAABaPQCF
+   eJxjYCAPsFAZj0SA7m9s4TBSw2YUjIKBBKPl2SgYBaNgsAMAfXwAnQ==
   </data>
  </layer>
  <layer name="jump" width="78" height="8">

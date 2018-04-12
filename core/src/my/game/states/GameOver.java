@@ -11,9 +11,11 @@ import my.game.handlers.GameButton;
 import my.game.handlers.GameStateManager;
 
 public class GameOver extends GameState {
+
     private Background bg;
     private GameButton playButton;
     private GameButton exitButton;
+    Play play;
 
     private World world;
     private TextureRegion[] menuButtons;
@@ -29,8 +31,10 @@ public class GameOver extends GameState {
         menuButtons = new TextureRegion[5];
         menuButtons[0] =  new TextureRegion(tex, 340, 40, 200, 100);
         menuButtons[1] =  new TextureRegion(tex, 340, 125, 200, 100);
-        playButton = new GameButton(menuButtons[0], Game.V_WIDTH, 0, cam);
-        exitButton = new GameButton(menuButtons[1], 0, 0, cam);
+        playButton = new GameButton(menuButtons[0], 250, 160, cam);
+        exitButton = new GameButton(menuButtons[1], 150, 170, cam);
+
+        play = new Play(gsm);
 
         cam.setToOrtho(false, Game.V_WIDTH, Game.V_HEIGHT);
         world = new World(new Vector2(0, -9.8f * 5), true);
@@ -62,5 +66,6 @@ public class GameOver extends GameState {
     }
 
     public void dispose() {
+        play.dispose();
     }
 }

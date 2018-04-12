@@ -16,6 +16,8 @@ import my.game.Game;
 import my.game.handlers.GameButton;
 import my.game.handlers.GameStateManager;
 
+import static my.game.handlers.B2DVars.SOUND_LEVEL;
+
 
 public class LevelSelect extends GameState {
 
@@ -100,7 +102,7 @@ public class LevelSelect extends GameState {
                 if (buttons[row][col].isClicked()) {
                     Play.level = row * buttons[0].length + col + 1;
                     if (Play.level <= lvl) {
-                        Game.res.getSound("snap").play();
+                        Game.res.getSound("snap").play(SOUND_LEVEL);
                         gsm.setState(GameStateManager.PLAY);
                     }
                 }
