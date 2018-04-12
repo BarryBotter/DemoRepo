@@ -10,13 +10,10 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import my.game.Game;
 import my.game.entities.Background;
-import my.game.entities.Player;
 import my.game.handlers.GameButton;
 import my.game.handlers.GameStateManager;
 
 public class LevelComplete extends GameState {
-
-
     private Background bg;
     private GameButton playButton;
     private GameButton exitButton;
@@ -73,7 +70,6 @@ public class LevelComplete extends GameState {
 
     @Override
     public void handleInput() {
-
         if (playButton.isClicked()) {
             gsm.setState(GameStateManager.PLAY);
         } else if (exitButton.isClicked()) {
@@ -136,7 +132,6 @@ public class LevelComplete extends GameState {
         crystalScore = Game.lvls.getInteger("crystals") * 100;
         enemyScore = Game.lvls.getInteger("enemies") * 100;
         hitScore = Game.lvls.getInteger("hits");
-
 
         if (hitScore != 0)
             totalScore = (crystalScore + enemyScore) * 5;
