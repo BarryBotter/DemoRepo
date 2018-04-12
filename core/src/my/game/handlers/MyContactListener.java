@@ -47,13 +47,11 @@ public class MyContactListener implements ContactListener {
         // Check collision between player and pickups.
         if(fa.getUserData() != null && fa.getUserData().equals("crystal")){
             //remove pickup
-            playerShoot = true;
             Game.res.getSound("pickup").play(SOUND_LEVEL);
             bodiesToRemove.add(fa.getBody());
             Player.increaseAmmo();
         }
         if(fb.getUserData() != null && fb.getUserData().equals("crystal")){
-            playerShoot = true;
             Game.res.getSound("pickup").play(SOUND_LEVEL);
             bodiesToRemove.add(fb.getBody());
             Player.increaseAmmo();
