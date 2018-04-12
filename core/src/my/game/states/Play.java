@@ -1,6 +1,7 @@
 package my.game.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 
 import my.game.Game;
@@ -48,15 +49,12 @@ import static my.game.handlers.B2DVars.BIT_JUMP;
 import static my.game.handlers.B2DVars.BIT_MELEE;
 import static my.game.handlers.B2DVars.BIT_PLAYER;
 import static my.game.handlers.B2DVars.BIT_TRAP;
+import static my.game.handlers.B2DVars.BIT_WIN;
 import static my.game.handlers.B2DVars.CRYSTALS_COLLECTED;
 import static my.game.handlers.B2DVars.ENEMIES_DESTROYED;
 import static my.game.handlers.B2DVars.HITS_TAKEN;
 import static my.game.handlers.B2DVars.LVL_UNLOCKED;
 import static my.game.handlers.B2DVars.PPM;
-
-/**
- * Created by Katriina on 20.3.2018.
- */
 
 public class Play extends GameState {
 
@@ -100,7 +98,6 @@ public class Play extends GameState {
 
     public Play(GameStateManager gsm) {
         super(gsm);
-
         world = new World(new Vector2(0, -9.81f), true);
         cl = new MyContactListener();
         world.setContactListener(cl);
@@ -127,25 +124,23 @@ public class Play extends GameState {
         createBullet();
 
         //Create enemy
-        createEnemy();
+        if(level != 9) {
+            createEnemy();
+        }
 
         //create melee hitbox
         createMeleeHitBox();
 
         // create backgrounds
         Texture bgs = Game.res.getTexture("bgones");
-        TextureRegion sky = new TextureRegion(bgs, 0, 0, 320, 240);
-        TextureRegion mountains = new TextureRegion(bgs, 0, 235, 320, 240);
+        TextureRegion sky = new TextureRegion(bgs, 0, 0, Game.V_WIDTH, Game.V_HEIGHT);
+        TextureRegion mountains = new TextureRegion(bgs, 0, 235, Game.V_WIDTH, Game.V_HEIGHT);
         Texture trees = Game.res.getTexture("bgone");
-        TextureRegion treeLayer = new TextureRegion(trees, 0, 27, 320, 240);
+        TextureRegion treeLayer = new TextureRegion(trees, 0, 27, Game.V_WIDTH, Game.V_HEIGHT);
         backgrounds = new Background[2];
         backgrounds[0] = new Background(sky, cam, 0f);
         backgrounds[1] = new Background(mountains, cam, 0.1f);
         //backgrounds[2] = new Background(treeLayer, cam, 0.2f);
-
-
-
-
 
         // set up hud
         hud = new HUD(player);
@@ -157,17 +152,14 @@ public class Play extends GameState {
         Gdx.graphics.setContinuousRendering(true);
     }
 
-
     @Override
     public void handleInput() {
-
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
     @Override
     public void update(float dt) {
-
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
             public boolean touchDown(int x, int y, int pointer, int button) {
@@ -182,9 +174,9 @@ public class Play extends GameState {
                 else if (rightSideTouched(touchPoint.x, touchPoint.y) && Gdx.graphics.isContinuousRendering()) {
                     //When player runs out of ammo, start melee mode.
                     if (Player.returnNumberOfAmmo() == 0) {
-                        meleeManager();
+                        meleeHitBox.meleeManager(player.getBody());
                     } else if (Player.returnNumberOfAmmo() <= Player.returnMaxAmmo()) {
-                        bulletManager();
+                        bullet.bulletManager(player.getBody(),touchPoint.x,touchPoint.y);
                     }
                 }
 
@@ -217,13 +209,23 @@ public class Play extends GameState {
                 else if (pauseMenuRightButtonTouched(touchPoint.x, touchPoint.y) && !Gdx.graphics.isContinuousRendering()) {
                     Gdx.graphics.setContinuousRendering(true);
                 }
-
                 return super.touchDown(x, y, pointer, button);
             }
 
             @Override
             public boolean touchUp(int x, int y, int pointer, int button) {
                 return true;
+            }
+
+            @Override
+            public boolean keyDown (int keycode) {
+                //Pause game when Android back button is pressed.
+                if(keycode == Input.Keys.BACK) {
+                    if(Gdx.graphics.isContinuousRendering()) {
+                        Gdx.graphics.setContinuousRendering(false);
+                    }
+                }
+                return false;
             }
         });
 
@@ -234,7 +236,11 @@ public class Play extends GameState {
             bulletRemover();
             meleeHitBoxRemover();
             trapRemover();
-            enemyManager();
+            if(level != 9) {
+                enemyRemover();
+                enemy.enemyManager();
+            }
+
 
             player.update(dt);
 
@@ -252,10 +258,15 @@ public class Play extends GameState {
                 crystals.get(i).update(dt);
             }
 
-            for (int i = 0; i < enemies.size; i++) {
-                enemies.get(i).update(dt);
+            if(level != 9) {
+                for (int i = 0; i < enemies.size; i++) {
+                    enemies.get(i).update(dt);
+                }
             }
 
+            for (int i = 0; i < traps.size; i++) {
+                traps.get(i).update(dt);
+            }
         }
         // Game over stuff
         if (player.getBody().getPosition().y < 0) {
@@ -268,22 +279,25 @@ public class Play extends GameState {
             gsm.setState(GameStateManager.GAMEOVER);
         }
 
-            // Win stuff
-            if (cl.isPlayerWin()) {
-                if (level == 1) {
-                    unlockLevel();
-                    Collected();
-                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
-                } else if (level == 2) {
-                    unlockLevel();
-                    Collected();
-                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
-                } else if (level == 3) {
-                    unlockLevel();
-                    gsm.setState(GameStateManager.MENU);
-                }
+        // Win stuff
+        if (cl.isPlayerWin()) {
+            if (level == 1) {
+                unlockLevel();
+                Collected();
+                gsm.setState(GameStateManager.LEVEL_COMPLETE);
+            } else if (level == 2) {
+                unlockLevel();
+                Collected();
+                gsm.setState(GameStateManager.LEVEL_COMPLETE);
+            } else if (level == 3) {
+                unlockLevel();
+                gsm.setState(GameStateManager.MENU);
             }
         }
+
+        // Player animations
+        animationManager();
+    }
 
     private boolean rightSideTouched(float x, float y) {
         return screenRightSide.contains(x, y);
@@ -307,8 +321,7 @@ public class Play extends GameState {
 
     private void setupTouchControlAreas() {
         touchPoint = new Vector3();
-        final int BOX_ENLARGER = 10;
-        screenTopRightSide = new Rectangle(game.getHUDCamera().viewportWidth - (hud.pauseTexture.getWidth() + BOX_ENLARGER),game.getHUDCamera().viewportHeight - (hud.pauseTexture.getHeight() + BOX_ENLARGER), hud.pauseTexture.getWidth() + BOX_ENLARGER ,hud.pauseTexture.getHeight() + BOX_ENLARGER);
+        screenTopRightSide = new Rectangle(game.getHUDCamera().viewportWidth - (hud.pauseButton.getRegionWidth() / 8),game.getHUDCamera().viewportHeight - (hud.pauseButton.getRegionHeight() / 8), hud.pauseButton.getRegionWidth() / 8,hud.pauseButton.getRegionHeight() / 8);
         screenRightSide = new Rectangle(game.getHUDCamera().viewportWidth / 2, 0, game.getHUDCamera().viewportWidth / 2,
                 game.getHUDCamera().viewportHeight);
         screenLeftSide = new Rectangle(0, 0, game.getHUDCamera().viewportWidth / 2, game.getHUDCamera().viewportHeight);
@@ -333,8 +346,6 @@ public class Play extends GameState {
             background.render(sb);
         }
 
-
-
         //draw tile maps
         tmRenderer.setView(cam);
         tmRenderer.render();
@@ -349,8 +360,10 @@ public class Play extends GameState {
         }
 
         //draw enemy
-        for (int i = 0; i < enemies.size; i++) {
-            enemies.get(i).render(sb);
+        if(level != 9) {
+            for (int i = 0; i < enemies.size; i++) {
+                enemies.get(i).render(sb);
+            }
         }
 
         //draw traps
@@ -394,7 +407,7 @@ public class Play extends GameState {
         shape.setAsBox(14 / PPM, 15 / PPM);
         fdef.shape = shape;
         fdef.filter.categoryBits = BIT_PLAYER;
-        fdef.filter.maskBits = BIT_GROUND | BIT_CRYSTAL | BIT_CORNER | BIT_ENEMY | BIT_TRAP | BIT_JUMP;
+        fdef.filter.maskBits = BIT_GROUND | BIT_CRYSTAL | BIT_CORNER | BIT_ENEMY | BIT_TRAP | BIT_JUMP | BIT_WIN;
         body.createFixture(fdef).setUserData("player");
         shape.dispose();
 
@@ -648,14 +661,14 @@ public class Play extends GameState {
 
                 fdef.shape = cshape;
                 fdef.isSensor = true;
-                fdef.filter.categoryBits = BIT_CRYSTAL;
+                fdef.filter.categoryBits = BIT_WIN;
                 fdef.filter.maskBits = BIT_PLAYER;
 
                 Body body = world.createBody(bdef);
                 body.createFixture(fdef).setUserData("win");
                 cshape.dispose();
 
-                win = new TextureDraw(body, "olvi");
+                win = new TextureDraw(body, "Crystal");
 
                 body.setUserData(win);
             }
@@ -747,7 +760,6 @@ public class Play extends GameState {
     }
 
     private void unlockLevel(){
-
         levelS = Game.lvls.getInteger("key");
 
         if (level < levelS) {
@@ -756,11 +768,9 @@ public class Play extends GameState {
             LVL_UNLOCKED = LVL_UNLOCKED + 1;
         Game.lvls.putInteger("key", LVL_UNLOCKED);
         Game.lvls.flush();
-
     }
 
     private void Collected() {
-
         Game.lvls.getInteger("crystals");
         Game.lvls.getInteger("enemies");
         Game.lvls.getInteger("hits");
@@ -772,10 +782,9 @@ public class Play extends GameState {
         Game.lvls.putInteger("enemies", ENEMIES_DESTROYED);
         Game.lvls.putInteger("hits", HITS_TAKEN);
         Game.lvls.flush();
-
     }
 
-    private void enemyManager() {
+    private void enemyRemover() {
         // Remove enemies.
         Array<Body> enemyBodies = cl.getEnemyBodiesToRemove();
         if (enemyBodies.size > 0) {
@@ -794,61 +803,12 @@ public class Play extends GameState {
             createEnemy();
         }
 
-        //If enemy gets left behind player undestroyed, respawn it.
+        //If enemy gets left behind player un destroyed, respawn it.
         if(enemies.get(0).getBody().getPosition().x < player.getposition().x - 2.5f) {
             Body b = enemy.getBody();
             enemies.removeValue((Enemy) b.getUserData(), true);
             world.destroyBody(b);
             createEnemy();
-        }
-
-        //Move enemy towards left side of the screen. If it stops, switch direction.
-        if (enemy.returnCurrentLocation() - enemies.get(0).getBody().getPosition().x < 0 && enemy.returnDirection()) {
-            enemies.get(0).getBody().setTransform(enemy.getposition().x +0.05f,enemy.getposition().y -0.01f, 0);
-            enemy.switchDirection();
-        }
-        else if (enemy.returnCurrentLocation() - enemies.get(0).getBody().getPosition().x < 0 && !enemy.returnDirection()){
-            enemies.get(0).getBody().setTransform(enemy.getposition().x -0.05f,enemy.getposition().y -0.01f, 0);
-            enemy.switchDirection();
-        }
-
-        // Go right
-        if(!enemy.returnDirection()) {
-            enemies.get(0).getBody().setTransform(enemy.getposition().x +0.01f,enemy.getposition().y -0.01f, 0);
-        }
-        else {  //Go left
-            enemies.get(0).getBody().setTransform(enemy.getposition().x -0.01f,enemy.getposition().y -0.01f, 0);
-        }
-
-        // Set current location to compare if enemy has stopped or not.
-        enemy.setCurrentLocation(enemies.get(0).getBody().getPosition().x);
-    }
-
-    private void bulletManager() {
-        // If the player has ammo and bullet is not on cooldown, shoot the bullet.
-        if (Player.returnNumberOfAmmo() > 0 && !bullet.returnCoolDownState() && !meleeHitBox.returnMeleeCoolDownState()) {
-            bullet.resetBullet(player.getposition().x, player.getposition().y);
-            // Check if the touch is below or above player.
-            if (touchPoint.y / PPM >= player.getposition().y) {
-                bullet.shootBullet(touchPoint.x / PPM, touchPoint.y / PPM, false);
-            } else {
-                bullet.shootBullet(touchPoint.x / PPM, (touchPoint.y / PPM) - player.getposition().y, true);
-            }
-        }
-        else {
-            // After teh bullet's been shot, deploy a little cool down.
-            bullet.checkBulletCoolDown();
-        }
-    }
-
-    private void meleeManager() {
-        //If melee swing is not on cooldown make melee hitbox appear in front of the player.
-        if (!meleeHitBox.returnMeleeCoolDownState() && !bullet.returnCoolDownState() && Player.returnNumberOfAmmo() == 0) {
-            meleeHitBox.meleeSwing();
-            meleeHitBox.getBody().setTransform(player.getposition().x + 0.4f, player.getposition().y, 0);
-        } else {
-            // Keep checking the cooldwon until it's ready to be used again.
-            meleeHitBox.checkMeleeCoolDown();
         }
     }
 
@@ -896,5 +856,24 @@ public class Play extends GameState {
             world.destroyBody(b);
         }
         trapBodies.clear();
+    }
+
+    private void animationManager() {
+        // Melee attack animation.
+        if(Melee.returnMeleeCoolDownState() && player.returnCurrentAnimation().equalsIgnoreCase("playerWalk")) {
+            player.setPlayerAnimation("playerAttack");
+        }
+        else if(!Melee.returnMeleeCoolDownState() && player.returnCurrentAnimation().equalsIgnoreCase("playerAttack")){
+            player.setPlayerAnimation("playerWalk");
+        }
+
+        //Shooting animation
+        //todo
+
+        //Dying animation
+        //todo
+
+        //Jumping animation
+        //todo
     }
 }

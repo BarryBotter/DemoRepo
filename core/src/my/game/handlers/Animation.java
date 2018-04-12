@@ -2,10 +2,6 @@ package my.game.handlers;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-/**
- * Created by Katriina on 22.3.2018.
- */
-
 public class Animation {
 
     private TextureRegion[] frames;

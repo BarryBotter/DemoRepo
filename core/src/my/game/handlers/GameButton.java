@@ -9,10 +9,6 @@ import com.badlogic.gdx.math.Vector3;
 
 import my.game.Game;
 
-/**
- * Created by Katriina on 23.3.2018.
- */
-
 public class GameButton {
     // center at x, y
     private float x;

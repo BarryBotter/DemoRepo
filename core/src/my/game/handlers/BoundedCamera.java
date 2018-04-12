@@ -2,10 +2,6 @@ package my.game.handlers;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
-/**
- * Created by Katriina on 26.3.2018.
- */
-
 public class BoundedCamera extends OrthographicCamera {
 
     private float xmin;
@@ -52,5 +48,4 @@ public class BoundedCamera extends OrthographicCamera {
             position.y = ymax - viewportHeight / 2;
         }
     }
-
 }

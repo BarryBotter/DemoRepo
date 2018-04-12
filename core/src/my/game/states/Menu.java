@@ -4,11 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -18,17 +13,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import my.game.Game;
 import my.game.entities.Background;
-import my.game.handlers.B2DVars;
-import my.game.handlers.GameButton;
 import my.game.handlers.GameStateManager;
-
-/**
- * Created by Katriina on 23.3.2018.
- */
 
 public class Menu extends GameState{
     private int row_height,col_width;
@@ -143,6 +131,7 @@ public class Menu extends GameState{
     public void handleInput() {
     }
 
+    @Override
     public void update(float dt) {
     }
 

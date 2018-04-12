@@ -6,6 +6,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+
 import my.game.handlers.BoundedCamera;
 import my.game.handlers.Content;
 import my.game.handlers.GameStateManager;
@@ -15,7 +16,6 @@ import static my.game.handlers.B2DVars.HITS_TAKEN;
 import static my.game.handlers.B2DVars.LVL_UNLOCKED;
 
 public class Game implements ApplicationListener {
-
 	public static final int V_WIDTH = 320;
 	public static final int V_HEIGHT = 240;
 
@@ -73,6 +73,9 @@ public class Game implements ApplicationListener {
 			prefs.putString("name", "Eero");
 			prefs.flush();
 		}
+
+		// Catch the back key so it's not passed onto OS.
+		Gdx.input.setCatchBackKey(true);
 	}
 
 	@Override
@@ -102,39 +105,45 @@ public class Game implements ApplicationListener {
 	}
 
 	public void loadTextures(){
-		res.loadTexture("res/images/trap.png","trap");
-		res.loadTexture("res/images/crystal.png", "Crystal");
 		res.loadTexture("res/images/hud.png","hud");
 		res.loadTexture("res/images/bgs.png","bg");
 		res.loadTexture("res/images/menu.png","menu");
-		res.loadTexture("kuva.png","olvi");
 		res.loadTexture("res/UI_final/rebg.png","menubg");
 		res.loadTexture("res/UI_final/resized_paavalikko.png","main");
-		res.loadTexture("res/UI_final/resized_hammas.png","tooth");
 		res.loadTexture("res/UI_final/menu_logo.png","menulogo");
-		res.loadTexture("res/images/Game_Over.png", "gameover");
+		res.loadTexture("res/images/GameOverScreen.png", "gameOver");
 		res.loadTexture("res/background/testimaa.png","bgone");
 		res.loadTexture("res/background/rsz_karkkimaas.png","bgones");
 		res.loadTexture("res/background/mountains.png", "mountain");
-		res.loadTexture("res/images/char.png","char");
-		res.loadTexture("res/images/bullet.png","bullet");
-		res.loadTexture("res/UI_assets/heartSilhoutte.png","heartSilhoutte");
-		res.loadTexture("res/UI_assets/ammoSilhoutte.png","ammoSilhoutte");
-		res.loadTexture("res/UI_assets/heart.png","heart");
-		res.loadTexture("res/UI_assets/ammo.png","ammo");
-		res.loadTexture("res/UI_assets/pauseButton.png","pauseButton");
-		res.loadTexture("res/UI_assets/pauseMenu.png","pauseMenu");
-		res.loadTexture("res/images/happyTooth.png","happyTooth");
-		res.loadTexture("res/images/attack.png", "attack");
 		res.loadTexture("res/images/complete.png", "complete");
 		res.loadTexture("res/images/testibg.png", "testibg");
 
+		//Player animations
+		res.loadTexture("res/playerAnimations/playerWalk.png","playerWalk");
+		res.loadTexture("res/playerAnimations/playerAttack.png","playerAttack");
+
+		//UI
+		res.loadTexture("res/UI_assets/pauseMenu.png","pauseMenu");
+		res.loadTexture("res/UI_assets/buttons.png","buttonMap");
+		res.loadTexture("res/UI_assets/HUD_Icons.png","hudIcons");
+
+		//Enemies
+		res.loadTexture("res/enemies/enemyBat.png","enemyBat");
+		res.loadTexture("res/enemies/enemyTooth.png","enemyTooth");
+		res.loadTexture("res/enemies/trap.png","trap");
+
+		//Particles
+		res.loadTexture("res/particles/bulletParticle.png","bulletParticles");
+		res.loadTexture("res/particles/bullet.png","bullet");
+
+		//PickUps
+		res.loadTexture("res/pickups/crystal.png", "Crystal");
+		res.loadTexture("res/pickups/toothPastePickUp.png", "toothPaste");
 	}
 
 	private void loadSounds(){
 		res.loadSound("res/sfx/necksnap.mp3","snap");
 		res.loadSound("res/sfx/hit.wav","hit");
 		res.loadSound("res/sfx/scream.ogg","scream");
-
 	}
 }

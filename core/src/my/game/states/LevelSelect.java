@@ -1,6 +1,8 @@
 package my.game.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -37,7 +39,6 @@ public class LevelSelect extends GameState {
 
         buttons();
         lvlSelectGrid();
-
     }
 
     private void buttons(){
@@ -86,9 +87,11 @@ public class LevelSelect extends GameState {
         }
     }
 
+    @Override
     public void handleInput() {
     }
 
+    @Override
     public void update(float dt) {
 
         for (int row = 0; row < buttons.length; row++) {
@@ -102,9 +105,21 @@ public class LevelSelect extends GameState {
                     }
                 }
             }
-
         }
+
+        Gdx.input.setInputProcessor(new InputAdapter() {
+            @Override
+            public boolean keyDown (int keycode) {
+                //If Android back button is pressed, go back to menu.
+                if(keycode == Input.Keys.BACK) {
+                    gsm.setState(GameStateManager.MENU);
+                }
+                return false;
+            }
+        });
     }
+
+    @Override
     public void render() {
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
@@ -123,6 +138,5 @@ public class LevelSelect extends GameState {
     public void dispose() {
         stage.clear();
     }
-
 }
 

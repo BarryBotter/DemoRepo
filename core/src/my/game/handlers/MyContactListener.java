@@ -12,11 +12,8 @@ import my.game.Game;
 import my.game.entities.Player;
 
 public class MyContactListener implements ContactListener {
-
     private int numFootContacts;
-
-    public boolean wincontact;
-    public boolean playerShoot;
+    private boolean winContact;
 
     private Array<Body> bodiesToRemove;
     private Array<Body> enemyBodiesToRemove;
@@ -30,6 +27,7 @@ public class MyContactListener implements ContactListener {
         bulletBodiesToRemove = new Array<Body>();
         meleeBodiesToRemove = new Array<Body>();
         trapBodiesToRemove = new Array<Body>();
+        winContact = false;
     }
 
     @Override
@@ -46,25 +44,25 @@ public class MyContactListener implements ContactListener {
 
         // Check collision between player and pickups.
         if(fa.getUserData() != null && fa.getUserData().equals("crystal")){
-
             //remove pickup
-            playerShoot = true;
-
             bodiesToRemove.add(fa.getBody());
             Player.increaseAmmo();
         }
         if(fb.getUserData() != null && fb.getUserData().equals("crystal")){
-            playerShoot = true;
             bodiesToRemove.add(fb.getBody());
             Player.increaseAmmo();
         }
 
         // Check collision between player and win block.
         if(fa.getUserData() != null && fa.getUserData().equals("win")){
-            wincontact = true;
+            if(fb.getUserData().equals("player")) {
+                winContact = true;
+            }
         }
         if(fb.getUserData() != null && fb.getUserData().equals("win")){
-            wincontact = true;
+            if(fa.getUserData().equals("player")) {
+                winContact = true;
+            }
         }
 
         // Check collisions between enemy and player/bullet/melee attack.
@@ -110,9 +108,11 @@ public class MyContactListener implements ContactListener {
         if (fb.getUserData() != null && fb.getUserData().equals("trap")) {
             if (fa.getUserData().equals("player")) {
                 Player.loseHealth();
+                Game.res.getSound("snap").play();
                 trapBodiesToRemove.add(fb.getBody());
             }
             else if (fa.getUserData().equals("bullet")) {
+                Game.res.getSound("hit").play();
                 trapBodiesToRemove.add(fb.getBody());
                 bulletBodiesToRemove.add(fa.getBody());
             }
@@ -120,9 +120,11 @@ public class MyContactListener implements ContactListener {
         if (fa.getUserData() != null && fa.getUserData().equals("trap")) {
             if (fb.getUserData().equals("player")) {
                 Player.loseHealth();
+                Game.res.getSound("snap").play();
                 trapBodiesToRemove.add(fa.getBody());
             }
             else if (fb.getUserData().equals("bullet")) {
+                Game.res.getSound("hit").play();
                 trapBodiesToRemove.add(fa.getBody());
                 bulletBodiesToRemove.add(fb.getBody());
             }
@@ -172,10 +174,8 @@ public class MyContactListener implements ContactListener {
     public Array<Body> getMeleeHitBoxesToRemove(){return meleeBodiesToRemove;}
     public Array<Body> getTrapsToRemove(){return trapBodiesToRemove;}
     public boolean isPlayerWin() {
-        return wincontact;
+        return winContact;
     }
-
-
 
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {

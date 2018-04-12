@@ -2,18 +2,12 @@ package my.game.states;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import my.game.Game;
 import my.game.handlers.BoundedCamera;
 import my.game.handlers.GameStateManager;
 
-/**
- * Created by Katriina on 20.3.2018.
- */
-
-public abstract class GameState {
+public abstract class GameState{
 
     protected GameStateManager gsm;
     protected Game game;

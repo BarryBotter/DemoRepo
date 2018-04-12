@@ -7,10 +7,6 @@ import com.badlogic.gdx.graphics.Texture;
 
 import java.util.HashMap;
 
-/**
- * Created by Katriina on 22.3.2018.
- */
-
 public class Content {
 
     private HashMap<String, Texture> textures;
@@ -23,10 +19,7 @@ public class Content {
         sounds = new HashMap<String, Sound>();
     }
 
-    /***********/
-    /* Texture */
-    /***********/
-
+    //Texture
     public void loadTexture(String path) {
         int slashIndex = path.lastIndexOf('/');
         String key;
@@ -56,10 +49,7 @@ public class Content {
         }
     }
 
-    /*********/
-    /* Music */
-    /*********/
-
+    //Music
     public void loadMusic(String path) {
         int slashIndex = path.lastIndexOf('/');
         String key;
@@ -89,10 +79,7 @@ public class Content {
         }
     }
 
-    /*******/
-    /* SFX */
-    /*******/
-
+    //Sfx
     public void loadSound(String path) {
         int slashIndex = path.lastIndexOf('/');
         String key;
@@ -122,10 +109,7 @@ public class Content {
         }
     }
 
-    /*********/
-    /* other */
-    /*********/
-
+    //Other
     public void removeAll() {
         for(Object o : textures.values()) {
             Texture tex = (Texture) o;

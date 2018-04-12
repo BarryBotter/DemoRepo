@@ -17,12 +17,7 @@ import my.game.Game;
 import my.game.entities.Background;
 import my.game.handlers.GameStateManager;
 
-/**
- * Created by velij on 4.4.2018.
- */
-
 public class cutScene extends GameState {
-
     ExtendViewport viewport;
     private Background bg;
     private BitmapFont font;
@@ -62,7 +57,7 @@ public class cutScene extends GameState {
         TextChange();
     }
 
-    void TextChange() {
+    private void TextChange() {
         Gdx.app.log("tag0", "method start");
         FileHandle ProgressFileHandle = Gdx.files.internal("res/xml/dialogs.xml");
         XmlReader reader = new XmlReader();
@@ -75,15 +70,9 @@ public class cutScene extends GameState {
         }
     }
 
-    @Override
-    public void handleInput() {
+    public void handleInput() {}
 
-    }
-
-    @Override
-    public void update(float dt) {
-
-    }
+    public void update(float dt) {}
 
     @Override
     public void render() {
@@ -120,5 +109,4 @@ public class cutScene extends GameState {
         // Top-right circle
         pixmap.fillCircle(pixmap.getWidth()-radius, pixmap.getHeight()-radius, radius);
     }
-
 }

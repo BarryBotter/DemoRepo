@@ -1,6 +1,8 @@
 package my.game.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -20,10 +22,6 @@ import my.game.Game;
 import my.game.entities.Background;
 import my.game.handlers.GameStateManager;
 import my.game.handlers.MyTextInputListener;
-
-/**
- * Created by velij on 27.3.2018.
- */
 
 public class Options extends GameState {
 
@@ -248,12 +246,20 @@ public class Options extends GameState {
 
     @Override
     public void handleInput() {
-
     }
 
     @Override
     public void update(float dt) {
-
+        Gdx.input.setInputProcessor(new InputAdapter() {
+            @Override
+            public boolean keyDown (int keycode) {
+                // Go back to menu when Andoird back button is pressed.
+                if(keycode == Input.Keys.BACK) {
+                    gsm.setState(GameStateManager.MENU);
+                }
+                return false;
+            }
+        });
     }
 
     @Override
