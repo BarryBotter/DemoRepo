@@ -38,7 +38,8 @@ public class cutScene extends GameState {
     private int screenWidth = 1920,screenHeight = 1080;
     private static Pixmap pixmap;
     private Texture pixmaptex;
-
+    String[] strings;
+    int dialogNumber = 1;
     public cutScene(final GameStateManager gsm){
         super(gsm);
 
@@ -58,29 +59,38 @@ public class cutScene extends GameState {
         //Text in the box
         font = new BitmapFont();
         font.getData().setScale(1f,1f);
+        xmlRead();
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-                dispose();
-                gsm.setState(GameStateManager.LEVEL_SELECT);
+                if (dialogNumber < 3){
+                    dialogString = strings[dialogNumber];
+                    dialogNumber++;
+                }else {
+                    dispose();
+                    gsm.setState(GameStateManager.LEVEL_SELECT);
+                }
                 return super.touchUp(screenX, screenY, pointer, button);
             }
         });
-        TextChange();
+
     }
 
-    void TextChange() {
-        Gdx.app.log("tag0", "method start");
+    void xmlRead() {
+        strings = new String[20];
+        //Gdx.app.log("tag0", "method start");
         FileHandle ProgressFileHandle = Gdx.files.internal("res/xml/dialogs.xml");
         XmlReader reader = new XmlReader();
         XmlReader.Element xml_element = reader.parse(ProgressFileHandle);
         Array<XmlReader.Element> dialogs = xml_element.getChildrenByName("dialog");
-
+        int i = 0;
         for (XmlReader.Element child : dialogs) {
-            dialogString = child.getChildByName("string").getAttribute("text");
-
+            strings[i] = child.get("string");
+            Gdx.app.log("string"+i, strings[i]);
+            i++;
         }
+        dialogString = strings[0];
     }
 
     @Override
@@ -98,7 +108,7 @@ public class cutScene extends GameState {
         bg.render(sb);
         sb.begin();
         sb.draw(pixmaptex,10,10,300,80);
-        font.draw(sb,dialogString,(float) (screenWidth*0.01) ,60);
+        font.draw(sb,dialogString,(float) (screenWidth*0.01) ,75);
         sb.end();
     }
 

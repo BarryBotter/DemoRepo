@@ -37,6 +37,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import my.game.handlers.BoundedCamera;
 import my.game.handlers.GameStateManager;
@@ -100,9 +101,11 @@ public class Play extends GameState {
 
     private HUD hud;
 
+
     public Play(GameStateManager gsm) {
         super(gsm);
 
+        cam.setToOrtho(false, Game.V_WIDTH, Game.V_HEIGHT);
         world = new World(new Vector2(0, -9.81f), true);
         cl = new MyContactListener();
         world.setContactListener(cl);
