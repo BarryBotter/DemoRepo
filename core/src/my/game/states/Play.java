@@ -40,6 +40,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import my.game.handlers.Content;
 import my.game.handlers.GameStateManager;
@@ -102,12 +103,16 @@ public class Play extends GameState {
     private Vector3 touchPoint;
 
     private Background[] backgrounds;
+
     private HUD hud;
     private BitmapFont textFont;
+
+
 
     public Play(GameStateManager gsm) {
         super(gsm);
 
+        cam.setToOrtho(false, Game.V_WIDTH, Game.V_HEIGHT);
         //Resets rendering every time play state is started.
         Gdx.graphics.setContinuousRendering(true);
 
@@ -115,6 +120,7 @@ public class Play extends GameState {
         world = new World(new Vector2(0, -9.81f), true);
         cl = new MyContactListener();
         world.setContactListener(cl);
+        b2dr = new Box2DDebugRenderer();
 
         // create player
         createPlayer();
@@ -317,6 +323,7 @@ public class Play extends GameState {
                     gsm.setState(GameStateManager.LEVEL_COMPLETE);
                 }
             }
+
         }
 
     private boolean rightSideTouched(float x, float y) {

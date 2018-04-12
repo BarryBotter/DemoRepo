@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-
 import java.util.Stack;
 import my.game.states.GameOver;
 import my.game.states.GameState;
@@ -33,10 +32,12 @@ public class GameStateManager {
     public static final int OPTIONS = 345678;
     public static final int CUTSCENE = 555768;
 
-    public ImageButton.ImageButtonStyle playButtonStyle, optionButtonStyle,exitButtonStyle,toothStyle;
-    private Texture tex;
-    private TextureRegion menuButtons[];
-    public Stage stage;
+    public ImageButton.ImageButtonStyle
+            playStyle, optionStyle,exitStyle,toothStyle,backStyle;
+
+    Texture tex;
+    TextureRegion menuButtons[];
+    public  Stage stage;
 
     public GameStateManager(my.game.Game game){
         this.game = game;
@@ -114,16 +115,21 @@ public class GameStateManager {
         TextureRegion play = new TextureRegion(new Texture(Gdx.files.internal("res/UI_final/play.png")));
         TextureRegion options = new TextureRegion(new Texture(Gdx.files.internal("res/UI_final/settings.png")));
         TextureRegion exit = new TextureRegion(new Texture(Gdx.files.internal("res/UI_final/exit.png")));
-        TextureRegion tooth = new TextureRegion(new Texture(Gdx.files.internal("res/UI_final/tooth_192.png")));
-        playButtonStyle = new ImageButton.ImageButtonStyle();
-        playButtonStyle.imageDown = new TextureRegionDrawable(play);
-        playButtonStyle.imageUp = new TextureRegionDrawable(play);
-        optionButtonStyle = new ImageButton.ImageButtonStyle();
-        optionButtonStyle.imageDown = new TextureRegionDrawable(options);
-        optionButtonStyle.imageUp = new TextureRegionDrawable(options);
-        exitButtonStyle = new ImageButton.ImageButtonStyle();
-        exitButtonStyle.imageDown = new TextureRegionDrawable(exit);
-        exitButtonStyle.imageUp = new TextureRegionDrawable(exit);
+        TextureRegion tooth = new TextureRegion(new Texture(Gdx.files.internal("res/UI_final/tooth_80.png")));
+        TextureRegion back = new TextureRegion(new Texture(Gdx.files.internal("res/UI_final/back_80.png")));
+
+        backStyle = new ImageButton.ImageButtonStyle();
+        backStyle.imageDown = new TextureRegionDrawable(back);
+        backStyle.imageUp = new TextureRegionDrawable(back);
+        playStyle = new ImageButton.ImageButtonStyle();
+        playStyle.imageDown = new TextureRegionDrawable(play);
+        playStyle.imageUp = new TextureRegionDrawable(play);
+        optionStyle = new ImageButton.ImageButtonStyle();
+        optionStyle.imageDown = new TextureRegionDrawable(options);
+        optionStyle.imageUp = new TextureRegionDrawable(options);
+        exitStyle = new ImageButton.ImageButtonStyle();
+        exitStyle.imageDown = new TextureRegionDrawable(exit);
+        exitStyle.imageUp = new TextureRegionDrawable(exit);
         toothStyle = new ImageButton.ImageButtonStyle();
         toothStyle.imageDown = new TextureRegionDrawable(tooth);
         toothStyle.imageUp = new TextureRegionDrawable(tooth);

@@ -4,7 +4,10 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import my.game.handlers.BoundedCamera;
 import my.game.handlers.Content;
@@ -38,6 +41,8 @@ public class Game implements ApplicationListener {
 	public OrthographicCamera getHUDCamera(){return hudCam;}
 
 	public Skin mySkin;
+	public BitmapFont font12,font24;
+
 
 	@Override
 	public void create() {
@@ -45,6 +50,7 @@ public class Game implements ApplicationListener {
 		res = new Content();
 		loadTextures();
 		loadSounds();
+		loadFont();
 
 		sb = new SpriteBatch();
 		cam = new BoundedCamera();
@@ -115,6 +121,17 @@ public class Game implements ApplicationListener {
 	@Override
 	public void dispose() {
 		res.removeAll();
+	}
+
+	public void loadFont(){
+
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("res/fonts/Gauge-Regular.ttf"));
+		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+		parameter.size = 12;
+		font12 = generator.generateFont(parameter); // font size 12 pixels
+		parameter.size = 24;
+		font24 = generator.generateFont(parameter); // font size 24 pixels
+		generator.dispose(); // don't forget to dispose to avoid memory leaks!
 	}
 
 	private void loadTextures(){
