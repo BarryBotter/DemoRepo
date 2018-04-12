@@ -224,6 +224,7 @@ public class Options extends GameState {
             soundvalue = "false";
         }
         game.prefs.flush();
+        game.isMusicPlaying();
     }
 
     private void getSettings(){
@@ -287,3 +288,4 @@ public class Options extends GameState {
         stage.clear();
     }
 }
+
