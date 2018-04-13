@@ -24,7 +24,6 @@ public class LevelSelect extends GameState {
     private int lvl;
     private Skin mySkin;
     private Stage stage;
-    private Button exitButton,cutSceneButton;
 
     public LevelSelect(final GameStateManager gsm) {
         super(gsm);
@@ -43,6 +42,7 @@ public class LevelSelect extends GameState {
 
     private void buttons(){
         //backbutton (not in lvlgridthingy)
+        Button exitButton,cutSceneButton;
         exitButton = new TextButton("BACK",mySkin,"default");
         exitButton.setSize(200, 100);
         exitButton.setPosition(100,100);
