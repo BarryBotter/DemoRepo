@@ -6,7 +6,7 @@
  <tileset firstgid="4" source="demoblock.tsx"/>
  <layer name="platforms" width="200" height="8">
   <data encoding="base64" compression="zlib">
-   eJzt10EKwCAMRFE3tve/cVfdFClxEhIM/0GWUVFGdAwAANDZZajIvkh3whzAacgFVNl3eCZyAavOOfgiF1ipeNNH8v5PuubC8ndTzlwZt6pnCuNkZcC7pp2++VOVe/BSz8hTD8tcBCo=
+   eJzt17EOwCAIRVEWyv//sUuHurQIjRq8J2GEmJhnRAQAAFR2OerPPgDz2F2AxwlvOJnAlxNy8GRCLtCr8KfP7CdV8+DZ3SJ3Hpm7qkcDc2ZlIHumkT59qR12++gdZaoBYB8EQA==
   </data>
  </layer>
  <objectgroup name="crystals">
@@ -51,7 +51,7 @@
  </layer>
  <layer name="corner" width="200" height="8">
   <data encoding="base64" compression="zlib">
-   eJztk0sKwCAMBbNoev8jd9FdsKjRms/LgIg7mccQFUXxJ3fn7R22/gAIqJ5lD5fJL3QwxdhN69TDFixudDxsMgJTnD4iIrsozy8R+mCy7SOCIy1fXaD2YbX1iu9TfWTuQNLrovrQM+Nuh++dfSA10GK0C+Q+WmcGjbvsvle7O9Vt5j4eDBABWg==
+   eJztk0EOgDAIBDmI/3+yR03TRgu2sMAkxnqSDhmioihWcr58e4etByhC0/ZwmEwhgwmjD6lTj7tA8L0SjzvpwYTTBzrl+AahDybbPhAcaeHBORtWu9Y439VHhg6ejJqoPnTM+OPmLf3fX31EaEBzhy9NZO+j98wg8Rfduba7Xd1G7uMCCyIBIg==
   </data>
  </layer>
  <objectgroup name="win">
