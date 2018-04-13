@@ -99,6 +99,7 @@ public class Play extends GameState {
 
     public Play(GameStateManager gsm) {
         super(gsm);
+        System.out.println("Play");
         handleInput();
         world = new World(new Vector2(0, -9.81f), true);
         cl = new MyContactListener();
@@ -283,7 +284,8 @@ public class Play extends GameState {
         // Win stuff
         if (cl.isPlayerWin()) {
             if (level != 0) {
-                unlockLevel();
+                System.out.println("Win");
+                //unlockLevel();
                 Collected();
                 gsm.setState(GameStateManager.LEVEL_COMPLETE);
             }
