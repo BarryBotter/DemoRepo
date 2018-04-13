@@ -89,8 +89,10 @@ public class LevelComplete extends GameState {
 
         if (playButton.isClicked()) {
             gsm.setState(GameStateManager.PLAY);
+            game.resumeMusic();
         } else if (exitButton.isClicked()) {
             gsm.setState(GameStateManager.MENU);
+            game.resumeMusic();
         }
 
 

@@ -1,6 +1,7 @@
 package my.game.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -47,7 +48,9 @@ public class LevelSelect extends GameState {
         mySkin = game.mySkin;
         stage = gsm.stage;
         font = game.font12;
+        font.setColor(Color.BLACK);
         font2 = game.font24;
+        font2.setColor(Color.BLACK);
         stage = new Stage(viewport);
         Gdx.input.setInputProcessor(stage);
         reg = new TextureRegion(Game.res.getTexture("menubg"), 0, 0, width, height);
@@ -56,12 +59,16 @@ public class LevelSelect extends GameState {
         lvlname = "Level number " + Play.level;
         toothpaste = "You collected 0/5 toothpaste";
         buttons();
-        //lvlSelectGrid();
     }
 
     private void buttons(){
-
-        lvlImg =  new Image(Game.res.getTexture("olvi"));
+        if (Play.level < 5)
+        {
+            lvlImg = new Image(Game.res.getTexture("olvi"));
+        }
+        else{
+            lvlImg = new Image(Game.res.getTexture("testibg"));
+        }
         lvlImg.setSize(width/2,height/2);
         lvlImg.setPosition(width/4,height/3);
         lvlImg.addListener(new InputListener(){
@@ -117,10 +124,16 @@ public class LevelSelect extends GameState {
         leftButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                Play.level -= 1;
-                lvlname = "Level number " + Play.level;
-                if (Play.level < 2 ){
+                if (Play.level > 1)
+                {
+                    Play.level -= 1;
+                    lvlname = "Level number " + Play.level;
+                    buttons();
+                }
+                else if (Play.level == 1 ){
                     Play.level = 1;
+                    lvlname = "Level number " + Play.level;
+                    buttons();
                 }
             }
             @Override
@@ -134,10 +147,16 @@ public class LevelSelect extends GameState {
         rightButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                Play.level += 1;
-                lvlname = "Level number " + Play.level;
-                if (Play.level > 8 ){
+                if (Play.level < 9)
+                {
+                    Play.level += 1;
+                    lvlname = "Level number " + Play.level;
+                    buttons();
+                }
+                else if (Play.level == 9 ){
                     Play.level = 9;
+                    lvlname = "Level number " + Play.level;
+                    buttons();
                 }
             }
             @Override
