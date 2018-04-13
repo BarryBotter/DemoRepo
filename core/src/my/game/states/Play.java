@@ -60,6 +60,8 @@ import static my.game.handlers.B2DVars.ENEMIES_DESTROYED;
 import static my.game.handlers.B2DVars.HITS_TAKEN;
 import static my.game.handlers.B2DVars.LVL_UNLOCKED;
 import static my.game.handlers.B2DVars.PPM;
+import static my.game.handlers.B2DVars.P_HEIGHT;
+import static my.game.handlers.B2DVars.P_WIDTH;
 import static my.game.handlers.B2DVars.SOUND_LEVEL;
 
 /**
@@ -112,7 +114,7 @@ public class Play extends GameState {
     public Play(GameStateManager gsm) {
         super(gsm);
 
-        cam.setToOrtho(false, Game.V_WIDTH, Game.V_HEIGHT);
+        cam.setToOrtho(false, P_WIDTH,P_HEIGHT);
         //Resets rendering every time play state is started.
         Gdx.graphics.setContinuousRendering(true);
 
@@ -153,11 +155,11 @@ public class Play extends GameState {
         TextureRegion sky = new TextureRegion(bgs, 0, 0, 320, 240);
         TextureRegion mountains = new TextureRegion(bgs, 0, 235, 320, 240);
         Texture trees = Game.res.getTexture("bgone");
-        //TextureRegion treeLayer = new TextureRegion(trees, 0, 27, 320, 240);
+        TextureRegion treeLayer = new TextureRegion(trees, 0, 27, 320, 240);
         backgrounds = new Background[2];
         backgrounds[0] = new Background(sky, cam, 0f);
-        backgrounds[1] = new Background(mountains, cam, 0.1f);
-        //backgrounds[2] = new Background(treeLayer, cam, 0.2f);
+        backgrounds[1] = new Background(mountains, cam, 0.2f);
+        //backgrounds[2] = new Background(treeLayer, cam, 0f);
 
         //create font
         textFont = new BitmapFont(Gdx.files.internal("res/images/fontstyle.fnt"), false);
@@ -167,6 +169,8 @@ public class Play extends GameState {
 
         //setup touch areas
         setupTouchControlAreas();
+
+        Gdx.input.setCatchBackKey(true);
 
     }
 
@@ -362,9 +366,9 @@ public class Play extends GameState {
     public void render() {
         //set cam to follow player
         cam.position.set(
-                player.getposition().x * PPM + Game.V_WIDTH / 4,
+                player.getposition().x * PPM + P_WIDTH / 4,
                 Game.V_HEIGHT / 2, 0);
-        cam.position.set(player.getposition().x * PPM + Game.V_WIDTH / 4, Game.V_HEIGHT / 2, 0);
+        cam.position.set(player.getposition().x * PPM + P_WIDTH / 4, P_HEIGHT/ 2, 0);
 
         cam.update();
 

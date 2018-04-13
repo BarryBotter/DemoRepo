@@ -50,11 +50,11 @@ public class Projectile extends B2DSprite{
                 if (Player.returnNumberOfAmmo() > 0) {
                     if(belowPlayer) {
                        // body.applyLinearImpulse(touchPointX * BULLET_SPEED,-(touchPointY * BULLET_SPEED), body.getWorldCenter().x,body.getWorldCenter().y,true);
-                        body.applyForceToCenter(touchPointX * BULLET_SPEED, touchPointY * BULLET_SPEED, true);
+                        body.applyForce(touchPointX * BULLET_SPEED, touchPointY  * BULLET_SPEED,body.getWorldCenter().x,body.getWorldCenter().y ,true);
                     }
                     else {
                        // body.applyLinearImpulse(touchPointX * BULLET_SPEED,touchPointY * BULLET_SPEED, body.getWorldCenter().x,body.getWorldCenter().y,true);
-                        body.applyForceToCenter(touchPointX * BULLET_SPEED, touchPointY * BULLET_SPEED, true);
+                        body.applyForce(touchPointX * BULLET_SPEED, touchPointY * BULLET_SPEED,body.getWorldCenter().x,body.getWorldCenter().y  ,true);
                     }
                     actionBeginTime = Play.accumulator;
                     coolDownSet = true;

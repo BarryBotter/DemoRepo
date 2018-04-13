@@ -11,6 +11,11 @@ public class B2DVars {
     //pixel per meter
     public static final float PPM = 100;
 
+    //PLAY width och Height
+
+    public static final int P_WIDTH = 480;
+    public static final int P_HEIGHT = 320;
+
     //category bits
     public static final short BIT_PLAYER = 2;
     public static final short BIT_TRAP = 4;

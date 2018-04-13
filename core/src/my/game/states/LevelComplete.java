@@ -181,7 +181,6 @@ public class LevelComplete extends GameState {
         if(compareScore < totalScore) {
             Game.scores.putInteger("score" + String.valueOf(Play.level), totalScore);
             Game.scores.flush();
-            //lol
         }
     }
 }
