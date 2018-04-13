@@ -15,6 +15,8 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import my.game.Game;
 import my.game.handlers.GameStateManager;
 
+import static my.game.handlers.B2DVars.P_HEIGHT;
+import static my.game.handlers.B2DVars.P_WIDTH;
 import static my.game.handlers.B2DVars.SOUND_LEVEL;
 
 /**
@@ -47,7 +49,7 @@ public class Menu extends GameState{
         cam.setToOrtho(false, Game.V_WIDTH, Game.V_HEIGHT);
         viewport = new StretchViewport(320,240, cam);
 
-        cam.setBounds(Game.V_WIDTH,Game.V_HEIGHT,Game.V_WIDTH,Game.V_HEIGHT);
+        cam.setBounds(P_WIDTH,P_HEIGHT,P_WIDTH,P_HEIGHT);
 
         Texture logoTex =Game.res.getTexture("menulogo");
         logo = new Image(logoTex);

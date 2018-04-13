@@ -184,7 +184,7 @@ public class LevelSelect extends GameState {
         font2.draw(sb,lvlname,width/4,height*0.90f);//lvlname
         //(lvlImg,width/4,height/3,width/2,height/2,sb);
         font2.draw(sb,toothpaste,width/4,height/3.5f);
-        font2.draw(sb,"your highscore is:" + levelScore,width/4,height/4.5f);
+        font2.draw(sb,game.prefs.getString("name")+"'s highscore is:" + levelScore,width/4,height/4.5f);
         sb.end();
 
         stage.act();

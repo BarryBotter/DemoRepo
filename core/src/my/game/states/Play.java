@@ -114,7 +114,7 @@ public class Play extends GameState {
     public Play(GameStateManager gsm) {
         super(gsm);
 
-        cam.setToOrtho(false, P_WIDTH,P_HEIGHT);
+        cam.setToOrtho(false, 480,320);//Game.V_WIDTH, Game.V_HEIGHT);
         //Resets rendering every time play state is started.
         Gdx.graphics.setContinuousRendering(true);
 
@@ -153,12 +153,12 @@ public class Play extends GameState {
         // create backgrounds
         Texture bgs = Game.res.getTexture("bgones");
         TextureRegion sky = new TextureRegion(bgs, 0, 0, 320, 240);
-        TextureRegion mountains = new TextureRegion(bgs, 0, 235, 320, 240);
+        TextureRegion mountains = new TextureRegion(bgs, 0, 235, 320, 340);
         Texture trees = Game.res.getTexture("bgone");
         TextureRegion treeLayer = new TextureRegion(trees, 0, 27, 320, 240);
-        backgrounds = new Background[2];
+        backgrounds = new Background[1];
         backgrounds[0] = new Background(sky, cam, 0f);
-        backgrounds[1] = new Background(mountains, cam, 0.2f);
+        //backgrounds[1] = new Background(mountains, cam, 0.2f);
         //backgrounds[2] = new Background(treeLayer, cam, 0f);
 
         //create font
@@ -365,10 +365,14 @@ public class Play extends GameState {
     @Override
     public void render() {
         //set cam to follow player
-        cam.position.set(
-                player.getposition().x * PPM + P_WIDTH / 4,
-                Game.V_HEIGHT / 2, 0);
-        cam.position.set(player.getposition().x * PPM + P_WIDTH / 4, P_HEIGHT/ 2, 0);
+        //cam with bounds and centered stage
+       //cam.setPosition(player.getposition().x * PPM + P_WIDTH / 4, P_HEIGHT / 2);
+
+        //cam without bounds and set to bottom
+        if (cam.position.x < tileMapWidth *28){
+            cam.position.set(player.getposition().x * PPM + P_WIDTH / 4, P_HEIGHT/ 2, 0);
+            cam.update();
+        }
 
         cam.update();
 
