@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputAdapter;
 
 import my.game.Game;
 import my.game.entities.Background;
+import my.game.entities.Bullet;
 import my.game.entities.Enemy;
 import my.game.entities.HUD;
 import my.game.entities.Melee;
@@ -36,6 +37,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Pool;
 
 import my.game.handlers.GameStateManager;
 import my.game.handlers.MyContactListener;
@@ -58,10 +60,9 @@ import static my.game.handlers.B2DVars.PPM;
 
 public class Play extends GameState {
 
-    public static int level;
+    static int level;
     private int levelS;
     private World world;
-    private Box2DDebugRenderer b2dr;
 
     public static float accumulator = 0;
 
@@ -98,10 +99,10 @@ public class Play extends GameState {
 
     public Play(GameStateManager gsm) {
         super(gsm);
+        handleInput();
         world = new World(new Vector2(0, -9.81f), true);
         cl = new MyContactListener();
         world.setContactListener(cl);
-        b2dr = new Box2DDebugRenderer();
 
         // create player
         createPlayer();
@@ -281,17 +282,10 @@ public class Play extends GameState {
 
         // Win stuff
         if (cl.isPlayerWin()) {
-            if (level == 1) {
+            if (level != 0) {
                 unlockLevel();
                 Collected();
                 gsm.setState(GameStateManager.LEVEL_COMPLETE);
-            } else if (level == 2) {
-                unlockLevel();
-                Collected();
-                gsm.setState(GameStateManager.LEVEL_COMPLETE);
-            } else if (level == 3) {
-                unlockLevel();
-                gsm.setState(GameStateManager.MENU);
             }
         }
 
@@ -391,6 +385,7 @@ public class Play extends GameState {
 
     @Override
     public void dispose() {
+        world.dispose();
     }
 
     private void createPlayer() {

@@ -30,7 +30,6 @@ public class Options extends GameState {
     private String Name = "", soundvalue = "",difficultyString = "",hintname = "Your Name";
     private int row_height,col_width;
     private Label nameLabel,soundLabel,difficultyLabel;
-    private Skin mySkin;
     private Stage stage;
     private ImageButton nameEditButton,difficultyButton,soundButton;
     private Button exitButton;
@@ -40,6 +39,7 @@ public class Options extends GameState {
         getSettings();
         row_height = 1080 / 12;
         col_width = 1920 / 12;
+        Skin mySkin;
         mySkin = game.mySkin;
         stage = gsm.stage;
         setup();

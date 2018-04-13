@@ -18,22 +18,11 @@ public class LevelComplete extends GameState {
     private GameButton playButton;
     private GameButton exitButton;
 
-    private World world;
-    private TextureRegion[] menuButtons;
-
-    private TextureRegion crystal;
     private TextureRegion[] font;
     private BitmapFont textFont;
 
-    private int crystalScore;
-    private int enemyScore;
-    private int hitScore;
-    private int scoreCounter = 0;
     private int hearthScore;
     private int totalScore;
-
-    float delay = 5;
-
 
     public LevelComplete(GameStateManager gsm) {
         super(gsm);
@@ -43,8 +32,6 @@ public class LevelComplete extends GameState {
         bg.setVector(4, -5);
 
         tex = Game.res.getTexture("hud");
-
-        crystal = new TextureRegion(tex, 80, 0, 16, 16);
 
         font = new TextureRegion[11];
         for (int i = 0; i < 6; i++) {
@@ -56,6 +43,7 @@ public class LevelComplete extends GameState {
         hearthScore =  Game.lvls.getInteger("hits");
 
         tex = Game.res.getTexture("main");
+        TextureRegion[] menuButtons;
         menuButtons = new TextureRegion[5];
         menuButtons[0] = new TextureRegion(tex, 340, 40, 200, 100);
         menuButtons[1] = new TextureRegion(tex, 340, 125, 200, 100);
@@ -64,8 +52,6 @@ public class LevelComplete extends GameState {
 
 
         cam.setToOrtho(false, Game.V_WIDTH, Game.V_HEIGHT);
-
-        world = new World(new Vector2(0, -9.8f * 5), true);
     }
 
     @Override
@@ -80,7 +66,6 @@ public class LevelComplete extends GameState {
     @Override
     public void update(float dt) {
         handleInput();
-        world.step(dt / 5, 8, 3);
         bg.update(dt);
         playButton.update(dt);
         exitButton.update(dt);
@@ -103,8 +88,8 @@ public class LevelComplete extends GameState {
         textFont.draw(sb, "Hits taken",130,160);
 
         // draw crystal amount
-        drawString(sb, game.lvls.getInteger("crystals") + "", 110, 184);
-        drawString(sb, game.lvls.getInteger("enemies") + "", 110, 164);
+        drawString(sb, Game.lvls.getInteger("crystals") + "", 110, 184);
+        drawString(sb, Game.lvls.getInteger("enemies") + "", 110, 164);
         drawString(sb, hearthScore + "",108,144);
         drawString(sb, getScore() + " ",110, 100);
 
@@ -114,7 +99,6 @@ public class LevelComplete extends GameState {
 
     @Override
     public void dispose() {
-
     }
 
     private void drawString(SpriteBatch sb, String s, float x, float y) {
@@ -129,6 +113,7 @@ public class LevelComplete extends GameState {
 
     private int getScore()
     {
+        int crystalScore, enemyScore, hitScore;
         crystalScore = Game.lvls.getInteger("crystals") * 100;
         enemyScore = Game.lvls.getInteger("enemies") * 100;
         hitScore = Game.lvls.getInteger("hits");

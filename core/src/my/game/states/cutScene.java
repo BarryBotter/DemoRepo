@@ -87,7 +87,6 @@ public class cutScene extends GameState {
     public void dispose() {
         pixmaptex.dispose();
         font.dispose();
-        //Gdx.input.setInputProcessor(null);
     }
 
     private void getPixmapRoundedRectangle(int width, int height, int radius, Color color) {

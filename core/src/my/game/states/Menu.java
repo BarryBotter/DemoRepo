@@ -21,17 +21,15 @@ import my.game.handlers.GameStateManager;
 public class Menu extends GameState{
     private int row_height,col_width;
     private Image logo;
-    private Table table, table1;
     private Stage stage;
     private ImageButton playButton,optionsButton,exitButton;
-    private Skin mySkin;
     private Background bg;
-    private World world;
 
     public Menu(final GameStateManager gsm) {
         super(gsm);
         row_height = 1080 / 12;
         col_width = 1920 / 12;
+        Skin mySkin;
         mySkin = game.mySkin;
         stage = gsm.stage;
         setup();
@@ -48,8 +46,6 @@ public class Menu extends GameState{
         cam.setToOrtho(false, Game.V_WIDTH, Game.V_HEIGHT);
         Texture logoTex =Game.res.getTexture("menulogo");
         logo = new Image(logoTex);
-
-        world = new World(new Vector2(0, -9.8f * 5), true);
 
         //stage
         stage = new Stage(new ScreenViewport());
@@ -106,6 +102,7 @@ public class Menu extends GameState{
     }
 
     private void tableLayout(ImageButton optionsButton, ImageButton playButton, ImageButton exitButton) {
+        Table table, table1;
         table = new Table();
         table1 = new Table();
         table.center();

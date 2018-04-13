@@ -15,9 +15,6 @@ public class GameOver extends GameState {
     private GameButton playButton;
     private GameButton exitButton;
 
-    private World world;
-    private TextureRegion[] menuButtons;
-
     public GameOver(GameStateManager gsm) {
         super(gsm);
 
@@ -26,6 +23,7 @@ public class GameOver extends GameState {
         bg.setVector(0, 0);
 
         tex = Game.res.getTexture("main");
+        TextureRegion[] menuButtons;
         menuButtons = new TextureRegion[5];
         menuButtons[0] =  new TextureRegion(tex, 340, 40, 200, 100);
         menuButtons[1] =  new TextureRegion(tex, 340, 125, 200, 100);
@@ -33,7 +31,6 @@ public class GameOver extends GameState {
         exitButton = new GameButton(menuButtons[1], 0, 0, cam);
 
         cam.setToOrtho(false, Game.V_WIDTH, Game.V_HEIGHT);
-        world = new World(new Vector2(0, -9.8f * 5), true);
     }
 
 
@@ -48,7 +45,6 @@ public class GameOver extends GameState {
 
     public void update(float dt) {
         handleInput();
-        world.step(dt / 5, 8, 3);
         bg.update(dt);
         playButton.update(dt);
         exitButton.update(dt);

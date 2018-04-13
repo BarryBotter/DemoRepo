@@ -9,18 +9,17 @@ import my.game.handlers.GameStateManager;
 
 public abstract class GameState{
 
-    protected GameStateManager gsm;
     protected Game game;
     protected SpriteBatch sb;
     protected BoundedCamera cam;
-    protected OrthographicCamera hudCam;
+    OrthographicCamera hudCam;
+    GameStateManager gsm;
 
-    protected GameState(GameStateManager gsm){
-
+    GameState(GameStateManager gsm){
         this.gsm = gsm;
         game = gsm.game();
         sb = game.getSpriteBatch();
-        cam = game.getCamera();
+        cam = Game.getCamera();
         hudCam = game.getHUDCamera();
     }
 
