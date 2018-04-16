@@ -170,6 +170,9 @@ public class Play extends GameState {
         //setup touch areas
         setupTouchControlAreas();
 
+        game.pauseMenuMusic();
+        game.resumeMusic();
+
         Gdx.input.setCatchBackKey(true);
 
     }
@@ -177,8 +180,6 @@ public class Play extends GameState {
     @Override
     public void handleInput() {
 
-        Gdx.gl.glClearColor(0,0,0,1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
     @Override
@@ -364,15 +365,19 @@ public class Play extends GameState {
 
     @Override
     public void render() {
+
+        Gdx.gl.glClearColor(0,0,0,1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         //set cam to follow player
         //cam with bounds and centered stage
        //cam.setPosition(player.getposition().x * PPM + P_WIDTH / 4, P_HEIGHT / 2);
 
         //cam without bounds and set to bottom
-        if (cam.position.x < tileMapWidth *28){
+        //if (cam.position.x < tileMapWidth *28){
             cam.position.set(player.getposition().x * PPM + P_WIDTH / 4, P_HEIGHT/ 2, 0);
             cam.update();
-        }
+        //}
 
         cam.update();
 

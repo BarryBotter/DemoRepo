@@ -88,11 +88,14 @@ public class LevelComplete extends GameState {
     public void handleInput() {
 
         if (playButton.isClicked()) {
+            Play.level ++;
+            Game.res.getSound("complete").stop();
             gsm.setState(GameStateManager.PLAY);
             game.resumeMusic();
         } else if (exitButton.isClicked()) {
+            Game.res.getSound("complete").stop();
             gsm.setState(GameStateManager.MENU);
-            game.resumeMusic();
+            game.resumeMenuMusic();
         }
 
 
