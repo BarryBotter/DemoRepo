@@ -28,6 +28,7 @@ public class LevelComplete extends GameState {
     private GameButton exitButton;
 
     private World world;
+    private Play play;
     private TextureRegion[] menuButtons;
 
     private TextureRegion[] font;
@@ -37,12 +38,11 @@ public class LevelComplete extends GameState {
     private int crystalScore;
     private int enemyScore;
     private int hitScore;
-    private int scoreCounter = 0;
+    private long completeTime;
     private int hearthScore;
     private int totalScore;
     private int hearthsLeft;
     private int scoreCount = 0;
-
 
 
     public LevelComplete(GameStateManager gsm) {
@@ -66,7 +66,7 @@ public class LevelComplete extends GameState {
         textFont = generator.generateFont(parameter); // font size 12 pixels
 
 
-        hearthScore =  Game.lvls.getInteger("hits");
+        hearthScore = Game.lvls.getInteger("hits");
 
         tex = Game.res.getTexture("main");
         menuButtons = new TextureRegion[5];
@@ -88,7 +88,7 @@ public class LevelComplete extends GameState {
     public void handleInput() {
 
         if (playButton.isClicked()) {
-            Play.level ++;
+            Play.level++;
             Game.res.getSound("complete").stop();
             gsm.setState(GameStateManager.PLAY);
             game.resumeMusic();
@@ -131,24 +131,27 @@ public class LevelComplete extends GameState {
         exitButton.render(sb);
 
         sb.begin();
-        textFont.draw(sb,"toothpaste collected", 130,215);
-        textFont.draw(sb, "enemies destroyed",130, 195);
-        textFont.draw(sb, "Hits taken",130,175);
-        textFont.draw(sb, "Hearths left", 130 ,155);
-        textFont.draw(sb,"total score",110, 80);
+        textFont.draw(sb, "toothpaste collected", 130, 215);
+        textFont.draw(sb, "enemies destroyed", 130, 195);
+        textFont.draw(sb, "Hits taken", 130, 175);
+        textFont.draw(sb, "Hearths left", 130, 155);
+        textFont.draw(sb, "total score", 110, 80);
+        textFont.draw(sb, "time", 170, 135);
 
 
         // draw crystal amount
         textFont.draw(sb, game.lvls.getInteger("crystals") + "", 110, 215);
         textFont.draw(sb, game.lvls.getInteger("enemies") + "", 110, 195);
-        textFont.draw(sb, hearthScore + "",110,175);
-        textFont.draw(sb, String.valueOf(Player.returnHealth()),110,155);
+        textFont.draw(sb, hearthScore + "", 110, 175);
+        textFont.draw(sb, String.valueOf(Player.returnHealth()), 110, 155);
+        textFont.draw(sb, String.valueOf(setTime() + "s"), 110, 135);
 
-        for (int i = 0; i < totalScore /1000; i++) {
+
+        for (int i = 0; i < totalScore / 1000; i++) {
             if (scoreCount == totalScore)
                 textFont.draw(sb, String.valueOf(scoreCount), 110, 100);
             else
-            scoreCount = scoreCount + 5;
+                scoreCount = scoreCount + 5;
             textFont.draw(sb, String.valueOf(scoreCount), 110, 100);
         }
 
@@ -160,30 +163,36 @@ public class LevelComplete extends GameState {
 
     @Override
     public void dispose() {
-      generator.dispose();
+        generator.dispose();
     }
 
 
-    public int getScore()
-    {
+    public int getScore() {
         crystalScore = Game.lvls.getInteger("crystals") * 100;
         enemyScore = Game.lvls.getInteger("enemies") * 100;
         hitScore = Game.lvls.getInteger("hits");
         hearthsLeft = Player.returnHealth() * 2;
+        completeTime = Play.getTime();
 
         if (hitScore == 0)
-            totalScore= (int) ((crystalScore + enemyScore) * hearthsLeft * 1.5f);
+            totalScore = (int) ((crystalScore + enemyScore) * hearthsLeft * 1.5f);
         else
-            totalScore=  (crystalScore + enemyScore) * hearthsLeft;
+            totalScore = (crystalScore + enemyScore) * hearthsLeft;
 
         return totalScore;
     }
 
-    public void setScore(){
-        int compareScore = Game.scores.getInteger("score"+String.valueOf(Play.level));
-        if(compareScore < totalScore) {
+    public void setScore() {
+        int compareScore = Game.scores.getInteger("score" + String.valueOf(Play.level));
+        if (compareScore < totalScore) {
             Game.scores.putInteger("score" + String.valueOf(Play.level), totalScore);
             Game.scores.flush();
         }
     }
+
+    public float setTime(){
+        float time = Play.getTime();
+        return time / 1000;
+    }
+
 }

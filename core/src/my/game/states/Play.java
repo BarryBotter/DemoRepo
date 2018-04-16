@@ -40,6 +40,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import my.game.handlers.Content;
@@ -92,6 +93,9 @@ public class Play extends GameState {
 
     private MyContactListener cl;
 
+    private static long time;
+    private static long startTime;
+
     private Player player;
     private Projectile bullet;
     private Enemy enemy;
@@ -110,11 +114,10 @@ public class Play extends GameState {
     private BitmapFont textFont;
 
 
-
     public Play(GameStateManager gsm) {
         super(gsm);
 
-        cam.setToOrtho(false, 480,320);//Game.V_WIDTH, Game.V_HEIGHT);
+        cam.setToOrtho(false, 480, 320);//Game.V_WIDTH, Game.V_HEIGHT);
         //Resets rendering every time play state is started.
         Gdx.graphics.setContinuousRendering(true);
 
@@ -173,6 +176,8 @@ public class Play extends GameState {
         game.pauseMenuMusic();
         game.resumeMusic();
 
+        startTime = System.currentTimeMillis();
+
         Gdx.input.setCatchBackKey(true);
 
     }
@@ -185,13 +190,18 @@ public class Play extends GameState {
     @Override
     public void update(float dt) {
 
+
+        time = System.currentTimeMillis() - startTime;
+
+        System.out.println(time);
+
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
             public boolean touchDown(int x, int y, int pointer, int button) {
                 translateScreenToWorldCoordinates(x, y);
 
                 // Pause button touched
-                if(topRightSideTouched(touchPoint.x, touchPoint.y) && Gdx.graphics.isContinuousRendering()) {
+                if (topRightSideTouched(touchPoint.x, touchPoint.y) && Gdx.graphics.isContinuousRendering()) {
                     Gdx.graphics.setContinuousRendering(false);
                 }
 
@@ -246,7 +256,7 @@ public class Play extends GameState {
         });
 
         // While the game is not paused keep updating the game.
-        if(Gdx.graphics.isContinuousRendering()) {
+        if (Gdx.graphics.isContinuousRendering()) {
             stepWorld();
             pickUpRemover();
             bulletRemover();
@@ -286,50 +296,48 @@ public class Play extends GameState {
             gsm.setState(GameStateManager.GAMEOVER);
         }
 
-            // Win stuff
-            if (cl.isPlayerWin()) {
-                if (level == 1) {
-                    unlockLevel();
-                    Collected();
-                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
-                } else if (level == 2) {
-                    unlockLevel();
-                    Collected();
-                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
-                } else if (level == 3) {
-                    unlockLevel();
-                    Collected();
-                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
-                }
-                else if (level == 4) {
-                    unlockLevel();
-                    Collected();
-                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
-                } else if (level == 5) {
-                    unlockLevel();
-                    Collected();
-                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
-                } else if (level == 6) {
-                    unlockLevel();
-                    Collected();
-                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
-                }
-                else if (level == 7) {
-                    unlockLevel();
-                    Collected();
-                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
-                } else if (level == 8) {
-                    unlockLevel();
-                    Collected();
-                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
-                } else if (level == 9) {
-                    unlockLevel();
-                    Collected();
-                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
-                }
+        // Win stuff
+        if (cl.isPlayerWin()) {
+            if (level == 1) {
+                unlockLevel();
+                Collected();
+                gsm.setState(GameStateManager.LEVEL_COMPLETE);
+            } else if (level == 2) {
+                unlockLevel();
+                Collected();
+                gsm.setState(GameStateManager.LEVEL_COMPLETE);
+            } else if (level == 3) {
+                unlockLevel();
+                Collected();
+                gsm.setState(GameStateManager.LEVEL_COMPLETE);
+            } else if (level == 4) {
+                unlockLevel();
+                Collected();
+                gsm.setState(GameStateManager.LEVEL_COMPLETE);
+            } else if (level == 5) {
+                unlockLevel();
+                Collected();
+                gsm.setState(GameStateManager.LEVEL_COMPLETE);
+            } else if (level == 6) {
+                unlockLevel();
+                Collected();
+                gsm.setState(GameStateManager.LEVEL_COMPLETE);
+            } else if (level == 7) {
+                unlockLevel();
+                Collected();
+                gsm.setState(GameStateManager.LEVEL_COMPLETE);
+            } else if (level == 8) {
+                unlockLevel();
+                Collected();
+                gsm.setState(GameStateManager.LEVEL_COMPLETE);
+            } else if (level == 9) {
+                unlockLevel();
+                Collected();
+                gsm.setState(GameStateManager.LEVEL_COMPLETE);
             }
-
         }
+
+    }
 
     private boolean rightSideTouched(float x, float y) {
         return screenRightSide.contains(x, y);
@@ -339,13 +347,21 @@ public class Play extends GameState {
         return screenLeftSide.contains(x, y);
     }
 
-    private boolean topRightSideTouched(float x, float y) { return screenTopRightSide.contains(x, y); }
+    private boolean topRightSideTouched(float x, float y) {
+        return screenTopRightSide.contains(x, y);
+    }
 
-    private boolean pauseMenuLeftButtonTouched(float x, float y) { return pauseMenuLeftButton.contains(x, y); }
+    private boolean pauseMenuLeftButtonTouched(float x, float y) {
+        return pauseMenuLeftButton.contains(x, y);
+    }
 
-    private boolean pauseMenuRightButtonTouched(float x, float y) { return pauseMenuRightButton.contains(x, y); }
+    private boolean pauseMenuRightButtonTouched(float x, float y) {
+        return pauseMenuRightButton.contains(x, y);
+    }
 
-    private boolean pauseMenuMiddleButtonTouched(float x, float y) { return pauseMenuMiddleButton.contains(x, y); }
+    private boolean pauseMenuMiddleButtonTouched(float x, float y) {
+        return pauseMenuMiddleButton.contains(x, y);
+    }
 
     private void translateScreenToWorldCoordinates(int x, int y) {
         game.getHUDCamera().unproject(touchPoint.set(x, y, 0));
@@ -354,29 +370,29 @@ public class Play extends GameState {
     private void setupTouchControlAreas() {
         touchPoint = new Vector3();
         final int BOX_ENLARGER = 10;
-        screenTopRightSide = new Rectangle(game.getHUDCamera().viewportWidth - (hud.pauseTexture.getWidth() + BOX_ENLARGER),game.getHUDCamera().viewportHeight - (hud.pauseTexture.getHeight() + BOX_ENLARGER), hud.pauseTexture.getWidth() + BOX_ENLARGER ,hud.pauseTexture.getHeight() + BOX_ENLARGER);
+        screenTopRightSide = new Rectangle(game.getHUDCamera().viewportWidth - (hud.pauseTexture.getWidth() + BOX_ENLARGER), game.getHUDCamera().viewportHeight - (hud.pauseTexture.getHeight() + BOX_ENLARGER), hud.pauseTexture.getWidth() + BOX_ENLARGER, hud.pauseTexture.getHeight() + BOX_ENLARGER);
         screenRightSide = new Rectangle(game.getHUDCamera().viewportWidth / 2, 0, game.getHUDCamera().viewportWidth / 2,
                 game.getHUDCamera().viewportHeight);
         screenLeftSide = new Rectangle(0, 0, game.getHUDCamera().viewportWidth / 2, game.getHUDCamera().viewportHeight);
-        pauseMenuLeftButton = new Rectangle((Game.V_WIDTH / 2) - (hud.pauseMenuTexture.getWidth() / 2 ),(Game.V_HEIGHT / 2 ) - (hud.pauseMenuTexture.getHeight() / 2), hud.pauseMenuTexture.getWidth() / 3, hud.pauseMenuTexture.getHeight() / 2);
-        pauseMenuMiddleButton =  new Rectangle((Game.V_WIDTH / 2) - (hud.pauseMenuTexture.getWidth() / 2 ) + (hud.pauseMenuTexture.getWidth() / 3),(Game.V_HEIGHT / 2 ) - (hud.pauseMenuTexture.getHeight() / 2), hud.pauseMenuTexture.getWidth() / 3, hud.pauseMenuTexture.getHeight() / 2);
-        pauseMenuRightButton =  new Rectangle((Game.V_WIDTH / 2) - (hud.pauseMenuTexture.getWidth() / 2 ) + ((hud.pauseMenuTexture.getWidth() / 3)*2),(Game.V_HEIGHT / 2 ) - (hud.pauseMenuTexture.getHeight() / 2), hud.pauseMenuTexture.getWidth() / 3, hud.pauseMenuTexture.getHeight() / 2);
+        pauseMenuLeftButton = new Rectangle((Game.V_WIDTH / 2) - (hud.pauseMenuTexture.getWidth() / 2), (Game.V_HEIGHT / 2) - (hud.pauseMenuTexture.getHeight() / 2), hud.pauseMenuTexture.getWidth() / 3, hud.pauseMenuTexture.getHeight() / 2);
+        pauseMenuMiddleButton = new Rectangle((Game.V_WIDTH / 2) - (hud.pauseMenuTexture.getWidth() / 2) + (hud.pauseMenuTexture.getWidth() / 3), (Game.V_HEIGHT / 2) - (hud.pauseMenuTexture.getHeight() / 2), hud.pauseMenuTexture.getWidth() / 3, hud.pauseMenuTexture.getHeight() / 2);
+        pauseMenuRightButton = new Rectangle((Game.V_WIDTH / 2) - (hud.pauseMenuTexture.getWidth() / 2) + ((hud.pauseMenuTexture.getWidth() / 3) * 2), (Game.V_HEIGHT / 2) - (hud.pauseMenuTexture.getHeight() / 2), hud.pauseMenuTexture.getWidth() / 3, hud.pauseMenuTexture.getHeight() / 2);
     }
 
     @Override
     public void render() {
 
-        Gdx.gl.glClearColor(0,0,0,1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //set cam to follow player
         //cam with bounds and centered stage
-       //cam.setPosition(player.getposition().x * PPM + P_WIDTH / 4, P_HEIGHT / 2);
+        //cam.setPosition(player.getposition().x * PPM + P_WIDTH / 4, P_HEIGHT / 2);
 
         //cam without bounds and set to bottom
         //if (cam.position.x < tileMapWidth *28){
-            cam.position.set(player.getposition().x * PPM + P_WIDTH / 4, P_HEIGHT/ 2, 0);
-            cam.update();
+        cam.position.set(player.getposition().x * PPM + P_WIDTH / 4, P_HEIGHT / 2, 0);
+        cam.update();
         //}
 
         cam.update();
@@ -560,7 +576,7 @@ public class Play extends GameState {
                 fd.shape = cs;
                 fd.restitution = 1;
                 fd.filter.categoryBits = bits;
-                fd.filter.maskBits = BIT_PLAYER | BIT_ENEMY |BIT_BULLET;
+                fd.filter.maskBits = BIT_PLAYER | BIT_ENEMY | BIT_BULLET;
                 world.createBody(bdef).createFixture(fd).setUserData("corner");
                 cs.dispose();
 
@@ -682,9 +698,9 @@ public class Play extends GameState {
     private void createWin() {
         MapLayer layer = tileMap.getLayers().get("win");
 
-        if (layer != null){
-        BodyDef bdef = new BodyDef();
-        FixtureDef fdef = new FixtureDef();
+        if (layer != null) {
+            BodyDef bdef = new BodyDef();
+            FixtureDef fdef = new FixtureDef();
 
             for (MapObject mo : layer.getObjects()) {
 
@@ -798,15 +814,15 @@ public class Play extends GameState {
         }
     }
 
-    private void updateText(){
-        int score = Game.scores.getInteger("score"+String.valueOf(Play.level));
+    private void updateText() {
+        int score = Game.scores.getInteger("score" + String.valueOf(Play.level));
 
         sb.begin();
-        textFont.draw(sb,String.valueOf(score), player.getposition().x + 50 , player.getposition().y  + 150);
+        textFont.draw(sb, String.valueOf(score), player.getposition().x + 50, player.getposition().y + 150);
         sb.end();
     }
 
-    private void unlockLevel(){
+    private void unlockLevel() {
         levelS = Game.lvls.getInteger("key");
 
         if (level < levelS) {
@@ -824,7 +840,7 @@ public class Play extends GameState {
 
         CRYSTALS_COLLECTED = player.getNumCrystals();
         ENEMIES_DESTROYED = Player.getEnemyKC();
-        HITS_TAKEN =  Player.counterHealth();
+        HITS_TAKEN = Player.counterHealth();
         Game.lvls.putInteger("crystals", CRYSTALS_COLLECTED);
         Game.lvls.putInteger("enemies", ENEMIES_DESTROYED);
         Game.lvls.putInteger("hits", HITS_TAKEN);
@@ -851,7 +867,7 @@ public class Play extends GameState {
         }
 
         //If enemy gets left behind player undestroyed, respawn it.
-        if(enemies.get(0).getBody().getPosition().x < player.getposition().x - 2.5f) {
+        if (enemies.get(0).getBody().getPosition().x < player.getposition().x - 2.5f) {
             Body b = enemy.getBody();
             enemies.removeValue((Enemy) b.getUserData(), true);
             world.destroyBody(b);
@@ -860,20 +876,18 @@ public class Play extends GameState {
 
         //Move enemy towards left side of the screen. If it stops, switch direction.
         if (enemy.returnCurrentLocation() - enemies.get(0).getBody().getPosition().x < 0 && enemy.returnDirection()) {
-            enemies.get(0).getBody().setTransform(enemy.getposition().x +0.05f,enemy.getposition().y -0.01f, 0);
+            enemies.get(0).getBody().setTransform(enemy.getposition().x + 0.05f, enemy.getposition().y - 0.01f, 0);
             enemy.switchDirection();
-        }
-        else if (enemy.returnCurrentLocation() - enemies.get(0).getBody().getPosition().x < 0 && !enemy.returnDirection()){
-            enemies.get(0).getBody().setTransform(enemy.getposition().x -0.05f,enemy.getposition().y -0.01f, 0);
+        } else if (enemy.returnCurrentLocation() - enemies.get(0).getBody().getPosition().x < 0 && !enemy.returnDirection()) {
+            enemies.get(0).getBody().setTransform(enemy.getposition().x - 0.05f, enemy.getposition().y - 0.01f, 0);
             enemy.switchDirection();
         }
 
         // Go right
-        if(!enemy.returnDirection()) {
-            enemies.get(0).getBody().setTransform(enemy.getposition().x +0.01f,enemy.getposition().y -0.01f, 0);
-        }
-        else {  //Go left
-            enemies.get(0).getBody().setTransform(enemy.getposition().x -0.01f,enemy.getposition().y -0.01f, 0);
+        if (!enemy.returnDirection()) {
+            enemies.get(0).getBody().setTransform(enemy.getposition().x + 0.01f, enemy.getposition().y - 0.01f, 0);
+        } else {  //Go left
+            enemies.get(0).getBody().setTransform(enemy.getposition().x - 0.01f, enemy.getposition().y - 0.01f, 0);
         }
 
         // Set current location to compare if enemy has stopped or not.
@@ -890,8 +904,7 @@ public class Play extends GameState {
             } else {
                 bullet.shootBullet(touchPoint.x / PPM, (touchPoint.y / PPM) - player.getposition().y, true);
             }
-        }
-        else {
+        } else {
             // After teh bullet's been shot, deploy a little cool down.
             bullet.checkBulletCoolDown();
         }
@@ -952,5 +965,10 @@ public class Play extends GameState {
             world.destroyBody(b);
         }
         trapBodies.clear();
+    }
+
+
+    public static long getTime(){
+        return time;
     }
 }
