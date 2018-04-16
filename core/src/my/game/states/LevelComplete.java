@@ -26,7 +26,6 @@ public class LevelComplete extends GameState {
 
     public LevelComplete(GameStateManager gsm) {
         super(gsm);
-
         Texture tex = Game.res.getTexture("complete");
         bg = new Background(new TextureRegion(tex), hudCam, 5);
         bg.setVector(4, -5);
@@ -65,10 +64,10 @@ public class LevelComplete extends GameState {
 
     @Override
     public void update(float dt) {
-        handleInput();
         bg.update(dt);
         playButton.update(dt);
         exitButton.update(dt);
+        handleInput();
     }
 
     @Override

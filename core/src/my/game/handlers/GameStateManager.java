@@ -52,7 +52,6 @@ public class GameStateManager {
     }
 
     private GameState getState(int state){
-
         if (state == MENU){
             return new Menu(this);
         }

@@ -99,8 +99,7 @@ public class Play extends GameState {
 
     public Play(GameStateManager gsm) {
         super(gsm);
-        System.out.println("Play");
-        handleInput();
+        System.out.println("Play CREATEEE");
         world = new World(new Vector2(0, -9.81f), true);
         cl = new MyContactListener();
         world.setContactListener(cl);
@@ -152,19 +151,18 @@ public class Play extends GameState {
 
         //Resets rendering every time play state is started.
         Gdx.graphics.setContinuousRendering(true);
+        System.out.println("Play END OF CREATEE");
     }
 
     @Override
     public void handleInput() {
-        Gdx.gl.glClearColor(0,0,0,1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
     @Override
     public void update(float dt) {
         Gdx.input.setInputProcessor(new InputAdapter() {
-            @Override
             public boolean touchDown(int x, int y, int pointer, int button) {
+                System.out.println("Play touchDown");
                 translateScreenToWorldCoordinates(x, y);
 
                 // Pause button touched
@@ -214,12 +212,10 @@ public class Play extends GameState {
                 return super.touchDown(x, y, pointer, button);
             }
 
-            @Override
             public boolean touchUp(int x, int y, int pointer, int button) {
                 return true;
             }
 
-            @Override
             public boolean keyDown (int keycode) {
                 //Pause game when Android back button is pressed.
                 if(keycode == Input.Keys.BACK) {
@@ -284,8 +280,7 @@ public class Play extends GameState {
         // Win stuff
         if (cl.isPlayerWin()) {
             if (level != 0) {
-                System.out.println("Win");
-                //unlockLevel();
+                unlockLevel();
                 Collected();
                 gsm.setState(GameStateManager.LEVEL_COMPLETE);
             }
@@ -316,6 +311,7 @@ public class Play extends GameState {
     }
 
     private void setupTouchControlAreas() {
+        System.out.println("Play setupTouchControlAreas");
         touchPoint = new Vector3();
         screenTopRightSide = new Rectangle(game.getHUDCamera().viewportWidth - (hud.pauseButton.getRegionWidth() / 8),game.getHUDCamera().viewportHeight - (hud.pauseButton.getRegionHeight() / 8), hud.pauseButton.getRegionWidth() / 8,hud.pauseButton.getRegionHeight() / 8);
         screenRightSide = new Rectangle(game.getHUDCamera().viewportWidth / 2, 0, game.getHUDCamera().viewportWidth / 2,
@@ -391,6 +387,7 @@ public class Play extends GameState {
     }
 
     private void createPlayer() {
+        System.out.println("Play createPlayer");
         BodyDef bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();
         FixtureDef fdef = new FixtureDef();
