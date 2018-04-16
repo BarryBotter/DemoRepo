@@ -2,34 +2,29 @@ package my.game.states;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import my.game.Game;
-import my.game.handlers.GameButton;
 import my.game.handlers.GameStateManager;
 
 
 public class LevelSelect extends GameState {
 
     private TextureRegion reg;
-    private GameButton[][] buttons;
     private int lvl;
     Skin mySkin;
     Stage stage;
-    private Button exitButton,cutSceneButton,rightButton,leftButton;
+    private Button exitButton,tutorialButton,rightButton,leftButton;
     Image lvlImg;
     private int width, height;
     BitmapFont font,font2;
@@ -47,7 +42,6 @@ public class LevelSelect extends GameState {
         font = game.font12;
         font2 = game.font24;
         stage = new Stage(viewport);
-        Gdx.input.setInputProcessor(stage);
         reg = new TextureRegion(Game.res.getTexture("menubg"), 0, 0, width, height);
         cam.setToOrtho(false, width, height);
         Play.level = 1;
@@ -55,7 +49,8 @@ public class LevelSelect extends GameState {
         score = "your score is: 1000";
         toothpaste = "You collected 0/5 toothpaste";
         buttons();
-        //lvlSelectGrid();
+        Gdx.input.setInputProcessor(stage);
+
     }
 
     private void buttons(){
@@ -66,8 +61,11 @@ public class LevelSelect extends GameState {
         lvlImg.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                dispose();
-                gsm.setState(GameStateManager.PLAY);
+                if ( event.getStageX() > width/4 && event.getStageX() < width*0.75f
+                        && Play.level > 0 && Play.level <10) {
+                    dispose();
+                    gsm.setState(GameStateManager.PLAY);
+                }
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -79,6 +77,7 @@ public class LevelSelect extends GameState {
         table.left().bottom();
         //button back to menu
         exitButton = new ImageButton(mySkin);
+        exitButton.setSize(80,80);
         exitButton.setStyle(gsm.backStyle);
         exitButton.addListener(new InputListener(){
             @Override
@@ -91,10 +90,11 @@ public class LevelSelect extends GameState {
                 return true;}
         });
         table.add(exitButton);
-        //button for testing cutscene
-        cutSceneButton = new ImageButton(mySkin);
-        cutSceneButton.setStyle(gsm.toothStyle);
-        cutSceneButton.addListener(new InputListener(){
+        //button tutorial
+        tutorialButton = new ImageButton(mySkin);
+        tutorialButton.setSize(80,80);
+        tutorialButton.setStyle(gsm.toothStyle);
+        tutorialButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 dispose();
@@ -104,99 +104,74 @@ public class LevelSelect extends GameState {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 return true;}
         });
-        table.add(cutSceneButton);
+        table.add(tutorialButton);
 
         stage.addActor(table);
         table.debug();
 
         //move to previous lvl
         leftButton = new ImageButton(mySkin);
-        leftButton.setStyle(gsm.toothStyle);
+        leftButton.setStyle(gsm.backStyle);
+        leftButton.setSize(80,80);
         leftButton.setPosition(width/10,height/2,1);
         leftButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                Play.level -= 1;
-                lvlname = "Level number " + Play.level;
-            }
-            @Override
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                return true;}
-        });
-        //move to next lvl
-        rightButton = new ImageButton(mySkin);
-        rightButton.setStyle(gsm.toothStyle);
-        rightButton.setPosition(width*0.9f,height/2,1);
-        rightButton.addListener(new InputListener(){
-            @Override
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                Play.level += 1;
-                lvlname = "Level number " + Play.level;
+                if ( event.getStageX() < width/4 && leftButton.isPressed() && Play.level > 1) {
+                    Play.level -= 1;
+                    lvlname = "Level number " + Play.level;
+                }
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 return true;}
         });
         stage.addActor(leftButton);
-        stage.addActor(rightButton);
 
-    }
+        //move to next lvl
+        rightButton = new ImageButton(mySkin);
+        rightButton.setStyle(gsm.rightStyle);
+        rightButton.setSize(80,80);
+        rightButton.setPosition(width*0.9f,height/2,1);
+        rightButton.addListener(new InputListener(){
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 
-    //deprecated
-    private void lvlSelectGrid(){
-        TextureRegion buttonReg = new TextureRegion(Game.res.getTexture("hud"), 0, 0, 32, 32);
-        buttons = new GameButton[3][3];
-        for(int row = 0; row < buttons.length; row++) {
-            for(int col = 0; col < buttons[0].length; col++) {
-                buttons[row][col] = new GameButton(buttonReg, 150 + col *40, 160 - row * 40, cam);
-                buttons[row][col].setText(row * buttons[0].length + col + 1 + "");
+                if (event.getStageX() > width*0.75  && rightButton.isPressed() && Play.level < 9) {
+                    Play.level += 1;
+                    lvlname = "Level number " + Play.level;
+                }
             }
-        }
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                return true;}
+        });
+        stage.addActor(rightButton);
     }
 
     public void handleInput() {
     }
 
     public void update(float dt) {
-
-/*        for (int row = 0; row < buttons.length; row++) {
-            for (int col = 0; col < buttons[0].length; col++) {
-                buttons[row][col].update(dt);
-                if (buttons[row][col].isClicked()) {
-                    Play.level = row * buttons[0].length + col + 1;
-                    if (Play.level <= lvl) {
-                        Game.res.getSound("snap").play();
-                        gsm.setState(GameStateManager.PLAY);
-                    }
-                }
-            }
-        }*/
     }
 
     public void render() {
+        if (Play.level == 1){
+            leftButton.setVisible(false);
+        }else leftButton.setVisible(true);
+        if (Play.level == 9){
+            rightButton.setVisible(false);
+        }else rightButton.setVisible(true);
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
         sb.draw(reg, 0, 0); //background
         font2.draw(sb,lvlname,width/4,height*0.90f);//lvlname
-        //(lvlImg,width/4,height/3,width/2,height/2,sb);
         font2.draw(sb,toothpaste,width/4,height/3.5f);
         font2.draw(sb,score,width/4,height/4.5f);
         sb.end();
-/*        for(int row = 0; row < buttons.length; row++) {
-            for(int col = 0; col < buttons[0].length; col++) {
-                buttons[row][col].render(sb);
-            }
-        }*/
         stage.act();
         stage.draw();
     }
-
-    void drawLvlImg(Image img, int x, int y, int width, int height, SpriteBatch sb){
-        img.setSize(width,height);
-        img.setPosition(x,y);
-        img.draw(sb,1);
-    }
-
 
     @Override
     public void dispose() {

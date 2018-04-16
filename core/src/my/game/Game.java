@@ -40,7 +40,7 @@ public class Game implements ApplicationListener {
 	public OrthographicCamera getHUDCamera(){return hudCam;}
 
 	public Skin mySkin;
-	public BitmapFont font12,font24;
+	public BitmapFont font12,font18,font24;
 
 
 	@Override
@@ -122,6 +122,8 @@ public class Game implements ApplicationListener {
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = 12;
 		font12 = generator.generateFont(parameter); // font size 12 pixels
+		parameter.size = 18;
+		font18 = generator.generateFont(parameter); // font size 18 pixels
 		parameter.size = 24;
 		font24 = generator.generateFont(parameter); // font size 24 pixels
 		generator.dispose(); // don't forget to dispose to avoid memory leaks!
@@ -134,10 +136,22 @@ public class Game implements ApplicationListener {
 		res.loadTexture("res/images/bgs.png","bg");
 		res.loadTexture("res/images/menu.png","menu");
 		res.loadTexture("kuva.png","olvi");
-		res.loadTexture("res/UI_final/rebg.png","menubg");
+		res.loadTexture("res/UI_final/play.png", "play");
+		res.loadTexture("res/UI_final/settings.png","settings");
+		res.loadTexture("res/UI_final/exit.png","exit");
+		res.loadTexture("res/UI_final/tooth_80.png", "tooth_80");
+		res.loadTexture("res/UI_final/back_80.png","back");
+		res.loadTexture("res/UI_final/right_80.png","right");
+		res.loadTexture("res/UI_final/background_640.png","menubg");
 		res.loadTexture("res/UI_final/resized_paavalikko.png","main");
 		res.loadTexture("res/UI_final/resized_hammas.png","tooth");
 		res.loadTexture("res/UI_final/menu_logo.png","menulogo");
+		res.loadTexture("res/UI_final/sound_off.png","sound_off");
+		res.loadTexture("res/UI_final/sound_on.png","sound_on");
+		res.loadTexture("res/UI_final/tooth_easy_80.png","easy");
+		res.loadTexture("res/UI_final/tooth_normal_80.png","normal");
+		res.loadTexture("res/UI_final/tooth_hard_80.png","hard");
+		res.loadTexture("res/UI_final/tutorial.png","tutorial");
 		res.loadTexture("res/images/Game_Over.png", "gameover");
 		res.loadTexture("res/background/testimaa.png","bgone");
 		res.loadTexture("res/background/rsz_karkkimaas.png","bgones");
@@ -180,7 +194,6 @@ public class Game implements ApplicationListener {
 		else if (prefs.getBoolean("sound") == false) {
 			res.getMusic("bbsong").setVolume(0);
 		}
-
 	}
 
 	public void pauseMusic(){

@@ -3,24 +3,24 @@ package my.game.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import my.game.Game;
-import my.game.entities.Background;
 import my.game.handlers.GameStateManager;
 import my.game.handlers.MyTextInputListener;
+
+import static com.badlogic.gdx.graphics.Color.BLACK;
 
 /**
  * Created by velij on 27.3.2018.
@@ -31,40 +31,33 @@ public class Options extends GameState {
     Image logo;
     private TextureRegion bg;
     String Name = "", soundvalue = "",difficultyString = "",hintname = "Your Name";
-    private int row_height,col_width,width,height;
+    private int row_height = Game.V_HEIGHT/ 6,col_width = Game.V_WIDTH /6,
+            width = Game.V_WIDTH*2,height = Game.V_HEIGHT*2;
     private Label nameLabel,soundLabel,difficultyLabel;
-    Skin mySkin;
-    Stage stage;
+    Skin mySkin = game.mySkin;
+    Stage stage= gsm.stage;
     private ImageButton nameEditButton,difficultyButton,soundButton,exitButton;
     StretchViewport viewport;
+    BitmapFont font = game.font24;
+    LabelStyle labelstyle;
 
     public Options(final GameStateManager gsm){
         super(gsm);
-        getSettings();
-        width= Game.V_WIDTH*2;
-        height= Game.V_HEIGHT*2;
-        row_height = Game.V_HEIGHT/ 6;
-        col_width = Game.V_WIDTH /6;
-        mySkin = game.mySkin;
-        stage = gsm.stage;
         setup();
         createButtons(mySkin);
         optionsLayout(nameEditButton,difficultyButton,soundButton);
+        getSettings();
+
     }
 
     private void setup(){
         cam.setToOrtho(false, Game.V_WIDTH, Game.V_HEIGHT);
-        //viewport = new StretchViewport(320,240, cam);
         viewport = new StretchViewport(640,480, cam);
-
-        Texture tex = Game.res.getTexture("menubg");
         bg = new TextureRegion(Game.res.getTexture("menubg"), 0, 0, width, height);
-
-        Texture logoTex =Game.res.getTexture("menulogo");
-        logo = new Image(logoTex);
+        logo = new Image(Game.res.getTexture("menulogo"));
         logo.setSize(col_width,row_height);
-
-        //skin and stage
+        labelstyle = new LabelStyle(font,BLACK);
+        //stage and input
         stage = new Stage(viewport);
         Gdx.input.setInputProcessor(stage);
     }
@@ -107,11 +100,12 @@ public class Options extends GameState {
 
         //name label
         nameLabel = new Label(Name,skin);
+        nameLabel.setStyle(labelstyle);
         nameLabel.setFontScale(1,1);
 
-        //Button for setting the sound on and off, does not have functionality(yet)
+        //Button for setting the sound on and off
         soundButton = new ImageButton(skin);
-        soundButton.setStyle(gsm.toothStyle);
+        soundButton.setStyle(gsm.soundStyle);
         soundButton.setSize(col_width,col_width);
         soundButton.addListener(new InputListener(){
             @Override
@@ -126,11 +120,13 @@ public class Options extends GameState {
 
         //sound label
         soundLabel = new Label(soundvalue, skin); //labeltest
+        soundLabel.setStyle(labelstyle);
         soundLabel.setFontScale(1,1);
 
         //chances the difficulty
         difficultyButton = new ImageButton(skin);
-        difficultyButton.setStyle(gsm.toothStyle);
+        difficultyButton.setStyle(gsm.hardStyle);
+        getDifficultyStyle();
         difficultyButton.setSize(col_width,col_width);
         difficultyButton.addListener(new InputListener(){
             @Override
@@ -146,6 +142,7 @@ public class Options extends GameState {
 
         //difficultylabel
         difficultyLabel = new Label(difficultyString, skin); //labeltest
+        difficultyLabel.setStyle(labelstyle);
         difficultyLabel.setFontScale(1,1);
     }
 
@@ -171,7 +168,6 @@ public class Options extends GameState {
         stage.addActor(table);
         //table.debug();      // Turn on all debug lines (table, cell, and widget).
     }
-
     //not in use yet
     private void createImageButton(ImageButton button, ImageButton.ImageButtonStyle style, int width){
         button = new ImageButton(style);
@@ -200,12 +196,15 @@ public class Options extends GameState {
         switch (difficulty) {
             case 0: game.prefs.putInteger("difficulty", 1);
                 difficultyString = "normal";
+                difficultyButton.setStyle(gsm.normalStyle);
                 break;
             case 1: game.prefs.putInteger("difficulty", 2);
                 difficultyString = "hard";
+                difficultyButton.setStyle(gsm.hardStyle);
                 break;
             case 2: game.prefs.putInteger("difficulty", 0);
                 difficultyString = "easy";
+                difficultyButton.setStyle(gsm.easyStyle);
                 break;
             default: difficultyString = "Invalid ";
                 break;
@@ -217,11 +216,13 @@ public class Options extends GameState {
         //chances the value of the sound boolean
         if (!game.prefs.getBoolean("sound")){
             game.prefs.putBoolean("sound",true);
-            soundvalue = "true";
+            soundvalue = "Music on ";
+            soundButton.setChecked(true);
         }else
         {
             game.prefs.putBoolean("sound",false);
-            soundvalue = "false";
+            soundvalue = "Music off";
+            soundButton.setChecked(false);
         }
         game.prefs.flush();
         game.isMusicPlaying();
@@ -233,9 +234,12 @@ public class Options extends GameState {
 
         //checks the boolean from Preferences
         if(game.prefs.getBoolean("sound")){
-            soundvalue = "true";
+            soundvalue = "Music on ";
+
+            soundButton.setChecked(true);
         }else {
-            soundvalue = "false";
+            soundvalue = "Music off";
+            soundButton.setChecked(false);
         }
 
         //difficulty is an integer(0-2) in the preferences
@@ -251,6 +255,23 @@ public class Options extends GameState {
                 difficultyString = "hard";
                 break;
             default: difficultyString = "Invalid ";
+                break;
+        }
+    }
+
+    void getDifficultyStyle(){
+        int difficulty = game.prefs.getInteger("difficulty");
+        switch (difficulty){
+            case 0:
+                difficultyButton.setStyle(gsm.easyStyle);
+                break;
+            case 1:
+                difficultyButton.setStyle(gsm.normalStyle);
+                break;
+            case 2:
+                difficultyButton.setStyle(gsm.hardStyle);
+                break;
+            default:
                 break;
         }
     }
@@ -286,6 +307,8 @@ public class Options extends GameState {
     @Override
     public void dispose() {
         stage.clear();
+        Gdx.input.setInputProcessor(null);
+
     }
 }
 
