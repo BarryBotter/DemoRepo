@@ -164,9 +164,6 @@ public class Play extends GameState {
         //backgrounds[1] = new Background(mountains, cam, 0.2f);
         //backgrounds[2] = new Background(treeLayer, cam, 0f);
 
-        //create font
-        textFont = new BitmapFont(Gdx.files.internal("res/images/fontstyle.fnt"), false);
-
         // set up hud
         hud = new HUD(player);
 
@@ -435,6 +432,7 @@ public class Play extends GameState {
         win.render(sb);
 
         updateText();
+        //updateText();
 
         //draw hud
         sb.setProjectionMatrix(hudCam.combined);
@@ -443,7 +441,6 @@ public class Play extends GameState {
 
     @Override
     public void dispose() {
-        textFont.dispose();
         tileMap.dispose();
     }
 
