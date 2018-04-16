@@ -10,10 +10,19 @@ import my.game.entities.Background;
 import my.game.handlers.GameButton;
 import my.game.handlers.GameStateManager;
 
+import static my.game.handlers.B2DVars.PPM;
+import static my.game.handlers.B2DVars.SOUND_LEVEL;
+
+/**
+ * Created by Katriina on 27.3.2018.
+ */
+
 public class GameOver extends GameState {
+
     private Background bg;
     private GameButton playButton;
     private GameButton exitButton;
+    Play play;
 
     public GameOver(GameStateManager gsm) {
         super(gsm);
@@ -29,16 +38,29 @@ public class GameOver extends GameState {
         menuButtons[1] =  new TextureRegion(tex, 340, 125, 200, 100);
         playButton = new GameButton(menuButtons[0], Game.V_WIDTH, 0, cam);
         exitButton = new GameButton(menuButtons[1], 0, 0, cam);
+        playButton = new GameButton(menuButtons[0], 250, 160, cam);
+        exitButton = new GameButton(menuButtons[1], 150, 170, cam);
+
+        play = new Play(gsm);
 
         cam.setToOrtho(false, Game.V_WIDTH, Game.V_HEIGHT);
+
+        game.pauseMusic();
+        Game.res.getSound("over").play(SOUND_LEVEL);
+
+        world = new World(new Vector2(0, -9.8f * 5), true);
+
     }
 
 
     public void handleInput() {
         if(playButton.isClicked()) {
+            Game.res.getSound("over").stop();
             gsm.setState(GameStateManager.PLAY);
         }
         else if(exitButton.isClicked()){
+            Game.res.getSound("over").stop();
+            game.resumeMenuMusic();
             gsm.setState(GameStateManager.MENU);
         }
     }

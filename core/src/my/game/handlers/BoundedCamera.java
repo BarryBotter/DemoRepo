@@ -2,6 +2,9 @@ package my.game.handlers;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
+import static my.game.handlers.B2DVars.P_HEIGHT;
+import static my.game.handlers.B2DVars.P_WIDTH;
+
 public class BoundedCamera extends OrthographicCamera {
 
     private float xmin;
@@ -35,17 +38,17 @@ public class BoundedCamera extends OrthographicCamera {
     }
 
     private void fixBounds() {
-        if(position.x < xmin + viewportWidth / 2) {
-            position.x = xmin + viewportWidth / 2;
+        if(position.x < xmin + P_WIDTH / 2) {
+            position.x = xmin + P_WIDTH / 2;
         }
-        if(position.x > xmax - viewportWidth / 2) {
-            position.x = xmax - viewportWidth / 2;
+        if(position.x > xmax - P_HEIGHT/ 2) {
+            position.x = xmax - P_HEIGHT / 2;
         }
-        if(position.y < ymin + viewportHeight / 2) {
-            position.y = ymin + viewportHeight / 2;
+        if(position.y < ymin +  P_WIDTH  / 2) {
+            position.y = ymin + P_WIDTH  / 2;
         }
-        if(position.y > ymax - viewportHeight / 2) {
-            position.y = ymax - viewportHeight / 2;
+        if(position.y > ymax -P_HEIGHT / 2) {
+            position.y = ymax - P_HEIGHT/ 2;
         }
     }
 }

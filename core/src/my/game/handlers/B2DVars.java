@@ -4,6 +4,11 @@ public class B2DVars {
     //pixel per meter
     public static final float PPM = 100;
 
+    //PLAY width och Height
+
+    public static final int P_WIDTH = 480;
+    public static final int P_HEIGHT = 320;
+
     //category bits
     public static final short BIT_PLAYER = 2;
     public static final short BIT_TRAP = 4;
@@ -17,9 +22,11 @@ public class B2DVars {
     public static final short BIT_WIN = 1024;
 
     //other vars
-    public static int MAX_HEALTH = 11;
+     public static int MAX_HEALTH = 3;
      public static int LVL_UNLOCKED = 10;
      public static int CRYSTALS_COLLECTED = 0;
      public static int HITS_TAKEN = 0;
      public static int ENEMIES_DESTROYED = 0;
+     public static float SOUND_LEVEL;
+
 }
