@@ -6,6 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import java.util.Stack;
+
+import my.game.Game;
 import my.game.states.GameOver;
 import my.game.states.GameState;
 import my.game.states.LevelComplete;
@@ -40,7 +42,7 @@ public class GameStateManager {
     TextureRegion menuButtons[];
     public  Stage stage;
 
-    public GameStateManager(my.game.Game game){
+    public GameStateManager(Game game){
         this.game = game;
         makeStyles();
         stage = new Stage();
@@ -48,7 +50,7 @@ public class GameStateManager {
         pushState(MENU);
     }
 
-    public my.game.Game game(){return game;}
+    public Game game(){return game;}
 
     public void update(float dt){
         gameStates.peek().update(dt);

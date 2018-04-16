@@ -15,6 +15,8 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import my.game.Game;
 import my.game.handlers.GameStateManager;
 
+import static my.game.handlers.B2DVars.SOUND_LEVEL;
+
 /**
  * Created by Katriina on 23.3.2018.
  */
@@ -70,12 +72,13 @@ public class Menu extends GameState{
         playButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                my.game.Game.res.getSound("hit").play();
+                my.game.Game.res.getSound("hit").play(SOUND_LEVEL);
                 dispose();
                 gsm.setState(GameStateManager.LEVEL_SELECT);
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                playButton.setPosition(playButton.getX(), playButton.getY() +2);
                 return true;
             }
         });
@@ -86,7 +89,7 @@ public class Menu extends GameState{
         optionsButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                my.game.Game.res.getSound("hit").play();
+                my.game.Game.res.getSound("hit").play(SOUND_LEVEL);
                 dispose();
                 gsm.setState(GameStateManager.OPTIONS);
                 //gsm.pushState(GameStateManager.OPTIONS);

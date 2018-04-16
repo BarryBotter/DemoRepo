@@ -20,6 +20,8 @@ import my.game.Game;
 import my.game.handlers.GameStateManager;
 import my.game.handlers.MyTextInputListener;
 
+import static my.game.handlers.B2DVars.MAX_HEALTH;
+import static my.game.handlers.B2DVars.SOUND_LEVEL;
 import static com.badlogic.gdx.graphics.Color.BLACK;
 
 /**
@@ -47,7 +49,6 @@ public class Options extends GameState {
         createButtons(mySkin);
         optionsLayout(nameEditButton,difficultyButton,soundButton);
         getSettings();
-
     }
 
     private void setup(){
@@ -197,14 +198,17 @@ public class Options extends GameState {
             case 0: game.prefs.putInteger("difficulty", 1);
                 difficultyString = "normal";
                 difficultyButton.setStyle(gsm.normalStyle);
+                MAX_HEALTH = 2;
                 break;
             case 1: game.prefs.putInteger("difficulty", 2);
                 difficultyString = "hard";
                 difficultyButton.setStyle(gsm.hardStyle);
+                MAX_HEALTH = 1;
                 break;
             case 2: game.prefs.putInteger("difficulty", 0);
                 difficultyString = "easy";
                 difficultyButton.setStyle(gsm.easyStyle);
+                MAX_HEALTH = 3;
                 break;
             default: difficultyString = "Invalid ";
                 break;
@@ -216,11 +220,13 @@ public class Options extends GameState {
         //chances the value of the sound boolean
         if (!game.prefs.getBoolean("sound")){
             game.prefs.putBoolean("sound",true);
+            SOUND_LEVEL = 1;
             soundvalue = "Music on ";
             soundButton.setChecked(true);
         }else
         {
             game.prefs.putBoolean("sound",false);
+            SOUND_LEVEL = 0;
             soundvalue = "Music off";
             soundButton.setChecked(false);
         }
@@ -235,7 +241,6 @@ public class Options extends GameState {
         //checks the boolean from Preferences
         if(game.prefs.getBoolean("sound")){
             soundvalue = "Music on ";
-
             soundButton.setChecked(true);
         }else {
             soundvalue = "Music off";

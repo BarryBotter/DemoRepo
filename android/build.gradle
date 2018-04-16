@@ -19,7 +19,7 @@ android {
     }
     defaultConfig {
         applicationId "my.game"
-        minSdkVersion 22
+        minSdkVersion 20
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"

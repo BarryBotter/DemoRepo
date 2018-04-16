@@ -134,12 +134,12 @@ public class MyContactListener implements ContactListener {
         // Check collision between bullet and ground
         if(fa.getUserData() != null && fa.getUserData().equals("ground")){
             if(fb.getUserData().equals("bullet")) {
-                bulletBodiesToRemove.add(fb.getBody());
+                //bulletBodiesToRemove.add(fb.getBody());
             }
         }
         if(fb.getUserData() != null && fb.getUserData().equals("ground")){
             if(fa.getUserData().equals("bullet")) {
-                bulletBodiesToRemove.add(fa.getBody());
+                //bulletBodiesToRemove.add(fa.getBody());
             }
         }
         if (fa.getUserData() != null && fa.getUserData().equals("jump")) {

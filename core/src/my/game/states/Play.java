@@ -60,6 +60,8 @@ import static my.game.handlers.B2DVars.ENEMIES_DESTROYED;
 import static my.game.handlers.B2DVars.HITS_TAKEN;
 import static my.game.handlers.B2DVars.LVL_UNLOCKED;
 import static my.game.handlers.B2DVars.PPM;
+import static my.game.handlers.B2DVars.P_HEIGHT;
+import static my.game.handlers.B2DVars.P_WIDTH;
 import static my.game.handlers.B2DVars.SOUND_LEVEL;
 
 /**
@@ -112,7 +114,11 @@ public class Play extends GameState {
     public Play(GameStateManager gsm) {
         super(gsm);
 
-        cam.setToOrtho(false, Game.V_WIDTH, Game.V_HEIGHT);
+        cam.setToOrtho(false, 480,320);//Game.V_WIDTH, Game.V_HEIGHT);
+        //Resets rendering every time play state is started.
+        Gdx.graphics.setContinuousRendering(true);
+
+
         world = new World(new Vector2(0, -9.81f), true);
         cl = new MyContactListener();
         world.setContactListener(cl);
@@ -144,19 +150,16 @@ public class Play extends GameState {
         //create melee hitbox
         createMeleeHitBox();
 
-
         // create backgrounds
         Texture bgs = Game.res.getTexture("bgones");
         TextureRegion sky = new TextureRegion(bgs, 0, 0, 320, 240);
-        TextureRegion mountains = new TextureRegion(bgs, 0, 235, 320, 240);
+        TextureRegion mountains = new TextureRegion(bgs, 0, 235, 320, 340);
         Texture trees = Game.res.getTexture("bgone");
         TextureRegion treeLayer = new TextureRegion(trees, 0, 27, 320, 240);
-        backgrounds = new Background[2];
+        backgrounds = new Background[1];
         backgrounds[0] = new Background(sky, cam, 0f);
-        backgrounds[1] = new Background(mountains, cam, 0.1f);
-        //backgrounds[2] = new Background(treeLayer, cam, 0.2f);
-
-
+        //backgrounds[1] = new Background(mountains, cam, 0.2f);
+        //backgrounds[2] = new Background(treeLayer, cam, 0f);
 
         //create font
         textFont = new BitmapFont(Gdx.files.internal("res/images/fontstyle.fnt"), false);
@@ -167,10 +170,9 @@ public class Play extends GameState {
         //setup touch areas
         setupTouchControlAreas();
 
-        //Resets rendering every time play state is started.
-        Gdx.graphics.setContinuousRendering(true);
-    }
+        Gdx.input.setCatchBackKey(true);
 
+    }
 
     @Override
     public void handleInput() {
@@ -295,7 +297,34 @@ public class Play extends GameState {
                     gsm.setState(GameStateManager.LEVEL_COMPLETE);
                 } else if (level == 3) {
                     unlockLevel();
-                    gsm.setState(GameStateManager.MENU);
+                    Collected();
+                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
+                }
+                else if (level == 4) {
+                    unlockLevel();
+                    Collected();
+                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
+                } else if (level == 5) {
+                    unlockLevel();
+                    Collected();
+                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
+                } else if (level == 6) {
+                    unlockLevel();
+                    Collected();
+                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
+                }
+                else if (level == 7) {
+                    unlockLevel();
+                    Collected();
+                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
+                } else if (level == 8) {
+                    unlockLevel();
+                    Collected();
+                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
+                } else if (level == 9) {
+                    unlockLevel();
+                    Collected();
+                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
                 }
             }
 
@@ -336,13 +365,16 @@ public class Play extends GameState {
     @Override
     public void render() {
         //set cam to follow player
-        cam.position.set(
-                player.getposition().x * PPM + Game.V_WIDTH / 4,
-                Game.V_HEIGHT / 2, 0);
-        cam.position.set(player.getposition().x * PPM + Game.V_WIDTH / 4, Game.V_HEIGHT / 2, 0);
+        //cam with bounds and centered stage
+       //cam.setPosition(player.getposition().x * PPM + P_WIDTH / 4, P_HEIGHT / 2);
+
+        //cam without bounds and set to bottom
+        if (cam.position.x < tileMapWidth *28){
+            cam.position.set(player.getposition().x * PPM + P_WIDTH / 4, P_HEIGHT/ 2, 0);
+            cam.update();
+        }
 
         cam.update();
-
 
         // draw bgs
         sb.setProjectionMatrix(hudCam.combined);
@@ -362,27 +394,22 @@ public class Play extends GameState {
         for (int i = 0; i < crystals.size; i++) {
             crystals.get(i).render(sb);
         }
-
         //draw enemy
         for (int i = 0; i < enemies.size; i++) {
             enemies.get(i).render(sb);
         }
-
         //draw traps
         for (int i = 0; i < traps.size; i++) {
             traps.get(i).render(sb);
         }
-
         //draw bullets
         for (int i = 0; i < bullets.size; i++) {
             bullets.get(i).render(sb);
         }
-
         //draw melee hit box
         for (int i = 0; i < meleeHitBoxes.size; i++) {
             meleeHitBoxes.get(i).render(sb);
         }
-
         //draw win
         win.render(sb);
 
@@ -457,7 +484,6 @@ public class Play extends GameState {
             createJump(layer, BIT_JUMP);
     }
 
-
     private void createBlocks(TiledMapTileLayer layer, short bits) {
         float ts = layer.getTileWidth();
 
@@ -527,9 +553,10 @@ public class Play extends GameState {
                 fd.shape = cs;
                 fd.restitution = 1;
                 fd.filter.categoryBits = bits;
-                fd.filter.maskBits = BIT_PLAYER | BIT_ENEMY;
+                fd.filter.maskBits = BIT_PLAYER | BIT_ENEMY |BIT_BULLET;
                 world.createBody(bdef).createFixture(fd).setUserData("corner");
                 cs.dispose();
+
             }
         }
     }
@@ -680,8 +707,6 @@ public class Play extends GameState {
         }
     }
 
-
-
     private void createBullet() {
         bullets = new Array<Projectile>();
         BodyDef bdef = new BodyDef();
@@ -696,8 +721,9 @@ public class Play extends GameState {
 
         shape.setAsBox(9 / PPM, 9 / PPM);
         fdef.shape = shape;
+        fdef.restitution = 1;
         fdef.filter.categoryBits = BIT_BULLET;
-        fdef.filter.maskBits = BIT_ENEMY | BIT_GROUND | BIT_TRAP;
+        fdef.filter.maskBits = BIT_ENEMY | BIT_GROUND | BIT_TRAP | BIT_CORNER;
         body.createFixture(fdef).setUserData("bullet");
         shape.dispose();
 
@@ -705,7 +731,6 @@ public class Play extends GameState {
         bullets.add(bullet);
         body.setUserData(bullet);
     }
-
 
     private void createEnemy() {
         enemies = new Array<Enemy>();
@@ -767,13 +792,14 @@ public class Play extends GameState {
     }
 
     private void updateText(){
+        int score = Game.scores.getInteger("score"+String.valueOf(Play.level));
+
         sb.begin();
-        textFont.draw(sb,"Touch left side to jump", player.getposition().x + 50 , player.getposition().y  + 150);
+        textFont.draw(sb,String.valueOf(score), player.getposition().x + 50 , player.getposition().y  + 150);
         sb.end();
     }
 
     private void unlockLevel(){
-
         levelS = Game.lvls.getInteger("key");
 
         if (level < levelS) {
@@ -782,11 +808,9 @@ public class Play extends GameState {
             LVL_UNLOCKED = LVL_UNLOCKED + 1;
         Game.lvls.putInteger("key", LVL_UNLOCKED);
         Game.lvls.flush();
-
     }
 
     private void Collected() {
-
         Game.lvls.getInteger("crystals");
         Game.lvls.getInteger("enemies");
         Game.lvls.getInteger("hits");
@@ -798,7 +822,6 @@ public class Play extends GameState {
         Game.lvls.putInteger("enemies", ENEMIES_DESTROYED);
         Game.lvls.putInteger("hits", HITS_TAKEN);
         Game.lvls.flush();
-
     }
 
     private void enemyManager() {
