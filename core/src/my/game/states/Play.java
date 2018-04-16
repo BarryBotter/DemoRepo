@@ -74,7 +74,6 @@ public class Play extends GameState {
     public static int level;
     private int levelS;
     private World world;
-    private Box2DDebugRenderer b2dr;
 
     public static float accumulator = 0;
 
@@ -125,7 +124,6 @@ public class Play extends GameState {
         world = new World(new Vector2(0, -9.81f), true);
         cl = new MyContactListener();
         world.setContactListener(cl);
-        b2dr = new Box2DDebugRenderer();
 
         // create player
         createPlayer();
@@ -189,8 +187,6 @@ public class Play extends GameState {
 
 
         time = System.currentTimeMillis() - startTime;
-
-        System.out.println(time);
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
@@ -431,7 +427,6 @@ public class Play extends GameState {
         //draw win
         win.render(sb);
 
-        updateText();
         //updateText();
 
         //draw hud
@@ -441,7 +436,7 @@ public class Play extends GameState {
 
     @Override
     public void dispose() {
-        tileMap.dispose();
+        //tileMap.dispose();
     }
 
     private void createPlayer() {
@@ -815,7 +810,11 @@ public class Play extends GameState {
         int score = Game.scores.getInteger("score" + String.valueOf(Play.level));
 
         sb.begin();
+
         textFont.draw(sb, String.valueOf(score), player.getposition().x + 50, player.getposition().y + 150);
+
+        //textFont.draw(sb,String.valueOf(score), player.getposition().x + 50 , player.getposition().y  + 150);
+
         sb.end();
     }
 

@@ -197,6 +197,7 @@ public class Game implements ApplicationListener {
 	    res.getMusic("bbsong").pause();
     }
     public void resumeMusic(){
+		if(prefs.getBoolean("sound"))
 		res.getMusic("bbsong").play();
 	}
 
