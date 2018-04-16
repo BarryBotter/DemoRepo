@@ -47,9 +47,6 @@ public class GameOver extends GameState {
 
         game.pauseMusic();
         Game.res.getSound("over").play(SOUND_LEVEL);
-
-        world = new World(new Vector2(0, -9.8f * 5), true);
-
     }
 
 

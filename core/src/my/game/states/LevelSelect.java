@@ -62,7 +62,6 @@ public class LevelSelect extends GameState {
         lvlname = "Level number " + Play.level;
         toothpaste = "You collected 0/5 toothpaste";
         buttons();
-        lvlSelectGrid();
         game.pauseMusic();
         game.resumeMenuMusic();
     }

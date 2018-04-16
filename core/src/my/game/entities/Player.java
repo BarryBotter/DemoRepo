@@ -90,11 +90,11 @@ public class Player extends  B2DSprite{
         return healthCount;
     }
 
-    static int returnHealth() {
+    public static int returnHealth() {
         return playerHealth;
     }
 
-    static int returnMaxHealth() {
+    public static int returnMaxHealth() {
         return MAX_HEALTH;
     }
 

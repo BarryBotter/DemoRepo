@@ -33,7 +33,6 @@ public class GameStateManager {
     public ImageButton.ImageButtonStyle
             playStyle, optionStyle,exitStyle,toothStyle,backStyle;
 
-    public ImageButton.ImageButtonStyle playButtonStyle, optionButtonStyle,exitButtonStyle,toothStyle;
     private TextureRegion menuButtons[];
     public Stage stage;
 
