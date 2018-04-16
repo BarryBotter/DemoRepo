@@ -59,7 +59,6 @@ import static my.game.handlers.B2DVars.LVL_UNLOCKED;
 import static my.game.handlers.B2DVars.PPM;
 
 public class Play extends GameState {
-
     static int level;
     private int levelS;
     private World world;
@@ -155,7 +154,6 @@ public class Play extends GameState {
 
         //Resets rendering every time play state is started.
         Gdx.graphics.setContinuousRendering(true);
-        System.out.println("Play END OF CREATEE");
     }
 
     @Override
@@ -166,7 +164,6 @@ public class Play extends GameState {
     public void update(float dt) {
         Gdx.input.setInputProcessor(new InputAdapter() {
             public boolean touchDown(int x, int y, int pointer, int button) {
-                System.out.println("Play touchDown");
                 translateScreenToWorldCoordinates(x, y);
 
                 // Pause button touched
@@ -315,7 +312,6 @@ public class Play extends GameState {
     }
 
     private void setupTouchControlAreas() {
-        System.out.println("Play setupTouchControlAreas");
         touchPoint = new Vector3();
         screenTopRightSide = new Rectangle(game.getHUDCamera().viewportWidth - (hud.pauseButton.getRegionWidth() / 8),game.getHUDCamera().viewportHeight - (hud.pauseButton.getRegionHeight() / 8), hud.pauseButton.getRegionWidth() / 8,hud.pauseButton.getRegionHeight() / 8);
         screenRightSide = new Rectangle(game.getHUDCamera().viewportWidth / 2, 0, game.getHUDCamera().viewportWidth / 2,
@@ -391,7 +387,6 @@ public class Play extends GameState {
     }
 
     private void createPlayer() {
-        System.out.println("Play createPlayer");
         BodyDef bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();
         FixtureDef fdef = new FixtureDef();
