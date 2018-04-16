@@ -55,10 +55,13 @@ public class LevelSelect extends GameState {
         Gdx.input.setInputProcessor(stage);
         reg = new TextureRegion(Game.res.getTexture("menubg"), 0, 0, width, height);
         cam.setToOrtho(false, width, height);
+        //todo current level from preferences
         Play.level = 1;
         lvlname = "Level number " + Play.level;
         toothpaste = "You collected 0/5 toothpaste";
         buttons();
+        game.pauseMusic();
+        game.resumeMenuMusic();
     }
 
     private void buttons(){
