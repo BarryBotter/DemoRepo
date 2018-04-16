@@ -99,17 +99,11 @@ public class Play extends GameState {
 
     public Play(GameStateManager gsm) {
         super(gsm);
-<<<<<<< Updated upstream
-        System.out.println("Play CREATEEE");
-=======
-        System.out.println("Play Create Start");
 
         cam.setToOrtho(false, 480,320);//Game.V_WIDTH, Game.V_HEIGHT);
         //Resets rendering every time play state is started.
         Gdx.graphics.setContinuousRendering(true);
 
-
->>>>>>> Stashed changes
         world = new World(new Vector2(0, -9.81f), true);
         cl = new MyContactListener();
         world.setContactListener(cl);
