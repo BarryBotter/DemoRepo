@@ -427,6 +427,8 @@ public class Play extends GameState {
 
     @Override
     public void dispose() {
+        textFont.dispose();
+        tileMap.dispose();
     }
 
     private void createPlayer() {

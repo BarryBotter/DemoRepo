@@ -172,7 +172,7 @@ public class LevelComplete extends GameState {
         hearthsLeft = Player.returnHealth() * 2;
 
         if (hitScore == 0)
-            totalScore=  (crystalScore + enemyScore) * hearthsLeft * 5;
+            totalScore= (int) ((crystalScore + enemyScore) * hearthsLeft * 1.5f);
         else
             totalScore=  (crystalScore + enemyScore) * hearthsLeft;
 

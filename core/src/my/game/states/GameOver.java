@@ -99,7 +99,6 @@ public class GameOver extends GameState {
     }
 
     public void dispose() {
-        play.dispose();
     }
 
 }

@@ -29,9 +29,6 @@ public class HUD {
 
     public Texture pauseTexture;
     public Texture pauseMenuTexture;
-    private GameButton pauseButton;
-    private TextureRegion pauseButtonRegion;
-    protected OrthographicCamera hudCam;
 
     public HUD(Player player) {
         this.player = player;
