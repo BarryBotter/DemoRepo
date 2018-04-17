@@ -475,7 +475,7 @@ public class Play extends GameState {
             tileMap = new TmxMapLoader().load("res/maps/level" + level + ".tmx");
         } catch (Exception e) {
             System.out.println("Cannot find file: res/maps/level" + level + ".tmx");
-            Gdx.app.exit();
+            //Gdx.app.exit();
         }
         tileMapWidth = tileMap.getProperties().get("width", Integer.class);
         tileMapHeight = tileMap.getProperties().get("height", Integer.class);
