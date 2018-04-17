@@ -92,6 +92,7 @@ public class Game implements ApplicationListener {
 		else if (prefs.getBoolean("sound") == false) {
 			SOUND_LEVEL = 0;
 			res.getMusic("theme").setVolume(0);
+			res.getMusic("bbsong").setVolume(0);
 		}
 	}
 
@@ -175,6 +176,7 @@ public class Game implements ApplicationListener {
         // music
 		res.loadMusic("res/music/menuSong.mp3","theme");
 		res.loadMusic("res/music/bbsong.ogg", "bbsong");
+		res.getMusic("bbsong").setLooping(true);
 
 
 	}

@@ -37,11 +37,13 @@ public class LevelComplete extends GameState {
     private int crystalScore;
     private int enemyScore;
     private int hitScore;
+    private float timescore;
     private float time;
     private int hearthScore;
     private int totalScore;
     private int hearthsLeft;
     private int scoreCount = 0;
+    private int compareScore;
 
 
 
@@ -113,7 +115,8 @@ public class LevelComplete extends GameState {
         exitButton.update(dt);
 
         getScore();
-
+        setScore();
+        System.out.println(compareScore);
     }
 
     @Override
@@ -136,6 +139,8 @@ public class LevelComplete extends GameState {
         textFont.draw(sb,"total score",110, 80);
 
 
+
+
         // draw crystal amount
         textFont.draw(sb, game.lvls.getInteger("crystals") + "", 110, 215);
         textFont.draw(sb, game.lvls.getInteger("enemies") + "", 110, 195);
@@ -151,9 +156,12 @@ public class LevelComplete extends GameState {
             textFont.draw(sb, String.valueOf(scoreCount), 110, 100);
         }
 
+        if(compareScore == getScore()) {
+            textFont.draw(sb, "NEW HIGHSCORE!", 100, 40);
+        }
+
         sb.end();
 
-        setScore();
 
     }
 
@@ -168,18 +176,19 @@ public class LevelComplete extends GameState {
         crystalScore = Game.lvls.getInteger("crystals") * 100;
         enemyScore = Game.lvls.getInteger("enemies") * 100;
         hitScore = Game.lvls.getInteger("hits");
+        timescore = (60 - (Play.gettime()/1000)) * 1000;
         hearthsLeft = Player.returnHealth() * 2;
 
         if (hitScore == 0)
-            totalScore=  (crystalScore + enemyScore) * hearthsLeft * 5;
+            totalScore = (int) ((int) ((timescore * hearthsLeft) + ((enemyScore +crystalScore)*5))* 1.5f);
         else
-            totalScore=  (crystalScore + enemyScore) * hearthsLeft;
+            totalScore= (int) ((timescore * hearthsLeft) + ((enemyScore +crystalScore)*5));
 
         return totalScore;
     }
 
     public void setScore(){
-        int compareScore = Game.scores.getInteger("score"+String.valueOf(Play.level));
+        compareScore = Game.scores.getInteger("score"+String.valueOf(Play.level));
         if(compareScore < totalScore) {
             Game.scores.putInteger("score" + String.valueOf(Play.level), totalScore);
             Game.scores.flush();

@@ -59,6 +59,8 @@ public class GameOver extends GameState {
         }
         else if(exitButton.isClicked()){
             gsm.setState(GameStateManager.MENU);
+            game.pauseMusic();
+            game.resumeMenuMusic();
         }
 
     }
