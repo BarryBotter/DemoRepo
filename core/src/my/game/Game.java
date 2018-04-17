@@ -190,7 +190,6 @@ public class Game implements ApplicationListener {
 	public void pauseMusic(){
 	    res.getMusic("bbsong").pause();
     }
-    public void resumeMusic(){
-		res.getMusic("bbsong").play();
+    public void resumeMusic(){ res.getMusic("bbsong").play();
 	}
 }
