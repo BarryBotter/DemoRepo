@@ -83,16 +83,15 @@ public class Game implements ApplicationListener {
 			scores.flush();
 		}
 
-		res.loadMusic("res/music/bbsong.ogg", "bbsong");
-		res.getMusic("bbsong").setLooping(true);
+		res.getMusic("theme").setLooping(true);
 		if (prefs.getBoolean("sound")) {
 			SOUND_LEVEL = 1;
-			res.getMusic("bbsong").setVolume(1);
-			res.getMusic("bbsong").play();
+			res.getMusic("theme").setVolume(1);
+			res.getMusic("theme").play();
 		}
 		else if (prefs.getBoolean("sound") == false) {
 			SOUND_LEVEL = 0;
-			res.getMusic("bbsong").setVolume(0);
+			res.getMusic("theme").setVolume(0);
 		}
 	}
 
@@ -173,16 +172,23 @@ public class Game implements ApplicationListener {
 		res.loadSound("res/sfx/meleeHit.mp3", "melee");
         res.loadSound("res/sfx/pickupSound.mp3", "pickup");
 
+        // music
+		res.loadMusic("res/music/menuSong.mp3","theme");
+		res.loadMusic("res/music/bbsong.ogg", "bbsong");
+
+
 	}
 
 	public void isMusicPlaying(){
 
 		if (prefs.getBoolean("sound")) {
 			res.getMusic("bbsong").setVolume(1);
-			res.getMusic("bbsong").play();
+			res.getMusic("theme").setVolume(1);
+			res.getMusic("theme").play();
 		}
 		else if (prefs.getBoolean("sound") == false) {
 			res.getMusic("bbsong").setVolume(0);
+			res.getMusic("theme").setVolume(0);
 		}
 
 	}
@@ -191,5 +197,11 @@ public class Game implements ApplicationListener {
 	    res.getMusic("bbsong").pause();
     }
     public void resumeMusic(){ res.getMusic("bbsong").play();
+	}
+
+	public void pauseMenuMusic(){
+		res.getMusic("theme").pause();
+	}
+	public void resumeMenuMusic(){ res.getMusic("theme").play();
 	}
 }

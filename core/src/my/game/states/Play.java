@@ -175,6 +175,9 @@ public class Play extends GameState {
 
         startTime = System.currentTimeMillis();
 
+        game.pauseMenuMusic();
+        game.resumeMusic();
+
         Gdx.input.setCatchBackKey(true);
 
     }
@@ -227,6 +230,8 @@ public class Play extends GameState {
 
                 // Pause menu left button touched. Goes to menu.
                 else if (pauseMenuLeftButtonTouched(touchPoint.x, touchPoint.y) && !Gdx.graphics.isContinuousRendering()) {
+                    game.pauseMusic();
+                    game.resumeMenuMusic();
                     gsm.setState(GameStateManager.LEVEL_SELECT);
                 }
 
@@ -334,7 +339,6 @@ public class Play extends GameState {
             }
 
             time = System.currentTimeMillis() - startTime;
-            System.out.println(time);
 
         }
 
