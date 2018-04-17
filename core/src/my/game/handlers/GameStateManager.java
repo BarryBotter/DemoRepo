@@ -36,7 +36,7 @@ public class GameStateManager {
     public ImageButton.ImageButtonStyle
             playStyle,optionStyle,exitStyle,
             toothStyle,backStyle,rightStyle, soundStyle,
-            easyStyle,normalStyle,hardStyle;
+            bubbleStyle, easyStyle,normalStyle,hardStyle;
 
     Texture tex;
     TextureRegion menuButtons[];
@@ -126,7 +126,7 @@ public class GameStateManager {
         TextureRegion tooth_easy = new TextureRegion(game.res.getTexture("easy"));
         TextureRegion tooth_normal = new TextureRegion(game.res.getTexture("normal"));
         TextureRegion tooth_hard = new TextureRegion(game.res.getTexture("hard"));
-
+        TextureRegion bubble = new TextureRegion(game.res.getTexture("bubble"));
 
         easyStyle = new  ImageButton.ImageButtonStyle();
         easyStyle.up = new TextureRegionDrawable(tooth_easy);
@@ -134,10 +134,11 @@ public class GameStateManager {
         normalStyle.up = new TextureRegionDrawable(tooth_normal);
         hardStyle = new  ImageButton.ImageButtonStyle();
         hardStyle.up = new TextureRegionDrawable(tooth_hard);
-
         soundStyle = new ImageButton.ImageButtonStyle();
         soundStyle.imageUp = new TextureRegionDrawable(sound_off);
         soundStyle.imageChecked = new TextureRegionDrawable(sound_on);
+        bubbleStyle = new ImageButton.ImageButtonStyle();
+        bubbleStyle.imageUp = new TextureRegionDrawable(bubble);
         backStyle = new ImageButton.ImageButtonStyle();
         backStyle.imageUp = new TextureRegionDrawable(back);
         rightStyle = new ImageButton.ImageButtonStyle();

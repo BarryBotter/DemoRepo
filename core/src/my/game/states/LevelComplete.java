@@ -32,7 +32,6 @@ public class LevelComplete extends GameState {
 
     private TextureRegion[] font;
     private BitmapFont textFont;
-    private FreeTypeFontGenerator generator;
 
     private int crystalScore;
     private int enemyScore;
@@ -57,14 +56,7 @@ public class LevelComplete extends GameState {
             font[i] = new TextureRegion(tex, 32 + i * 9, 16, 9, 9);
         }
 
-        generator = new FreeTypeFontGenerator(Gdx.files.internal("res/font/Gauge-Regular.ttf"));
-        FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-        parameter.size = 16;
-        parameter.shadowOffsetX = 3;
-        parameter.shadowOffsetY = 3;
-        parameter.color = Color.GREEN;
-        textFont = generator.generateFont(parameter); // font size 12 pixels
-
+        textFont = game.textFont;
 
         hearthScore =  Game.lvls.getInteger("hits");
 
@@ -157,7 +149,7 @@ public class LevelComplete extends GameState {
 
     @Override
     public void dispose() {
-      generator.dispose();
+
     }
 
 

@@ -85,7 +85,7 @@ public class Options extends GameState {
 
         //nameEditButton, makes a MyTextInputListener
         nameEditButton = new ImageButton(skin);
-        nameEditButton.setStyle(gsm.toothStyle);
+        nameEditButton.setStyle(gsm.bubbleStyle);
         nameEditButton.setSize(col_width,col_width);
         nameEditButton.addListener(new InputListener(){
             @Override
@@ -151,15 +151,17 @@ public class Options extends GameState {
         Table table = new Table();
         table.center();
         table.row();//first row
-        table.add(logo).colspan(4).height(row_height*5).width(col_width*4);
+        table.add().width(col_width);
+        table.add(logo).colspan(5).height(row_height*5).width(col_width*4);
 /*        table.row();//filler row
         table.add().height(row_height);*/
         table.row();//second row
-        table.add(nameEditButton);
+        table.add(nameEditButton).colspan(2);
         table.add(nameLabel).width(col_width*2);
         table.add(difficultyButton);
         table.add(difficultyLabel).width(col_width*2);
         table.row();//third row
+        table.add().width(col_width);
         table.add(soundButton);
         table.add(soundLabel);
         table.add().width(col_width*2);

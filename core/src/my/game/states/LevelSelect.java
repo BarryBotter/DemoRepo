@@ -7,14 +7,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import my.game.Game;
@@ -60,29 +57,8 @@ public class LevelSelect extends GameState {
     }
 
     private void buttons(){
-        if (Play.level < 5)
-        {
-            lvlImg = new Image(Game.res.getTexture("olvi"));
-        }
-        else{
-            lvlImg = new Image(Game.res.getTexture("testibg"));
-        }
-        lvlImg.setSize(width/2,height/2);
-        lvlImg.setPosition(width/4,height/3);
-        lvlImg.addListener(new InputListener(){
-            @Override
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                if ( event.getStageX() > width/4 && event.getStageX() < width*0.75f
-                        && Play.level > 0 && Play.level <10) {
-                    dispose();
-                    gsm.setState(GameStateManager.PLAY);
-                }
-            }
-            @Override
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                return true;}
-        });
-        stage.addActor(lvlImg);
+
+        updateImg();
 
         Table table = new Table();
         table.left().bottom();
@@ -118,7 +94,7 @@ public class LevelSelect extends GameState {
         table.add(tutorialButton);
 
         stage.addActor(table);
-        table.debug();
+        //table.debug();
 
         //move to previous lvl
         leftButton = new ImageButton(mySkin);
@@ -131,6 +107,7 @@ public class LevelSelect extends GameState {
                 if ( event.getStageX() < width/4 && leftButton.isPressed() && Play.level > 1) {
                     Play.level -= 1;
                     lvlname = "Level number " + Play.level;
+                    updateImg();
                 }
             }
             @Override
@@ -150,6 +127,7 @@ public class LevelSelect extends GameState {
                 if (event.getStageX() > width*0.75  && rightButton.isPressed() && Play.level < 9) {
                     Play.level += 1;
                     lvlname = "Level number " + Play.level;
+                    updateImg();
                 }
             }
             @Override
@@ -157,6 +135,31 @@ public class LevelSelect extends GameState {
                 return true;}
         });
         stage.addActor(rightButton);
+    }
+
+    private void updateImg(){
+        if (Play.level < 5) {
+            lvlImg = new Image(Game.res.getTexture("olvi"));
+        }
+        else{
+            lvlImg = new Image(Game.res.getTexture("testibg"));
+        }
+        lvlImg.setSize(width/2,height/2);
+        lvlImg.setPosition(width/4,height/3);
+        lvlImg.addListener(new InputListener(){
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                if ( event.getStageX() > width/4 && event.getStageX() < width*0.75f
+                        && Play.level > 0 && Play.level <10) {
+                    dispose();
+                    gsm.setState(GameStateManager.PLAY);
+                }
+            }
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                return true;}
+        });
+        stage.addActor(lvlImg);
     }
 
     public void handleInput() {
@@ -185,13 +188,6 @@ public class LevelSelect extends GameState {
         stage.act();
         stage.draw();
     }
-
-    void drawLvlImg(Image img, int x, int y, int width, int height, SpriteBatch sb){
-        img.setSize(width,height);
-        img.setPosition(x,y);
-        img.draw(sb,1);
-    }
-
 
     @Override
     public void dispose() {

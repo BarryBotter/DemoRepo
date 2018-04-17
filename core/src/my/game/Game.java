@@ -3,6 +3,7 @@ package my.game;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -41,7 +42,7 @@ public class Game implements ApplicationListener {
 	public OrthographicCamera getHUDCamera(){return hudCam;}
 
 	public Skin mySkin;
-	public BitmapFont font12,font18,font24;
+	public BitmapFont font12,font18,font24,textFont;
 
 
 	@Override
@@ -133,6 +134,11 @@ public class Game implements ApplicationListener {
 		font18 = generator.generateFont(parameter); // font size 18 pixels
 		parameter.size = 24;
 		font24 = generator.generateFont(parameter); // font size 24 pixels
+		parameter.size = 16;
+		parameter.shadowOffsetX = 3;
+		parameter.shadowOffsetY = 3;
+		parameter.color = Color.GREEN;
+		textFont = generator.generateFont(parameter);
 		generator.dispose(); // don't forget to dispose to avoid memory leaks!
 	}
 
@@ -156,6 +162,7 @@ public class Game implements ApplicationListener {
 		res.loadTexture("res/UI_final/tooth_easy_80.png","easy");
 		res.loadTexture("res/UI_final/tooth_normal_80.png","normal");
 		res.loadTexture("res/UI_final/tooth_hard_80.png","hard");
+		res.loadTexture("res/UI_final/tooth_bubble_120.png","bubble");
 		res.loadTexture("res/UI_final/tutorial.png","tutorial");
 		res.loadTexture("res/images/Game_Over.png", "gameover");
 		res.loadTexture("res/background/testimaa.png","bgone");
