@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" tiledversion="2018.03.21" orientation="orthogonal" renderorder="right-down" width="78" height="8" tilewidth="32" tileheight="32" infinite="0" nextobjectid="69">
- <tileset firstgid="1" name="blocks" tilewidth="32" tileheight="32" tilecount="3" columns="3">
-  <image source="blocks.png" width="96" height="32"/>
+ <tileset firstgid="1" name="blocks" tilewidth="32" tileheight="32" tilecount="4" columns="4">
+  <image source="demoblock.png" width="128" height="32"/>
  </tileset>
- <tileset firstgid="4" source="demoblock.tsx"/>
+ <tileset firstgid="5" source="demoblock.tsx"/>
  <layer name="platforms" width="78" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2DwAzYi8SigLhgN51EwCkYBCFCa/4ktw4kpbyipD2ihh9ywodQsAIrtAas=
+   eJxjYBgFo2DwA3Yi8SigLhgN51EwCkYBCFCa/4ktw4kpbyipD2ihh9ywodQsACB8AfI=
   </data>
  </layer>
  <layer name="corner" width="78" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2BwA/aBdsAIBSwD7YBRMApGwaAAlJbB1CzDKTGLHL20qn+oYS4AecgANg==
+   eJxjYBgFo2BwA46BdsAIBawD7YBRMApGwaAAlJbB1CzDKTGLHL20qn+oYS4AjDQAPg==
   </data>
  </layer>
  <layer name="jump" width="78" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUjIJRMApGwSgYnIBloB1AAqCnWwEP0AAJ
+   eJxjYBgFo2AUjIJRMApGwSgYnIB1oB1AAqCnWwERVAAL
   </data>
  </layer>
  <objectgroup name="win">

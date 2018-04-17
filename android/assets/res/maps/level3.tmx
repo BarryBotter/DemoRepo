@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" tiledversion="2018.03.21" orientation="orthogonal" renderorder="right-down" width="200" height="8" tilewidth="32" tileheight="32" infinite="0" nextobjectid="41">
- <tileset firstgid="1" name="blocks" tilewidth="32" tileheight="32" tilecount="3" columns="3">
-  <image source="blocks.png" width="96" height="32"/>
+ <tileset firstgid="1" name="blocks" tilewidth="32" tileheight="32" tilecount="4" columns="4">
+  <image source="demoblock.png" width="128" height="32"/>
  </tileset>
- <tileset firstgid="4" source="demoblock.tsx"/>
+ <tileset firstgid="5" source="demoblock.tsx"/>
  <layer name="platforms" width="200" height="8">
   <data encoding="base64" compression="zlib">
-   eJzt17EOwCAIRVEWyv//sUuHurQIjRq8J2GEmJhnRAQAAFR2OerPPgDz2F2AxwlvOJnAlxNy8GRCLtCr8KfP7CdV8+DZ3SJ3Hpm7qkcDc2ZlIHumkT59qR12++gdZaoBYB8EQA==
+   eJzt17EOwCAIRVEmyv9/sUuHurQIjRq8J2GEmJhnRAQAAFR2OerPPgDz2F2AxwlvOJnAlxNy8GRCLtCr8KfP7CdV8+DZ3SJ3Hpm7qkcDc2ZlIHumkT59qR12++gdZaoBNkQE9Q==
   </data>
  </layer>
  <objectgroup name="crystals">
@@ -46,12 +46,12 @@
  </objectgroup>
  <layer name="jump" width="200" height="8">
   <data encoding="base64" compression="zlib">
-   eJzt1jEKACAQA8ErFP//Yz8gyGERhBlIv2WqAACAn83L4GSkAwCAiJUOeOTD0LEBbu4AOA==
+   eJzt1jEKACAQA8FrFP//Yj8gyGERhBlIv2WqAACAn83L4GSkAwCAiJUOeOTD0LEB5/IAQw==
   </data>
  </layer>
  <layer name="corner" width="200" height="8">
   <data encoding="base64" compression="zlib">
-   eJztk0EOgDAIBDmI/3+yR03TRgu2sMAkxnqSDhmioihWcr58e4etByhC0/ZwmEwhgwmjD6lTj7tA8L0SjzvpwYTTBzrl+AahDybbPhAcaeHBORtWu9Y439VHhg6ejJqoPnTM+OPmLf3fX31EaEBzhy9NZO+j98wg8Rfduba7Xd1G7uMCCyIBIg==
+   eJztk0EOgDAIBLmI//+xR03TRgu2sMAkxnqSDhmioihWcr58e4etByhC0/ZwmEwhgwmjD6lTj7tA8L0SjzvpwYTTBzrl+AahDybbPhAcaeHBORtWu9Y439VHhg6ejJqoPnTM+OPmLf3fX31EaEBzhy9NZO+j98wg8Rfduba7Xd1G7uMCGJwBXw==
   </data>
  </layer>
  <objectgroup name="win">
