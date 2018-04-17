@@ -92,6 +92,9 @@ public class Play extends GameState {
 
     private MyContactListener cl;
 
+    private static long startTime;
+    private static long time;
+
     private Player player;
     private Projectile bullet;
     private Enemy enemy;
@@ -169,6 +172,8 @@ public class Play extends GameState {
 
         //setup touch areas
         setupTouchControlAreas();
+
+        startTime = System.currentTimeMillis();
 
         Gdx.input.setCatchBackKey(true);
 
@@ -328,6 +333,9 @@ public class Play extends GameState {
                 }
             }
 
+            time = System.currentTimeMillis() - startTime;
+            System.out.println(time);
+
         }
 
     private boolean rightSideTouched(float x, float y) {
@@ -369,10 +377,10 @@ public class Play extends GameState {
        //cam.setPosition(player.getposition().x * PPM + P_WIDTH / 4, P_HEIGHT / 2);
 
         //cam without bounds and set to bottom
-        if (cam.position.x < tileMapWidth *28){
+        //if (cam.position.x < tileMapWidth *28){
             cam.position.set(player.getposition().x * PPM + P_WIDTH / 4, P_HEIGHT/ 2, 0);
             cam.update();
-        }
+        //}
 
         cam.update();
 
@@ -945,5 +953,9 @@ public class Play extends GameState {
             world.destroyBody(b);
         }
         trapBodies.clear();
+    }
+
+    public static long gettime(){
+        return time;
     }
 }

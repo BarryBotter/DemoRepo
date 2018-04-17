@@ -37,7 +37,7 @@ public class LevelComplete extends GameState {
     private int crystalScore;
     private int enemyScore;
     private int hitScore;
-    private int scoreCounter = 0;
+    private float time;
     private int hearthScore;
     private int totalScore;
     private int hearthsLeft;
@@ -88,6 +88,7 @@ public class LevelComplete extends GameState {
     public void handleInput() {
 
         if (playButton.isClicked()) {
+            Play.level++;
             gsm.setState(GameStateManager.PLAY);
             game.resumeMusic();
         } else if (exitButton.isClicked()) {
@@ -140,6 +141,7 @@ public class LevelComplete extends GameState {
         textFont.draw(sb, game.lvls.getInteger("enemies") + "", 110, 195);
         textFont.draw(sb, hearthScore + "",110,175);
         textFont.draw(sb, String.valueOf(Player.returnHealth()),110,155);
+        textFont.draw(sb, String.valueOf(settime()) + "s",110,135);
 
         for (int i = 0; i < totalScore /1000; i++) {
             if (scoreCount == totalScore)
@@ -182,5 +184,10 @@ public class LevelComplete extends GameState {
             Game.scores.putInteger("score" + String.valueOf(Play.level), totalScore);
             Game.scores.flush();
         }
+    }
+
+    public float settime(){
+        time = Play.gettime() / 1000;
+        return time;
     }
 }
