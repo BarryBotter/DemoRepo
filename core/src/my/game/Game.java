@@ -93,7 +93,7 @@ public class Game implements ApplicationListener {
 			res.getMusic("menutheme").setVolume(1);
 			res.getMusic("menutheme").play();
 		}
-		else if (prefs.getBoolean("sound") == false) {
+		else if (!prefs.getBoolean("sound")) {
 			SOUND_LEVEL = 0;
 			res.getMusic("menutheme").setVolume(0);
 		}
@@ -140,18 +140,15 @@ public class Game implements ApplicationListener {
 		res.loadTexture("res/images/hud.png","hud");
 		res.loadTexture("res/images/bgs.png","bg");
 		res.loadTexture("res/images/menu.png","menu");
-		//res.loadTexture("kuva.png","olvi");
+		res.loadTexture("kuva.png","olvi");
 		res.loadTexture("res/UI_final/rebg.png","menubg");
 		res.loadTexture("res/UI_final/resized_paavalikko.png","main");
 		res.loadTexture("res/UI_final/menu_logo.png","menulogo");
-		res.loadTexture("res/images/GameOverScreen.png", "gameOver");
 		res.loadTexture("res/background/testimaa.png","bgone");
 		res.loadTexture("res/background/rsz_karkkimaas.png","bgones");
 		res.loadTexture("res/background/mountains.png", "mountain");
-		res.loadTexture("res/UI_assets/pauseMenu.png","pauseMenu");
 		res.loadTexture("res/images/complete.png", "complete");
 		res.loadTexture("res/images/testibg.png", "testibg");
-		res.loadTexture("res/images/toothpaste.png","toothpaste");
 		res.loadTexture("res/images/testitausta.png","taustatesti");
 
 		//Player animations
@@ -159,6 +156,7 @@ public class Game implements ApplicationListener {
 		res.loadTexture("res/playerAnimations/playerAttack.png","playerAttack");
 
 		//UI
+		res.loadTexture("res/UI_assets/GameOverScreen.png", "gameOver");
 		res.loadTexture("res/UI_assets/pauseMenu.png","pauseMenu");
 		res.loadTexture("res/UI_assets/buttons.png","buttonMap");
 		res.loadTexture("res/UI_assets/HUD_Icons.png","hudIcons");
@@ -201,7 +199,7 @@ public class Game implements ApplicationListener {
 			res.getMusic("bbsong").setVolume(1);
 			res.getMusic("menutheme").play();
 		}
-		else if (prefs.getBoolean("sound") == false) {
+		else if (!prefs.getBoolean("sound")) {
 			res.getMusic("bbsong").setVolume(0);
 			res.getMusic("menutheme").setVolume(0);
 		}
@@ -214,6 +212,8 @@ public class Game implements ApplicationListener {
     public void resumeMusic(){
 		res.getMusic("bbsong").play();
 	}
+	public void decreaseMusicLevel() { res.getMusic("bbsong").setVolume(0.33f); }
+	public void increaseMusicLevel() { res.getMusic("bbsong").setVolume(1); }
 
 	public void pauseMenuMusic(){
 		res.getMusic("menutheme").pause();
