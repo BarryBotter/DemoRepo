@@ -56,6 +56,17 @@ public class Options extends GameState {
         createButtons(mySkin);
         optionsLayout(nameEditButton,difficultyButton,soundButton);
 
+        /*Gdx.input.setInputProcessor(new InputAdapter() {
+            @Override
+            public boolean keyDown (int keycode) {
+                // Go back to menu when Andoird back button is pressed.
+                if(keycode == Input.Keys.BACK) {
+                    gsm.setState(GameStateManager.MENU);
+                }
+                return false;
+            }
+        });*/
+
     }
 
     private void setup(){
@@ -272,16 +283,6 @@ public class Options extends GameState {
 
     @Override
     public void update(float dt) {
-        Gdx.input.setInputProcessor(new InputAdapter() {
-            @Override
-            public boolean keyDown (int keycode) {
-                // Go back to menu when Andoird back button is pressed.
-                if(keycode == Input.Keys.BACK) {
-                    gsm.setState(GameStateManager.MENU);
-                }
-                return false;
-            }
-        });
     }
 
     @Override

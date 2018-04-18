@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
 
 import my.game.Game;
-
+//todo No time to do this for now, maybe later
 public class FinalBoss extends B2DSprite{
     public FinalBoss(Body body) {
         super(body);

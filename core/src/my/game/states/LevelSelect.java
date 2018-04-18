@@ -185,7 +185,7 @@ public class LevelSelect extends GameState {
     @Override
     public void update(float dt) {
         levelScore = Game.scores.getInteger("score"+ String.valueOf(Play.level));
-
+/*
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
             public boolean keyDown (int keycode) {
@@ -195,7 +195,7 @@ public class LevelSelect extends GameState {
                 }
                 return false;
             }
-        });
+        });*/
     }
 
     @Override

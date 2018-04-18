@@ -119,6 +119,13 @@ public class MyContactListener implements ContactListener {
                 Game.res.getSound("hit").play();
                 trapBodiesToRemove.add(fb.getBody());
                 bulletBodiesToRemove.add(fa.getBody());
+                Player.increaseEnemyKC();
+            }
+            else if (fa.getUserData().equals("melee")) {
+                Game.res.getSound("hit").play();
+                trapBodiesToRemove.add(fb.getBody());
+                meleeBodiesToRemove.add(fa.getBody());
+                Player.increaseEnemyKC();
             }
         }
         if (fa.getUserData() != null && fa.getUserData().equals("trap")) {
@@ -131,6 +138,13 @@ public class MyContactListener implements ContactListener {
                 Game.res.getSound("hit").play();
                 trapBodiesToRemove.add(fa.getBody());
                 bulletBodiesToRemove.add(fb.getBody());
+                Player.increaseEnemyKC();
+            }
+            else if (fb.getUserData().equals("melee")) {
+                Game.res.getSound("hit").play();
+                trapBodiesToRemove.add(fa.getBody());
+                meleeBodiesToRemove.add(fb.getBody());
+                Player.increaseEnemyKC();
             }
         }
 

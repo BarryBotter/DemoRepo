@@ -139,9 +139,7 @@ public class Play extends GameState {
         createBullet();
 
         //Create enemy
-        if(level != 9) {
-            createEnemy();
-        }
+        createEnemy();
 
         //create melee hitbox
         createMeleeHitBox();
@@ -184,13 +182,14 @@ public class Play extends GameState {
                 // Pause button touched
                 if(topRightSideTouched(touchPoint.x, touchPoint.y) && Gdx.graphics.isContinuousRendering()) {
                     Gdx.graphics.setContinuousRendering(false);
+                    game.decreaseMusicLevel();
                 }
 
                 // Fighting stuff.
                 else if (rightSideTouched(touchPoint.x, touchPoint.y) && Gdx.graphics.isContinuousRendering()) {
                     //When player runs out of ammo, start melee mode.
                     if (Player.returnNumberOfAmmo() == 0) {
-                        meleeHitBox.meleeManager(player.getBody());
+                        meleeHitBox.meleeManager();
                     } else if (Player.returnNumberOfAmmo() <= Player.returnMaxAmmo()) {
                         bullet.bulletManager(player.getBody(),touchPoint.x,touchPoint.y);
                     }
@@ -215,16 +214,19 @@ public class Play extends GameState {
                 // Pause menu left button touched. Goes to menu.
                 else if (pauseMenuLeftButtonTouched(touchPoint.x, touchPoint.y) && !Gdx.graphics.isContinuousRendering()) {
                     gsm.setState(GameStateManager.LEVEL_SELECT);
+                    game.increaseMusicLevel();
                 }
 
                 // Pause menu middle button touched. Restarts level.
                 else if (pauseMenuMiddleButtonTouched(touchPoint.x, touchPoint.y) && !Gdx.graphics.isContinuousRendering()) {
                     gsm.setState(GameStateManager.PLAY);
+                    game.increaseMusicLevel();
                 }
 
                 // Pause menu right button touched. Resumes game.
                 else if (pauseMenuRightButtonTouched(touchPoint.x, touchPoint.y) && !Gdx.graphics.isContinuousRendering()) {
                     Gdx.graphics.setContinuousRendering(true);
+                    game.increaseMusicLevel();
                 }
                 return super.touchDown(x, y, pointer, button);
             }
@@ -238,6 +240,7 @@ public class Play extends GameState {
                 if(keycode == Input.Keys.BACK) {
                     if(Gdx.graphics.isContinuousRendering()) {
                         Gdx.graphics.setContinuousRendering(false);
+                        game.decreaseMusicLevel();
                     }
                 }
                 return false;
@@ -251,11 +254,8 @@ public class Play extends GameState {
             bulletRemover();
             meleeHitBoxRemover();
             trapRemover();
-            if(level != 9) {
-                enemyRemover();
-                enemy.enemyManager();
-            }
-
+            enemyRemover();
+            enemy.enemyManager();
 
             player.update(dt);
 
@@ -266,17 +266,15 @@ public class Play extends GameState {
 
             for (int i = 0; i < meleeHitBoxes.size; i++) {
                 meleeHitBoxes.get(i).update(dt);
-                meleeHitBox.checkMeleeCoolDown();
+                meleeHitBox.checkMeleeCoolDown(player.getBody());
             }
 
             for (int i = 0; i < crystals.size; i++) {
                 crystals.get(i).update(dt);
             }
 
-            if(level != 9) {
-                for (int i = 0; i < enemies.size; i++) {
+            for (int i = 0; i < enemies.size; i++) {
                     enemies.get(i).update(dt);
-                }
             }
 
             for (int i = 0; i < traps.size; i++) {
@@ -410,10 +408,8 @@ public class Play extends GameState {
             crystals.get(i).render(sb);
         }
         //draw enemy
-        if(level != 9) {
-            for (int i = 0; i < enemies.size; i++) {
-                enemies.get(i).render(sb);
-            }
+        for (int i = 0; i < enemies.size; i++) {
+            enemies.get(i).render(sb);
         }
         //draw traps
         for (int i = 0; i < traps.size; i++) {
@@ -677,7 +673,7 @@ public class Play extends GameState {
                 fdef.shape = cshape;
                 fdef.restitution = 1;
                 fdef.filter.categoryBits = BIT_TRAP;
-                fdef.filter.maskBits = BIT_PLAYER | BIT_GROUND | BIT_BULLET;
+                fdef.filter.maskBits = BIT_PLAYER | BIT_GROUND | BIT_BULLET | BIT_MELEE;
 
                 Body body = world.createBody(bdef);
                 body.createFixture(fdef).setUserData("trap");
@@ -790,7 +786,7 @@ public class Play extends GameState {
         shape.setAsBox(13 / PPM, 15 / PPM);
         fdef.shape = shape;
         fdef.filter.categoryBits = BIT_MELEE;
-        fdef.filter.maskBits = BIT_ENEMY;
+        fdef.filter.maskBits = BIT_ENEMY | BIT_TRAP;
         body.createFixture(fdef).setUserData("melee");
         shape.dispose();
 

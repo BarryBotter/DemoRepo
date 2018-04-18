@@ -97,7 +97,7 @@ public class HUD {
 
         //draw pause menu if game is paused
         if(!Gdx.graphics.isContinuousRendering()) {
-            sb.draw(pauseMenuTexture, (Game.V_WIDTH / 2) - (pauseMenuTexture.getWidth() / 2 ),(Game.V_HEIGHT / 2 ) - (pauseMenuTexture.getHeight() / 2), pauseMenuTexture.getWidth(),pauseMenuTexture.getHeight());
+            sb.draw(pauseMenuTexture, 0,0, pauseMenuTexture.getWidth(),pauseMenuTexture.getHeight());
         } else {
             //draw pause button only when the game is not paused.
             sb.draw(pauseButton,Game.V_WIDTH - (pauseButton.getRegionWidth() / DOWNSCALE_MULTIPLIER) - 5,
