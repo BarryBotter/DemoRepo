@@ -4,19 +4,20 @@
   <image source="demoblock.png" width="128" height="32"/>
  </tileset>
  <tileset firstgid="5" source="demoblock.tsx"/>
+ <tileset firstgid="9" source="gameblocks.tsx"/>
  <layer name="platforms" width="78" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2DwA3Yi8SigLhgN51EwCkYBCFCa/4ktw4kpbyipD2ihh9ywodQsACB8AfI=
+   eJxjYBgFo2DwAx4i8SigLhgN51EwCkYBCFCa/4ktw4kpbyipD2ihh9ywodQsAAwpA1U=
   </data>
  </layer>
  <layer name="corner" width="78" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2BwA46BdsAIBawD7YBRMApGwaAAlJbB1CzDKTGLHL20qn+oYS4AjDQAPg==
+   eJxjYBgFo2BwA66BdsAIBaPhPgpGwSgAAUrLAmqWJZSYRY5eWpWD1DAXAMH4AFE=
   </data>
  </layer>
  <layer name="jump" width="78" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUjIJRMApGwSgYnIB1oB1AAqCnWwERVAAL
+   eJxjYBgFo2AUjIJRMApGwSgYnIB7oB1AAqCnWwEabAAX
   </data>
  </layer>
  <objectgroup name="win">

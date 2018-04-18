@@ -4,17 +4,24 @@
   <image source="demoblock.png" width="128" height="32"/>
  </tileset>
  <tileset firstgid="5" source="demoblock.tsx"/>
+ <tileset firstgid="9" source="gameblocks.tsx"/>
  <layer name="platforms" width="40" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUjALaAPZBjgFesAEZ
+   eJxjYBgFo2AUjALaAB4i8EC6AwBFsAC1
   </data>
  </layer>
- <objectgroup name="text">
-  <object id="2" x="45.3333" y="72.5" width="368" height="77.6667">
-   <text fontfamily="MS Shell Dlg 2" pixelsize="33" wrap="1">Touch left side of the screen to jump</text>
-  </object>
- </objectgroup>
+ <layer name="corner" width="40" height="8">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUDFfABcScdOQPNQAAgLQAhg==
+  </data>
+ </layer>
+ <layer name="jump" width="40" height="8">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjIKRCQAFAAAB
+  </data>
+ </layer>
  <objectgroup name="win">
   <object id="1" x="1205.33" y="174.667" width="70.6667" height="46.6667"/>
  </objectgroup>
+ <objectgroup name="crystals"/>
 </map>

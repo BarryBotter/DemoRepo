@@ -4,9 +4,10 @@
   <image source="demoblock.png" width="128" height="32"/>
  </tileset>
  <tileset firstgid="5" source="demoblock.tsx"/>
+ <tileset firstgid="9" source="gameblocks.tsx"/>
  <layer name="platforms" width="200" height="8">
   <data encoding="base64" compression="zlib">
-   eJzt17EOwCAIRVEmyv9/sUuHurQIjRq8J2GEmJhnRAQAAFR2OerPPgDz2F2AxwlvOJnAlxNy8GRCLtCr8KfP7CdV8+DZ3SJ3Hpm7qkcDc2ZlIHumkT59qR12++gdZaoBNkQE9Q==
+   eJzt17EOABAMRVGbxf9/r8liUUoar/ckHYlHSpQCAACUNWOdjAMQi17Ejgz3uGou3KPeA7MsOWGn8BZ4/ie/Zl6x/vl289eDuX+s17zrUtiDIeJ8O3TlCLQ=
   </data>
  </layer>
  <objectgroup name="crystals">
@@ -46,12 +47,12 @@
  </objectgroup>
  <layer name="jump" width="200" height="8">
   <data encoding="base64" compression="zlib">
-   eJzt1jEKACAQA8FrFP//Yj8gyGERhBlIv2WqAACAn83L4GSkAwCAiJUOeOTD0LEB5/IAQw==
+   eJzt1rEJAEAIA0B799/XBR6+E4J3kD5FilQBAADJ+hN4sQ0AuCn9A6T3Z9cATHcAeg==
   </data>
  </layer>
  <layer name="corner" width="200" height="8">
   <data encoding="base64" compression="zlib">
-   eJztk0EOgDAIBLmI//+xR03TRgu2sMAkxnqSDhmioihWcr58e4etByhC0/ZwmEwhgwmjD6lTj7tA8L0SjzvpwYTTBzrl+AahDybbPhAcaeHBORtWu9Y439VHhg6ejJqoPnTM+OPmLf3fX31EaEBzhy9NZO+j98wg8Rfduba7Xd1G7uMCGJwBXw==
+   eJztlzkOwCAMBN0m4v/vjShQEEoUsMOxeEeioIE19hSIEEJ6chb7Y0oKPWV+Qv4kfOxXJrqBkFfrMN1fD4R5iyQ3UPIiQ09vEOYtd2NGXg/zkteIMBO9mFW75d4gY/zw4EHOmxP0Q09805Y/ferBKn7s4IClhhonvPvxtFrP0Ny7M1bvRnlb4wRqry5f7gKx
   </data>
  </layer>
  <objectgroup name="win">

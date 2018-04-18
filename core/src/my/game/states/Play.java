@@ -455,7 +455,7 @@ public class Play extends GameState {
         shape.dispose();
 
         //create foot sensor
-        shape.setAsBox(15 / PPM, 2 / PPM, new Vector2(0, -17 / PPM), 0);
+        shape.setAsBox(15 / PPM, 2 / PPM, new Vector2(0, -20 / PPM), 0);
         fdef.shape = shape;
         fdef.filter.categoryBits = BIT_PLAYER;
         fdef.filter.maskBits = BIT_GROUND | BIT_CORNER | BIT_JUMP;

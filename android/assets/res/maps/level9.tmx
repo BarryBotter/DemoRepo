@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" tiledversion="2018.03.21" orientation="orthogonal" renderorder="right-down" width="100" height="10" tilewidth="32" tileheight="32" infinite="0" nextobjectid="7">
  <tileset firstgid="1" source="demoblock.tsx"/>
+ <tileset firstgid="5" source="gameblocks.tsx"/>
  <layer name="corner" width="100" height="10">
   <data encoding="base64" compression="zlib">
-   eJztwzEJAAAMA7Ae9a+5NgZLIAkAAAAf1VMHS08BkQ==
+   eJzt1b0KACAIhVGXft7/iaNBcDEouEXwnUlcFISrGaBRk365ugUAYIqZ3EOtyuTsByhnAsBvPCvJxTdWvyrauU87nOEGoLcATQ==
   </data>
  </layer>
  <objectgroup name="win">
@@ -11,26 +12,13 @@
  </objectgroup>
  <layer name="jump" width="100" height="10">
   <data encoding="base64" compression="zlib">
-   eJztwzENAAAIA7AF/6J554CDNmkCAADw0xyHtqQgAEE=
+   eJzt1rEKACAIRVE3+/8vbnESBMUEiXvgDTakkygC4BdqAYAOv0eqtXcsAIB9NEj1j5d1tmc0b/atY+rmvo2SAMc=
   </data>
  </layer>
- <objectgroup name="crystals">
-  <object id="3" x="1351.52" y="106.061">
-   <ellipse/>
-  </object>
-  <object id="4" x="1693.94" y="148.485">
-   <ellipse/>
-  </object>
-  <object id="5" x="1924.24" y="133.333" width="3.0303">
-   <ellipse/>
-  </object>
-  <object id="6" x="2215.15" y="136.364">
-   <ellipse/>
-  </object>
- </objectgroup>
+ <objectgroup name="crystals"/>
  <layer name="platforms" width="100" height="10">
   <data encoding="base64" compression="zlib">
-   eJztw6ENAAAIA7CF/49GzWNwbdIEAACoOQT4sF+AABM=
+   eJzt1yEOACAMA8BJ/v9iFAmBCQQwc5dU13VZBLzTkgBQY97hH5u8drgDADu7WCv7V27/LycdIx04HAER
   </data>
  </layer>
 </map>
