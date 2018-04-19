@@ -235,12 +235,13 @@ public class Game implements ApplicationListener {
 	public void pauseMusic(){
 	    res.getMusic("bbsong").pause();
     }
-    public void resumeMusic(){ res.getMusic("bbsong").play();
-	}
+    public void resumeMusic(){ res.getMusic("bbsong").play(); }
 
 	public void pauseMenuMusic(){
 		res.getMusic("theme").pause();
 	}
-	public void resumeMenuMusic(){ res.getMusic("theme").play();
-	}
+	public void resumeMenuMusic(){ res.getMusic("theme").play(); }
+
+	public void decreaseMusicLevel() { res.getMusic("bbsong").setVolume(0.33f); }
+	public void increaseMusicLevel() { res.getMusic("bbsong").setVolume(1); }
 }
