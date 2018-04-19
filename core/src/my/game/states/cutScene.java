@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.XmlReader;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import my.game.Game;
 import my.game.handlers.GameStateManager;
@@ -21,39 +21,47 @@ import my.game.handlers.GameStateManager;
  */
 
 public class cutScene extends GameState {
-    StretchViewport viewport;
     private TextureRegion bg,tutorialBg;
     private BitmapFont font;
-    private String dialogString = "default_string";
-    private int width = Game.V_WIDTH*2,height = Game.V_HEIGHT*2;
+    private String dialogString = "default_string",name;
+    private int width = 320,height = 240;
     private static Pixmap pixmap;
     private Texture pixmaptex;
     String[] strings;
-    public int dialogNumber = 0;
-    public boolean tutorialBool;
+    public static int dialogNumber; // changing this changes the dialog
+    private boolean tutorialBool; //draws tutorial or default background
+    private Texture tex,tutorial;
+    int i = 1;
 
     public cutScene(final GameStateManager gsm){
         super(gsm);
+        xmlRead();
+        if (dialogNumber == 1){
+            name = game.prefs.getString("name", "no name stored");
+            dialogString += " " + name;
+        }
+        //camera
+        bigCam.setToOrtho(false,640,480);
 
-        Texture tex = Game.res.getTexture("menubg"); //background
+        tex = Game.res.getTexture("menubg"); //background
         bg = new TextureRegion(tex,0,0,width,height);
 
-        //tutorial
-        Texture tutorial = Game.res.getTexture("tutorial");
-        tutorialBg = new TextureRegion(tutorial,0,0,width,height);
-        if (dialogNumber == 0) tutorialBool = true; //changes the background
-
-        //camera
-        viewport = new StretchViewport(width, height, cam);
-
-        //rectanglebox for dialogs
-        getPixmapRoundedRectangle(250,250,50, Color.LIGHT_GRAY);
-        pixmaptex = new Texture( pixmap );
-        pixmap.dispose();
-
         //Text in the box
-        font = game.font18;
-        xmlRead();
+        //font = game.font8;
+
+        //tutorial
+        tutorial = Game.res.getTexture("tutorial");
+        tutorialBg = new TextureRegion(tutorial,0,0,640,480);
+        if (dialogNumber == 0) {
+            tutorialBool = true; //changes the background
+            i = 2;
+            font = game.font18;
+            boxCreate(500,500,100);
+        }else {
+            //Text in the box
+            font = game.font8;
+            boxCreate(250,250,50);
+        }
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
@@ -62,7 +70,6 @@ public class cutScene extends GameState {
                 if (dialogNumber == 0){
                     tutorialBool = true;
                     dialogString = strings[dialogNumber];
-
                     dispose();
                     gsm.setState(GameStateManager.LEVEL_SELECT);
 
@@ -72,8 +79,10 @@ public class cutScene extends GameState {
                 else if (dialogNumber == 1) {
                     tutorialBool = false;
                     dialogString = strings[1];
-                    dialogString += " " + game.prefs.getString("name", "no name stored");
+                    dialogString += " " + name;
                     dialogNumber++;
+
+                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
                     return super.touchUp(screenX, screenY, pointer, button);
 
                 }
@@ -106,7 +115,15 @@ public class cutScene extends GameState {
             Gdx.app.log("string"+i, strings[i]);
             i++;
         }
-        dialogString = strings[0];//by default the dialogString is the first string/tutorial
+        dialogString = strings[dialogNumber];
+    }
+
+    private void boxCreate(int width,int height, int radius){
+        //rectanglebox for dialogs
+        //getPixmapRoundedRectangle(250,250,50, Color.LIGHT_GRAY);
+        getPixmapRoundedRectangle(width,height,radius, Color.LIGHT_GRAY);
+        pixmaptex = new Texture( pixmap );
+        pixmap.dispose();
     }
 
     @Override
@@ -124,11 +141,14 @@ public class cutScene extends GameState {
         sb.begin();
         if (tutorialBool){
             sb.draw(tutorialBg,0,0);
+            sb.draw(pixmaptex,width/8*2,10,width*0.75f*2,height/4*2);
+            font.draw(sb,dialogString,width*0.1875f *2,height/4*2-10);
         }else {
             sb.draw(bg,0,0);
+            sb.draw(pixmaptex,width/8,10,width*0.75f,height/4);
+            font.draw(sb,dialogString,width*0.1875f ,height/4-10);
         }
-        sb.draw(pixmaptex,width/8,10,width*0.75f,height/4);
-        font.draw(sb,dialogString,width*0.1875f ,height/4-10);
+        //sb.draw(pixmaptex,width/8,10,width*0.75f,height/4);
         sb.end();
     }
 

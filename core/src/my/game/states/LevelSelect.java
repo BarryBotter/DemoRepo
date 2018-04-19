@@ -85,6 +85,7 @@ public class LevelSelect extends GameState {
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 dispose();
+                cutScene.dialogNumber = 0;
                 gsm.setState(GameStateManager.CUTSCENE);
             }
             @Override

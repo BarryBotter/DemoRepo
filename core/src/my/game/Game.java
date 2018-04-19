@@ -28,7 +28,7 @@ public class Game implements ApplicationListener {
 
 	private SpriteBatch sb;
 	private static BoundedCamera cam;
-	private OrthographicCamera hudCam;
+	private OrthographicCamera hudCam,bigCam;
 
 	private GameStateManager gsm;
 
@@ -40,9 +40,10 @@ public class Game implements ApplicationListener {
 	public SpriteBatch getSpriteBatch(){return sb;}
 	public static BoundedCamera getCamera(){return cam;}
 	public OrthographicCamera getHUDCamera(){return hudCam;}
+	public OrthographicCamera getBigCam(){return bigCam;}
 
 	public Skin mySkin;
-	public BitmapFont font12,font18,font24,textFont;
+	public BitmapFont font8,font12,font18,font24,textFont;
 
 
 	@Override
@@ -58,6 +59,8 @@ public class Game implements ApplicationListener {
 		cam.setToOrtho(false, V_WIDTH,V_HEIGHT);
 		hudCam = new OrthographicCamera();
 		hudCam.setToOrtho(false, V_WIDTH, V_HEIGHT);
+		bigCam = new OrthographicCamera();
+		bigCam.setToOrtho(false,640,480);
 		mySkin = new Skin(Gdx.files.internal("res/skin/glassy-ui.json"));
 
 		gsm = new GameStateManager(this);
@@ -128,12 +131,14 @@ public class Game implements ApplicationListener {
 
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("res/fonts/Gauge-Regular.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+		parameter.size = 8;
+		font8 = generator.generateFont(parameter);
 		parameter.size = 12;
-		font12 = generator.generateFont(parameter); // font size 12 pixels
+		font12 = generator.generateFont(parameter);
 		parameter.size = 18;
-		font18 = generator.generateFont(parameter); // font size 18 pixels
+		font18 = generator.generateFont(parameter);
 		parameter.size = 24;
-		font24 = generator.generateFont(parameter); // font size 24 pixels
+		font24 = generator.generateFont(parameter);
 		parameter.size = 16;
 		parameter.shadowOffsetX = 3;
 		parameter.shadowOffsetY = 3;

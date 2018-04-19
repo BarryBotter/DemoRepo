@@ -290,7 +290,8 @@ public class Play extends GameState {
                 if (level == 1) {
                     unlockLevel();
                     Collected();
-                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
+                    cutScene.dialogNumber = 1;
+                    gsm.setState(GameStateManager.CUTSCENE);
                 } else if (level == 2) {
                     unlockLevel();
                     Collected();
