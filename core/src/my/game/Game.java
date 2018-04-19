@@ -169,7 +169,6 @@ public class Game implements ApplicationListener {
 		res.loadTexture("res/UI_final/tooth_hard_80.png","hard");
 		res.loadTexture("res/UI_final/tooth_bubble_120.png","bubble");
 		res.loadTexture("res/UI_final/tutorial.png","tutorial");
-		res.loadTexture("res/images/Game_Over.png", "gameover");
 		res.loadTexture("res/background/testimaa.png","bgone");
 		res.loadTexture("res/background/rsz_karkkimaas.png","bgones");
 		res.loadTexture("res/background/mountains.png", "mountain");
