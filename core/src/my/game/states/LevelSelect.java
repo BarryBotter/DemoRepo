@@ -1,8 +1,6 @@
 package my.game.states;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -19,30 +17,25 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import my.game.Game;
 import my.game.handlers.GameStateManager;
 
-
 public class LevelSelect extends GameState {
-
     private TextureRegion reg;
-    private int lvl;
-    Skin mySkin;
-    Stage stage;
-    private Button exitButton,tutorialButton,rightButton,leftButton;
-    Image lvlImg;
+    private Skin mySkin;
+    private Stage stage;
+    private Button rightButton,leftButton;
     private int width, height;
-    BitmapFont font,font2;
-    String lvlname,score,toothpaste;
-    private StretchViewport viewport;
-
+    private BitmapFont font2;
+    private String lvlname,toothpaste;
     private int levelScore;
 
     public LevelSelect(final GameStateManager gsm) {
         super(gsm);
-        lvl = game.lvls.getInteger("key");
         width= Game.V_WIDTH*2;
         height= Game.V_HEIGHT*2;
+        StretchViewport viewport;
         viewport = new StretchViewport(width,height, cam);
         mySkin = game.mySkin;
         stage = gsm.stage;
+        BitmapFont font;
         font = game.font12;
         font.setColor(Color.BLACK);
         font2 = game.font24;
@@ -62,12 +55,12 @@ public class LevelSelect extends GameState {
     }
 
     private void buttons(){
-
         updateImg();
 
         Table table = new Table();
         table.left().bottom();
         //button back to menu
+        Button exitButton,tutorialButton;
         exitButton = new ImageButton(mySkin);
         exitButton.setSize(80,80);
         exitButton.setStyle(gsm.backStyle);
@@ -144,6 +137,8 @@ public class LevelSelect extends GameState {
     }
 
     private void updateImg(){
+        Image lvlImg;
+
         if (Play.level < 5) {
             lvlImg = new Image(Game.res.getTexture("olvi"));
         }

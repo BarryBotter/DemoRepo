@@ -20,19 +20,10 @@ public class LevelComplete extends GameState {
     private GameButton exitButton;
 
     private World world;
-    private TextureRegion[] menuButtons;
-
-    private TextureRegion[] font;
     private BitmapFont textFont;
 
-    private int crystalScore;
-    private int enemyScore;
-    private int hitScore;
-    private float timescore;
-    private float time;
     private int hearthScore;
     private int totalScore;
-    private int hearthsLeft;
     private int scoreCount = 0;
     private int compareScore;
 
@@ -45,16 +36,13 @@ public class LevelComplete extends GameState {
         bg = new Background(new TextureRegion(tex), hudCam, 5);
         bg.setVector(0, 0);
 
-        font = new TextureRegion[11];
-        for (int i = 0; i < 6; i++) {
-            font[i] = new TextureRegion(tex, 32 + i * 9, 16, 9, 9);
-        }
-
         textFont = game.textFont;
 
         hearthScore =  Game.lvls.getInteger("hits");
 
         tex = Game.res.getTexture("main");
+
+        TextureRegion[] menuButtons;
         menuButtons = new TextureRegion[5];
         menuButtons[0] = new TextureRegion(tex, 340, 40, 200, 100);
         menuButtons[1] = new TextureRegion(tex, 340, 125, 200, 100);
@@ -122,8 +110,8 @@ public class LevelComplete extends GameState {
 
 
         // draw crystal amount
-        textFont.draw(sb, game.lvls.getInteger("crystals") + "", 110, 215);
-        textFont.draw(sb, game.lvls.getInteger("enemies") + "", 110, 195);
+        textFont.draw(sb, Game.lvls.getInteger("crystals") + "", 110, 215);
+        textFont.draw(sb, Game.lvls.getInteger("enemies") + "", 110, 195);
         textFont.draw(sb, hearthScore + "",110,175);
         textFont.draw(sb, String.valueOf(Player.returnHealth()),110,155);
         textFont.draw(sb, String.valueOf(settime()) + "s",110,135);
@@ -151,8 +139,13 @@ public class LevelComplete extends GameState {
     }
 
 
-    public int getScore()
-    {
+    private int getScore() {
+        int crystalScore;
+        int enemyScore;
+        int hitScore;
+        float timescore;
+        int hearthsLeft;
+
         crystalScore = Game.lvls.getInteger("crystals") * 100;
         enemyScore = Game.lvls.getInteger("enemies") * 100;
         hitScore = Game.lvls.getInteger("hits");
@@ -167,7 +160,7 @@ public class LevelComplete extends GameState {
         return totalScore;
     }
 
-    public void setScore(){
+    private void setScore(){
         compareScore = Game.scores.getInteger("score"+String.valueOf(Play.level));
         if(compareScore < totalScore) {
             Game.scores.putInteger("score" + String.valueOf(Play.level), totalScore);
@@ -175,7 +168,8 @@ public class LevelComplete extends GameState {
         }
     }
 
-    public float settime(){
+    private float settime(){
+        float time;
         time = Play.gettime() / 1000;
         return time;
     }

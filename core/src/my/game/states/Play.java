@@ -21,30 +21,22 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapImageLayer;
-import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Pool;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 
-import my.game.handlers.Content;
 import my.game.handlers.GameStateManager;
 import my.game.handlers.MyContactListener;
 
@@ -68,9 +60,7 @@ import static my.game.handlers.B2DVars.P_WIDTH;
 import static my.game.handlers.B2DVars.SOUND_LEVEL;
 
 public class Play extends GameState {
-
     public static int level;
-    private int levelS;
     private World world;
 
     public static float accumulator = 0;
@@ -109,8 +99,6 @@ public class Play extends GameState {
 
     private HUD hud;
     private BitmapFont textFont;
-
-
 
     public Play(GameStateManager gsm) {
         super(gsm);
@@ -830,6 +818,7 @@ public class Play extends GameState {
     }
 
     private void unlockLevel(){
+        int levelS;
         levelS = Game.lvls.getInteger("key");
 
         if (level < levelS) {

@@ -128,7 +128,7 @@ public class Game implements ApplicationListener {
 		res.removeAll();
 	}
 
-	public void loadFont(){
+	private void loadFont(){
 		FreeTypeFontGenerator.setMaxTextureSize(2048);
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("res/fonts/Gauge-Regular.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
@@ -148,7 +148,7 @@ public class Game implements ApplicationListener {
 		generator.dispose(); // don't forget to dispose to avoid memory leaks!
 	}
 
-	public void loadTextures(){
+	private void loadTextures(){
 		res.loadTexture("res/images/hud.png","hud");
 		res.loadTexture("res/images/bgs.png","bg");
 		res.loadTexture("res/images/menu.png","menu");

@@ -24,13 +24,10 @@ import static my.game.handlers.B2DVars.SOUND_LEVEL;
 
 public class Menu extends GameState{
     private TextureRegion bg;
-    int row_height,col_width,width,height;
-    Image logo;
-    Table table, table1;
-    Stage stage;
-    ImageButton playButton,optionsButton,exitButton;
-    Skin mySkin;
-    StretchViewport viewport;
+    private int row_height,col_width,width,height;
+    private Image logo;
+    private Stage stage;
+    private ImageButton playButton,optionsButton,exitButton;
 
     public Menu(final GameStateManager gsm) {
         super(gsm);
@@ -38,6 +35,8 @@ public class Menu extends GameState{
         height= Game.V_HEIGHT*2;
         row_height = Game.V_HEIGHT/6;
         col_width = Game.V_WIDTH /6;
+
+        Skin mySkin;
         mySkin = game.mySkin;
         stage = gsm.stage;
         setup();
@@ -45,8 +44,10 @@ public class Menu extends GameState{
         tableLayout(optionsButton,playButton,exitButton);
     }
 
-    void setup(){
+    private void setup(){
         cam.setToOrtho(false, width, height);
+
+        StretchViewport viewport;
         viewport = new StretchViewport(width,height, cam);
 
         cam.setBounds(width,height,width,height);
@@ -64,7 +65,7 @@ public class Menu extends GameState{
         Gdx.input.setInputProcessor(stage);
     }
 
-    void createButtons(Skin Skin){
+    private void createButtons(Skin Skin){
 
         playButton = new ImageButton(Skin);
         playButton.setStyle(gsm.playStyle);
@@ -141,7 +142,6 @@ public class Menu extends GameState{
 
 
     public void handleInput() {
-
     }
 
     @Override
@@ -163,14 +163,8 @@ public class Menu extends GameState{
     }
 
     public void dispose() {
-/*        table.removeActor(table1);
-        table.removeActor(logo);
-        table.removeActor(table);*/
         stage.clear();
-        //stage.dispose(); //crashes for some reason?
-
     }
-
 }
 
 

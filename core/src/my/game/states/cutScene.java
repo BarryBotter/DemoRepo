@@ -11,14 +11,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.XmlReader;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
 import my.game.Game;
 import my.game.handlers.GameStateManager;
-
-/**
- * Created by velij on 4.4.2018.
- */
 
 public class cutScene extends GameState {
     private TextureRegion bg,tutorialBg;
@@ -27,11 +22,10 @@ public class cutScene extends GameState {
     private int width = 320,height = 240;
     private static Pixmap pixmap;
     private Texture pixmaptex;
-    String[] strings;
+    private String[] strings;
     public static int dialogNumber; // changing this changes the dialog
     private boolean tutorialBool; //draws tutorial or default background
-    private Texture tex,tutorial;
-    int i = 1;
+    private int i = 1;
 
     public cutScene(final GameStateManager gsm){
         super(gsm);
@@ -43,6 +37,7 @@ public class cutScene extends GameState {
         //camera
         bigCam.setToOrtho(false,640,480);
 
+        Texture tex,tutorial;
         tex = Game.res.getTexture("menubg"); //background
         bg = new TextureRegion(tex,0,0,width,height);
 

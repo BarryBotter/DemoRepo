@@ -1,10 +1,7 @@
 package my.game.states;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -26,28 +23,23 @@ import static my.game.handlers.B2DVars.MAX_HEALTH;
 import static my.game.handlers.B2DVars.SOUND_LEVEL;
 import static com.badlogic.gdx.graphics.Color.BLACK;
 
-/**
- * Created by velij on 27.3.2018.
- */
 
 public class Options extends GameState {
-
-    Image logo;
+    private Image logo;
     private TextureRegion bg;
-    String Name = "", soundvalue = "",difficultyString = "",hintname = "Your Name";
+    private String Name = "", soundvalue = "",difficultyString = "",hintname = "Your Name";
     private int row_height = Game.V_HEIGHT/ 6,col_width = Game.V_WIDTH /6,
             width = Game.V_WIDTH*2,height = Game.V_HEIGHT*2;
     private Label nameLabel,soundLabel,difficultyLabel;
-    Skin mySkin = game.mySkin;
-    Stage stage= gsm.stage;
+    private Stage stage= gsm.stage;
     private ImageButton nameEditButton,difficultyButton,soundButton,exitButton;
-    StretchViewport viewport;
-    BitmapFont font = game.font24;
-    LabelStyle labelstyle;
+    private BitmapFont font = game.font24;
+    private LabelStyle labelstyle;
 
     public Options(final GameStateManager gsm){
         super(gsm);
         setup();
+        Skin mySkin = game.mySkin;
         createButtons(mySkin);
         optionsLayout(nameEditButton,difficultyButton,soundButton);
         getSettings();
@@ -55,6 +47,8 @@ public class Options extends GameState {
 
     private void setup(){
         cam.setToOrtho(false, Game.V_WIDTH, Game.V_HEIGHT);
+
+        StretchViewport viewport;
         viewport = new StretchViewport(640,480, cam);
         bg = new TextureRegion(Game.res.getTexture("menubg"), 0, 0, width, height);
         logo = new Image(Game.res.getTexture("menulogo"));
