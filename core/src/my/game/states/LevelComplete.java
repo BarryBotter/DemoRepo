@@ -83,6 +83,9 @@ public class LevelComplete extends GameState {
         game.pauseMusic();
         Game.res.getSound("complete").play(SOUND_LEVEL);
 
+        getScore();
+        setScore();
+
         world = new World(new Vector2(0, -9.8f * 5), true);
     }
 
@@ -114,8 +117,6 @@ public class LevelComplete extends GameState {
 
         exitButton.update(dt);
 
-        getScore();
-        setScore();
         System.out.println(compareScore);
     }
 
@@ -156,7 +157,7 @@ public class LevelComplete extends GameState {
             textFont.draw(sb, String.valueOf(scoreCount), 110, 100);
         }
 
-        if(compareScore == getScore()) {
+        if(compareScore < getScore()) {
             textFont.draw(sb, "NEW HIGHSCORE!", 100, 40);
         }
 
