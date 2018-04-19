@@ -27,10 +27,6 @@ import my.game.handlers.MyTextInputListener;
 import static my.game.handlers.B2DVars.MAX_HEALTH;
 import static my.game.handlers.B2DVars.SOUND_LEVEL;
 
-/**
- * Created by velij on 27.3.2018.
- */
-
 public class Options extends GameState {
 
     Image logo;
