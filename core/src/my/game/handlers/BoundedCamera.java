@@ -5,10 +5,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import static my.game.handlers.B2DVars.P_HEIGHT;
 import static my.game.handlers.B2DVars.P_WIDTH;
 
-/**
- * Created by Katriina on 26.3.2018.
- */
-
 public class BoundedCamera extends OrthographicCamera {
 
     private float xmin;
@@ -55,5 +51,4 @@ public class BoundedCamera extends OrthographicCamera {
             position.y = ymax - P_HEIGHT/ 2;
         }
     }
-
 }

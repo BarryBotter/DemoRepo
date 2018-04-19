@@ -18,28 +18,23 @@ import my.game.states.Options;
 import my.game.states.Play;
 import my.game.states.cutScene;
 
-/**
- * Created by Katriina on 20.3.2018.
- */
-
 public class GameStateManager {
     private my.game.Game game;
     private Stack<GameState> gameStates;
 
-    public static final int PLAY = 2182301;
+    public static final int PLAY = 218231;
     public static final int MENU = 823183;
-    public static final int LEVEL_SELECT = 323971;
-    public static final int GAMEOVER = 213212;
-    public static final int LEVEL_COMPLETE = 281209;
-    public static final int OPTIONS = 345678;
-    public static final int CUTSCENE = 555768;
+    public static final int LEVEL_SELECT = 32391;
+    public static final int GAMEOVER = 21312;
+    public static final int LEVEL_COMPLETE = 28209;
+    public static final int OPTIONS = 34578;
+    public static final int CUTSCENE = 55768;
 
     public ImageButton.ImageButtonStyle
             playStyle, optionStyle,exitStyle,toothStyle,backStyle;
 
-    Texture tex;
-    TextureRegion menuButtons[];
-    public  Stage stage;
+    private TextureRegion menuButtons[];
+    public Stage stage;
 
     public GameStateManager(Game game){
         this.game = game;
@@ -60,7 +55,6 @@ public class GameStateManager {
     }
 
     private GameState getState(int state){
-
         if (state == MENU){
             return new Menu(this);
         }
@@ -109,7 +103,7 @@ public class GameStateManager {
         //styles for buttons
 
         //todo load from a bigger texture
-        tex = my.game.Game.res.getTexture("main");
+        Texture tex = my.game.Game.res.getTexture("main");
         menuButtons = new TextureRegion[5];
         menuButtons[0] =  new TextureRegion(tex, 340, 40, 200, 100);
         menuButtons[1] =  new TextureRegion(tex, 340, 125, 200, 100);

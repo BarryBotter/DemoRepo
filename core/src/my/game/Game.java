@@ -19,7 +19,6 @@ import static my.game.handlers.B2DVars.LVL_UNLOCKED;
 import static my.game.handlers.B2DVars.SOUND_LEVEL;
 
 public class Game implements ApplicationListener {
-
 	public static final int V_WIDTH = 320;
 	public static final int V_HEIGHT = 240;
 
@@ -42,7 +41,6 @@ public class Game implements ApplicationListener {
 
 	public Skin mySkin;
 	public BitmapFont font12,font24;
-
 
 	@Override
 	public void create() {
@@ -77,9 +75,12 @@ public class Game implements ApplicationListener {
 			prefs.flush();
 		}
 
+		// Catch the back key so it's not passed onto OS.
+		Gdx.input.setCatchBackKey(true);
+
 		scores = Gdx.app.getPreferences("highscores");
 		if (!scores.contains("score1")){
-			scores.putInteger("score1",100);
+			scores.putInteger("score1",0);
 			scores.flush();
 		}
 
@@ -89,7 +90,7 @@ public class Game implements ApplicationListener {
 			res.getMusic("theme").setVolume(1);
 			res.getMusic("theme").play();
 		}
-		else if (prefs.getBoolean("sound") == false) {
+		else if (!prefs.getBoolean("sound")) {
 			SOUND_LEVEL = 0;
 			res.getMusic("theme").setVolume(0);
 			res.getMusic("bbsong").setVolume(0);
@@ -124,7 +125,7 @@ public class Game implements ApplicationListener {
 	}
 
 	public void loadFont(){
-
+		FreeTypeFontGenerator.setMaxTextureSize(2048);
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("res/fonts/Gauge-Regular.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = 12;
@@ -134,32 +135,43 @@ public class Game implements ApplicationListener {
 		generator.dispose(); // don't forget to dispose to avoid memory leaks!
 	}
 
-	private void loadTextures(){
-		res.loadTexture("res/images/trap.png","trap");
+	public void loadTextures(){
 		res.loadTexture("res/images/hud.png","hud");
 		res.loadTexture("res/images/bgs.png","bg");
+		res.loadTexture("res/images/menu.png","menu");
 		res.loadTexture("kuva.png","olvi");
 		res.loadTexture("res/UI_final/rebg.png","menubg");
 		res.loadTexture("res/UI_final/resized_paavalikko.png","main");
-		res.loadTexture("res/UI_final/resized_hammas.png","tooth");
 		res.loadTexture("res/UI_final/menu_logo.png","menulogo");
-		res.loadTexture("res/images/Game_Over.png", "gameover");
 		res.loadTexture("res/background/testimaa.png","bgone");
 		res.loadTexture("res/background/rsz_karkkimaas.png","bgones");
-		res.loadTexture("res/images/char.png","char");
-		res.loadTexture("res/images/bullet.png","bullet");
-		res.loadTexture("res/UI_assets/heartSilhoutte.png","heartSilhoutte");
-		res.loadTexture("res/UI_assets/ammoSilhoutte.png","ammoSilhoutte");
-		res.loadTexture("res/UI_assets/heart.png","heart");
-		res.loadTexture("res/UI_assets/ammo.png","ammo");
-		res.loadTexture("res/UI_assets/pauseButton.png","pauseButton");
-		res.loadTexture("res/UI_assets/pauseMenu.png","pauseMenu");
-		res.loadTexture("res/images/happyTooth.png","happyTooth");
+		res.loadTexture("res/background/mountains.png", "mountain");
 		res.loadTexture("res/images/complete.png", "complete");
 		res.loadTexture("res/images/testibg.png", "testibg");
-		res.loadTexture("res/images/toothpaste.png","toothpaste");
 		res.loadTexture("res/images/testitausta.png","taustatesti");
 
+		//Player animations
+		res.loadTexture("res/playerAnimations/playerWalk.png","playerWalk");
+		res.loadTexture("res/playerAnimations/playerAttack.png","playerAttack");
+
+		//UI
+		res.loadTexture("res/UI_assets/GameOverScreen.png", "gameOver");
+		res.loadTexture("res/UI_assets/pauseMenu.png","pauseMenu");
+		res.loadTexture("res/UI_assets/buttons.png","buttonMap");
+		res.loadTexture("res/UI_assets/HUD_Icons.png","hudIcons");
+
+		//Enemies
+		res.loadTexture("res/enemies/enemyBat.png","enemyBat");
+		res.loadTexture("res/enemies/enemyTooth.png","enemyTooth");
+		res.loadTexture("res/enemies/trap.png","trap");
+
+		//Particles
+		res.loadTexture("res/particles/bulletParticle.png","bulletParticles");
+		res.loadTexture("res/particles/bullet.png","bullet");
+
+		//PickUps
+		res.loadTexture("res/pickups/crystal.png", "Crystal");
+		res.loadTexture("res/pickups/toothPastePickUp.png", "toothPaste");
 	}
 
 	private void loadSounds(){
@@ -188,7 +200,7 @@ public class Game implements ApplicationListener {
 			res.getMusic("theme").setVolume(1);
 			res.getMusic("theme").play();
 		}
-		else if (prefs.getBoolean("sound") == false) {
+		else if (!prefs.getBoolean("sound")) {
 			res.getMusic("bbsong").setVolume(0);
 			res.getMusic("theme").setVolume(0);
 		}

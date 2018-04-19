@@ -21,8 +21,6 @@ import static my.game.handlers.B2DVars.MAX_HEALTH;
 import static my.game.handlers.B2DVars.SOUND_LEVEL;
 
 public class LevelComplete extends GameState {
-
-
     private Background bg;
     private GameButton playButton;
     private GameButton exitButton;
@@ -100,8 +98,6 @@ public class LevelComplete extends GameState {
             gsm.setState(GameStateManager.MENU);
             game.resumeMenuMusic();
         }
-
-
     }
 
     @Override
@@ -122,7 +118,6 @@ public class LevelComplete extends GameState {
 
     @Override
     public void render() {
-
         sb.setProjectionMatrix(cam.combined);
 
         // draw background
@@ -138,8 +133,6 @@ public class LevelComplete extends GameState {
         textFont.draw(sb, "Hits taken",130,175);
         textFont.draw(sb, "Hearths left", 130 ,155);
         textFont.draw(sb,"total score",110, 80);
-
-
 
 
         // draw crystal amount

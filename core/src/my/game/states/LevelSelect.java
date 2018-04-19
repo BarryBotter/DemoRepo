@@ -1,6 +1,8 @@
 package my.game.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -28,8 +30,8 @@ public class LevelSelect extends GameState {
     private TextureRegion reg;
     private GameButton[][] buttons;
     private int lvl;
-    Skin mySkin;
-    Stage stage;
+    private Skin mySkin;
+    private Stage stage;
     private Button exitButton,cutSceneButton,rightButton,leftButton;
     Image lvlImg;
     private int width, height;
@@ -55,13 +57,21 @@ public class LevelSelect extends GameState {
         Gdx.input.setInputProcessor(stage);
         reg = new TextureRegion(Game.res.getTexture("menubg"), 0, 0, width, height);
         cam.setToOrtho(false, width, height);
+        //todo current level from preferences
         Play.level = 1;
         lvlname = "Level number " + Play.level;
         toothpaste = "You collected 0/5 toothpaste";
         buttons();
+        game.pauseMusic();
+        game.resumeMenuMusic();
     }
 
     private void buttons(){
+        //backbutton (not in lvlgridthingy)
+        Button exitButton,cutSceneButton;
+        exitButton = new TextButton("BACK",mySkin,"default");
+        exitButton.setSize(200, 100);
+        exitButton.setPosition(100,100);
         if (Play.level < 5)
         {
             lvlImg = new Image(Game.res.getTexture("olvi"));
@@ -168,14 +178,27 @@ public class LevelSelect extends GameState {
 
     }
 
+    @Override
     public void handleInput() {
     }
 
+    @Override
     public void update(float dt) {
-
         levelScore = Game.scores.getInteger("score"+ String.valueOf(Play.level));
-
+/*
+        Gdx.input.setInputProcessor(new InputAdapter() {
+            @Override
+            public boolean keyDown (int keycode) {
+                //If Android back button is pressed, go back to menu.
+                if(keycode == Input.Keys.BACK) {
+                    gsm.setState(GameStateManager.MENU);
+                }
+                return false;
+            }
+        });*/
     }
+
+    @Override
 
     public void render() {
         sb.setProjectionMatrix(cam.combined);
@@ -202,6 +225,5 @@ public class LevelSelect extends GameState {
     public void dispose() {
         stage.clear();
     }
-
 }
 

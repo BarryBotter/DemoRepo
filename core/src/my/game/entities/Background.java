@@ -6,10 +6,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import my.game.Game;
 
-/**
- * Created by Katriina on 23.3.2018.
- */
-
 public class Background {
 
     private TextureRegion image;

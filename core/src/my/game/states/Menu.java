@@ -3,6 +3,9 @@ package my.game.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
+
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -10,9 +13,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import my.game.Game;
+import my.game.entities.Background;
 import my.game.handlers.GameStateManager;
 
 import static my.game.handlers.B2DVars.P_HEIGHT;
@@ -24,7 +29,6 @@ import static my.game.handlers.B2DVars.SOUND_LEVEL;
  */
 
 public class Menu extends GameState{
-
     private TextureRegion bg;
     int row_height,col_width;
     Image logo;
@@ -36,6 +40,7 @@ public class Menu extends GameState{
 
     public Menu(final GameStateManager gsm) {
         super(gsm);
+        Skin mySkin;
         row_height = Game.V_HEIGHT/ 12;
         col_width = Game.V_WIDTH /12;
         mySkin = game.mySkin;
@@ -118,6 +123,7 @@ public class Menu extends GameState{
     }
 
     private void tableLayout(ImageButton optionsButton, ImageButton playButton, ImageButton exitButton) {
+        Table table, table1;
         table = new Table();
         table1 = new Table();
         table.center();
@@ -145,6 +151,7 @@ public class Menu extends GameState{
 
     }
 
+    @Override
     public void update(float dt) {
         //handleInput();
         //bg.update(dt);

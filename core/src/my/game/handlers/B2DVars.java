@@ -1,13 +1,6 @@
 package my.game.handlers;
 
-import my.game.Game;
-
-/**
- * Created by Katriina on 20.3.2018.
- */
-
 public class B2DVars {
-
     //pixel per meter
     public static final float PPM = 100;
 
@@ -26,6 +19,7 @@ public class B2DVars {
     public static final short BIT_BULLET = 128;
     public static final short BIT_ENEMY = 256;
     public static final short BIT_MELEE = 512;
+    public static final short BIT_WIN = 1024;
 
     //other vars
      public static int MAX_HEALTH = 3;

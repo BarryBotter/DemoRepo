@@ -2,14 +2,9 @@ package my.game.handlers;
 
 import com.badlogic.gdx.Input;
 
-/**
- * Created by velij on 19.3.2018.
- */
-
 public class MyTextInputListener implements Input.TextInputListener {
 
     private final my.game.Game game;
-    private String nameToSettings;
 
     public MyTextInputListener(final my.game.Game gam)
     {
@@ -17,9 +12,8 @@ public class MyTextInputListener implements Input.TextInputListener {
     }
 
     @Override
-    public void input(String text) {
-        if(!text.equals("")) {
-            nameToSettings = text;
+    public void input(String nameToSettings) {
+        if(!nameToSettings.equals("")) {
             game.prefs.putString("name", nameToSettings);
             game.prefs.flush();
         }

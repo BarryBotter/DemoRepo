@@ -1,10 +1,12 @@
 package my.game.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 
 import my.game.Game;
 import my.game.entities.Background;
+import my.game.entities.Bullet;
 import my.game.entities.Enemy;
 import my.game.entities.HUD;
 import my.game.entities.Melee;
@@ -40,6 +42,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import my.game.handlers.Content;
@@ -55,6 +58,7 @@ import static my.game.handlers.B2DVars.BIT_JUMP;
 import static my.game.handlers.B2DVars.BIT_MELEE;
 import static my.game.handlers.B2DVars.BIT_PLAYER;
 import static my.game.handlers.B2DVars.BIT_TRAP;
+import static my.game.handlers.B2DVars.BIT_WIN;
 import static my.game.handlers.B2DVars.CRYSTALS_COLLECTED;
 import static my.game.handlers.B2DVars.ENEMIES_DESTROYED;
 import static my.game.handlers.B2DVars.HITS_TAKEN;
@@ -64,16 +68,11 @@ import static my.game.handlers.B2DVars.P_HEIGHT;
 import static my.game.handlers.B2DVars.P_WIDTH;
 import static my.game.handlers.B2DVars.SOUND_LEVEL;
 
-/**
- * Created by Katriina on 20.3.2018.
- */
-
 public class Play extends GameState {
 
     public static int level;
     private int levelS;
     private World world;
-    private Box2DDebugRenderer b2dr;
 
     public static float accumulator = 0;
 
@@ -125,7 +124,6 @@ public class Play extends GameState {
         world = new World(new Vector2(0, -9.81f), true);
         cl = new MyContactListener();
         world.setContactListener(cl);
-        b2dr = new Box2DDebugRenderer();
 
         // create player
         createPlayer();
@@ -191,7 +189,6 @@ public class Play extends GameState {
 
     @Override
     public void update(float dt) {
-
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
             public boolean touchDown(int x, int y, int pointer, int button) {
@@ -206,9 +203,9 @@ public class Play extends GameState {
                 else if (rightSideTouched(touchPoint.x, touchPoint.y) && Gdx.graphics.isContinuousRendering()) {
                     //When player runs out of ammo, start melee mode.
                     if (Player.returnNumberOfAmmo() == 0) {
-                        meleeManager();
+                        meleeHitBox.meleeManager();
                     } else if (Player.returnNumberOfAmmo() <= Player.returnMaxAmmo()) {
-                        bulletManager();
+                        bullet.bulletManager(player.getBody(),touchPoint.x,touchPoint.y);
                     }
                 }
 
@@ -244,13 +241,22 @@ public class Play extends GameState {
                 else if (pauseMenuRightButtonTouched(touchPoint.x, touchPoint.y) && !Gdx.graphics.isContinuousRendering()) {
                     Gdx.graphics.setContinuousRendering(true);
                 }
-
                 return super.touchDown(x, y, pointer, button);
             }
 
             @Override
             public boolean touchUp(int x, int y, int pointer, int button) {
                 return true;
+            }
+
+            public boolean keyDown (int keycode) {
+                //Pause game when Android back button is pressed.
+                if(keycode == Input.Keys.BACK) {
+                    if(Gdx.graphics.isContinuousRendering()) {
+                        Gdx.graphics.setContinuousRendering(false);
+                    }
+                }
+                return false;
             }
         });
 
@@ -261,7 +267,8 @@ public class Play extends GameState {
             bulletRemover();
             meleeHitBoxRemover();
             trapRemover();
-            enemyManager();
+            enemyRemover();
+            enemy.enemyManager();
 
             player.update(dt);
 
@@ -272,7 +279,7 @@ public class Play extends GameState {
 
             for (int i = 0; i < meleeHitBoxes.size; i++) {
                 meleeHitBoxes.get(i).update(dt);
-                meleeHitBox.checkMeleeCoolDown();
+                meleeHitBox.checkMeleeCoolDown(player.getBody());
             }
 
             for (int i = 0; i < crystals.size; i++) {
@@ -280,9 +287,12 @@ public class Play extends GameState {
             }
 
             for (int i = 0; i < enemies.size; i++) {
-                enemies.get(i).update(dt);
+                    enemies.get(i).update(dt);
             }
 
+            for (int i = 0; i < traps.size; i++) {
+                traps.get(i).update(dt);
+            }
         }
         // Game over stuff
         if (player.getBody().getPosition().y < 0) {
@@ -340,6 +350,9 @@ public class Play extends GameState {
 
             time = System.currentTimeMillis() - startTime;
 
+        // Player animations
+        animationManager();
+
         }
 
     private boolean rightSideTouched(float x, float y) {
@@ -364,8 +377,7 @@ public class Play extends GameState {
 
     private void setupTouchControlAreas() {
         touchPoint = new Vector3();
-        final int BOX_ENLARGER = 10;
-        screenTopRightSide = new Rectangle(game.getHUDCamera().viewportWidth - (hud.pauseTexture.getWidth() + BOX_ENLARGER),game.getHUDCamera().viewportHeight - (hud.pauseTexture.getHeight() + BOX_ENLARGER), hud.pauseTexture.getWidth() + BOX_ENLARGER ,hud.pauseTexture.getHeight() + BOX_ENLARGER);
+        screenTopRightSide = new Rectangle(game.getHUDCamera().viewportWidth - (hud.pauseButton.getRegionWidth() / 8),game.getHUDCamera().viewportHeight - (hud.pauseButton.getRegionHeight() / 8), hud.pauseButton.getRegionWidth() / 8,hud.pauseButton.getRegionHeight() / 8);
         screenRightSide = new Rectangle(game.getHUDCamera().viewportWidth / 2, 0, game.getHUDCamera().viewportWidth / 2,
                 game.getHUDCamera().viewportHeight);
         screenLeftSide = new Rectangle(0, 0, game.getHUDCamera().viewportWidth / 2, game.getHUDCamera().viewportHeight);
@@ -434,6 +446,8 @@ public class Play extends GameState {
 
     @Override
     public void dispose() {
+        //tileMap.dispose();
+       //world.dispose();
     }
 
     private void createPlayer() {
@@ -450,7 +464,7 @@ public class Play extends GameState {
         shape.setAsBox(14 / PPM, 15 / PPM);
         fdef.shape = shape;
         fdef.filter.categoryBits = BIT_PLAYER;
-        fdef.filter.maskBits = BIT_GROUND | BIT_CRYSTAL | BIT_CORNER | BIT_ENEMY | BIT_TRAP | BIT_JUMP;
+        fdef.filter.maskBits = BIT_GROUND | BIT_CRYSTAL | BIT_CORNER | BIT_ENEMY | BIT_TRAP | BIT_JUMP | BIT_WIN;
         body.createFixture(fdef).setUserData("player");
         shape.dispose();
 
@@ -472,7 +486,7 @@ public class Play extends GameState {
             tileMap = new TmxMapLoader().load("res/maps/level" + level + ".tmx");
         } catch (Exception e) {
             System.out.println("Cannot find file: res/maps/level" + level + ".tmx");
-            //Gdx.app.exit();
+            Gdx.app.exit();
         }
         tileMapWidth = tileMap.getProperties().get("width", Integer.class);
         tileMapHeight = tileMap.getProperties().get("height", Integer.class);
@@ -614,7 +628,6 @@ public class Play extends GameState {
         MapLayer layer = tileMap.getLayers().get("crystals");
 
         if (layer != null) {
-
             BodyDef bdef = new BodyDef();
             FixtureDef fdef = new FixtureDef();
 
@@ -671,7 +684,7 @@ public class Play extends GameState {
                 fdef.shape = cshape;
                 fdef.restitution = 1;
                 fdef.filter.categoryBits = BIT_TRAP;
-                fdef.filter.maskBits = BIT_PLAYER | BIT_GROUND | BIT_BULLET;
+                fdef.filter.maskBits = BIT_PLAYER | BIT_GROUND | BIT_BULLET | BIT_MELEE;
 
                 Body body = world.createBody(bdef);
                 body.createFixture(fdef).setUserData("trap");
@@ -705,14 +718,14 @@ public class Play extends GameState {
 
                 fdef.shape = cshape;
                 fdef.isSensor = true;
-                fdef.filter.categoryBits = BIT_CRYSTAL;
+                fdef.filter.categoryBits = BIT_WIN;
                 fdef.filter.maskBits = BIT_PLAYER;
 
                 Body body = world.createBody(bdef);
                 body.createFixture(fdef).setUserData("win");
                 cshape.dispose();
 
-                win = new TextureDraw(body, "olvi");
+                win = new TextureDraw(body, "Crystal");
 
                 body.setUserData(win);
             }
@@ -784,7 +797,7 @@ public class Play extends GameState {
         shape.setAsBox(13 / PPM, 15 / PPM);
         fdef.shape = shape;
         fdef.filter.categoryBits = BIT_MELEE;
-        fdef.filter.maskBits = BIT_ENEMY;
+        fdef.filter.maskBits = BIT_ENEMY | BIT_TRAP;
         body.createFixture(fdef).setUserData("melee");
         shape.dispose();
 
@@ -836,7 +849,7 @@ public class Play extends GameState {
         Game.lvls.flush();
     }
 
-    private void enemyManager() {
+    private void enemyRemover() {
         // Remove enemies.
         Array<Body> enemyBodies = cl.getEnemyBodiesToRemove();
         if (enemyBodies.size > 0) {
@@ -855,61 +868,12 @@ public class Play extends GameState {
             createEnemy();
         }
 
-        //If enemy gets left behind player undestroyed, respawn it.
+        //If enemy gets left behind player un destroyed, respawn it.
         if(enemies.get(0).getBody().getPosition().x < player.getposition().x - 2.5f) {
             Body b = enemy.getBody();
             enemies.removeValue((Enemy) b.getUserData(), true);
             world.destroyBody(b);
             createEnemy();
-        }
-
-        //Move enemy towards left side of the screen. If it stops, switch direction.
-        if (enemy.returnCurrentLocation() - enemies.get(0).getBody().getPosition().x < 0 && enemy.returnDirection()) {
-            enemies.get(0).getBody().setTransform(enemy.getposition().x +0.05f,enemy.getposition().y -0.01f, 0);
-            enemy.switchDirection();
-        }
-        else if (enemy.returnCurrentLocation() - enemies.get(0).getBody().getPosition().x < 0 && !enemy.returnDirection()){
-            enemies.get(0).getBody().setTransform(enemy.getposition().x -0.05f,enemy.getposition().y -0.01f, 0);
-            enemy.switchDirection();
-        }
-
-        // Go right
-        if(!enemy.returnDirection()) {
-            enemies.get(0).getBody().setTransform(enemy.getposition().x +0.01f,enemy.getposition().y -0.01f, 0);
-        }
-        else {  //Go left
-            enemies.get(0).getBody().setTransform(enemy.getposition().x -0.01f,enemy.getposition().y -0.01f, 0);
-        }
-
-        // Set current location to compare if enemy has stopped or not.
-        enemy.setCurrentLocation(enemies.get(0).getBody().getPosition().x);
-    }
-
-    private void bulletManager() {
-        // If the player has ammo and bullet is not on cooldown, shoot the bullet.
-        if (Player.returnNumberOfAmmo() > 0 && !bullet.returnCoolDownState() && !meleeHitBox.returnMeleeCoolDownState()) {
-            bullet.resetBullet(player.getposition().x, player.getposition().y);
-            // Check if the touch is below or above player.
-            if (touchPoint.y / PPM >= player.getposition().y) {
-                bullet.shootBullet(touchPoint.x / PPM, touchPoint.y / PPM, false);
-            } else {
-                bullet.shootBullet(touchPoint.x / PPM, (touchPoint.y / PPM) - player.getposition().y, true);
-            }
-        }
-        else {
-            // After teh bullet's been shot, deploy a little cool down.
-            bullet.checkBulletCoolDown();
-        }
-    }
-
-    private void meleeManager() {
-        //If melee swing is not on cooldown make melee hitbox appear in front of the player.
-        if (!meleeHitBox.returnMeleeCoolDownState() && !bullet.returnCoolDownState() && Player.returnNumberOfAmmo() == 0) {
-            meleeHitBox.meleeSwing();
-            meleeHitBox.getBody().setTransform(player.getposition().x + 0.4f, player.getposition().y, 0);
-        } else {
-            // Keep checking the cooldwon until it's ready to be used again.
-            meleeHitBox.checkMeleeCoolDown();
         }
     }
 
@@ -961,5 +925,24 @@ public class Play extends GameState {
 
     public static long gettime(){
         return time;
+    }
+
+    private void animationManager() {
+        // Melee attack animation.
+        if(Melee.returnMeleeCoolDownState() && player.returnCurrentAnimation().equalsIgnoreCase("playerWalk")) {
+            player.setPlayerAnimation("playerAttack");
+        }
+        else if(!Melee.returnMeleeCoolDownState() && player.returnCurrentAnimation().equalsIgnoreCase("playerAttack")){
+            player.setPlayerAnimation("playerWalk");
+        }
+
+        //Shooting animation
+        //todo
+
+        //Dying animation
+        //todo
+
+        //Jumping animation
+        //todo
     }
 }

@@ -17,12 +17,7 @@ import my.game.Game;
 import my.game.entities.Background;
 import my.game.handlers.GameStateManager;
 
-/**
- * Created by velij on 4.4.2018.
- */
-
 public class cutScene extends GameState {
-
     ExtendViewport viewport;
     private Background bg;
     private BitmapFont font;
@@ -85,15 +80,9 @@ public class cutScene extends GameState {
         dialogString = strings[0];
     }
 
-    @Override
-    public void handleInput() {
+    public void handleInput() {}
 
-    }
-
-    @Override
-    public void update(float dt) {
-
-    }
+    public void update(float dt) {}
 
     @Override
     public void render() {
@@ -108,7 +97,6 @@ public class cutScene extends GameState {
     public void dispose() {
         pixmaptex.dispose();
         font.dispose();
-        //Gdx.input.setInputProcessor(null);
     }
 
     private void getPixmapRoundedRectangle(int width, int height, int radius, Color color) {
@@ -130,5 +118,4 @@ public class cutScene extends GameState {
         // Top-right circle
         pixmap.fillCircle(pixmap.getWidth()-radius, pixmap.getHeight()-radius, radius);
     }
-
 }

@@ -17,22 +17,32 @@ import static my.game.handlers.B2DVars.MAX_HEALTH;
 public class Player extends  B2DSprite{
     //private static final int MAX_HEALTH = 3;
     private static final int MAX_NUMBER_OF_AMMO = 3;
-    private static int numberOfAmmo = MAX_NUMBER_OF_AMMO;
-    private static int playerHealth;
-    private static int healthCount = 0;
-    private static int enemyKillCount = 0;
 
-    private static boolean gameOver = false;
+    private static boolean gameOver;
+    private static int numberOfAmmo;
+    private static int playerHealth;
+    private static int healthCount;
+    private static int enemyKillCount;
 
     private int numCrystals;
     private int totalCrystals;
+    private String animationKey;
 
     public Player(Body body){
         super(body);
-        Texture tex = Game.res.getTexture("char");
+        setPlayerAnimation("playerWalk");
+        resetPlayer();
+    }
+
+    public void setPlayerAnimation(String animationKey) {
+        this.animationKey = animationKey;
+        Texture tex = Game.res.getTexture(animationKey);
         TextureRegion[] sprites = TextureRegion.split(tex, 32, 32)[0];
         setAnimation(sprites, 1 / 12f);
-        resetPlayer();
+    }
+
+    public String returnCurrentAnimation() {
+        return animationKey;
     }
 
 
@@ -40,8 +50,7 @@ public class Player extends  B2DSprite{
     public void collectCrystal(){numCrystals++;}
     public int getNumCrystals(){return numCrystals;}
     public void setTotalCrystals(int i){totalCrystals = i;}
-    public int getTotalCrystals(){return totalCrystals;}
-
+    int getTotalCrystals(){return totalCrystals;}
 
     public static int returnNumberOfAmmo() {
         return numberOfAmmo;
@@ -51,17 +60,13 @@ public class Player extends  B2DSprite{
         return MAX_NUMBER_OF_AMMO;
     }
 
-    public static void reload() {
-        numberOfAmmo = MAX_NUMBER_OF_AMMO;
-    }
-
     public static void increaseAmmo() {
         if(numberOfAmmo < MAX_NUMBER_OF_AMMO) {
             numberOfAmmo++;
         }
     }
 
-    public static void decreaseAmmo() {
+    static void decreaseAmmo() {
         numberOfAmmo--;
     }
 
@@ -77,18 +82,8 @@ public class Player extends  B2DSprite{
         }
     }
 
-    public static void countHealth(){
+    private static void countHealth(){
         healthCount++;
-    }
-
-    public static void fullHeal() {
-        playerHealth = MAX_HEALTH;
-    }
-
-    public static void gainHealth() {
-        if(playerHealth < 3) {
-            playerHealth++;
-        }
     }
 
     public static int counterHealth(){

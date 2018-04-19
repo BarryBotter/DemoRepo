@@ -1,50 +1,39 @@
 package my.game.entities;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector3;
 
 import my.game.Game;
-import my.game.handlers.GameButton;
-
-/**
- * Created by Katriina on 22.3.2018.
- */
 
 public class HUD {
-
     private Player player;
-    private TextureRegion[] blocks;
-    private TextureRegion toothpaste;
+    private TextureRegion crystal;
     private TextureRegion[] font;
 
-    private Texture heartTexture;
-    private Texture heartSilhoutteTexture;
-    private Texture ammoTexture;
-    private Texture ammoSilhoutteTexture;
+    private TextureRegion heartTexture;
+    private TextureRegion heartSilhouetteTexture;
+    private TextureRegion toothPasteTexture;
+    private TextureRegion toothPasteSilhouetteTexture;
 
-    public Texture pauseTexture;
+    //private TextureRegion ammoTexture;
+    //private TextureRegion ammoSilhouetteTexture;
+
     public Texture pauseMenuTexture;
-    private GameButton pauseButton;
-    private TextureRegion pauseButtonRegion;
-    protected OrthographicCamera hudCam;
+    public TextureRegion pauseButton;
 
     public HUD(Player player) {
         this.player = player;
 
         Texture tex = Game.res.getTexture("hud");
 
-        blocks = new TextureRegion[3];
+        TextureRegion[] blocks = new TextureRegion[3];
         for (int i = 0; i < blocks.length; i++) {
             blocks[i] = new TextureRegion(tex, 32 + i * 16, 0, 16, 16);
         }
 
-        Texture tooth = Game.res.getTexture("toothpaste");
-        toothpaste = new TextureRegion(tooth, 0, 0, 32, 32);
+        crystal = new TextureRegion(tex, 80, 0, 16, 16);
 
         font = new TextureRegion[11];
         for (int i = 0; i < 6; i++) {
@@ -53,51 +42,69 @@ public class HUD {
         for (int i = 0; i < 5; i++) {
             font[i + 6] = new TextureRegion(tex, 32 + i * 9, 25, 9, 9);
         }
+        // Load hud icon textures.
+        Texture hudIconTextures = Game.res.getTexture("hudIcons");
+        heartTexture = new TextureRegion(hudIconTextures,0,0,160,160);
+        heartSilhouetteTexture = new TextureRegion(hudIconTextures,160,0,160,160);
+        toothPasteTexture = new TextureRegion(hudIconTextures,650,0,160,160);
+        toothPasteSilhouetteTexture = new TextureRegion(hudIconTextures,830,0,160,160);
 
-        heartTexture = Game.res.getTexture("heart");
-        heartSilhoutteTexture = Game.res.getTexture("heartSilhoutte");
-        ammoTexture = Game.res.getTexture("ammo");
-        ammoSilhoutteTexture = Game.res.getTexture("ammoSilhoutte");
+        //ammoTexture = new TextureRegion(hudIconTextures,330,0,160,160);
+        //ammoSilhouetteTexture = new TextureRegion(hudIconTextures,480,0,160,160);
 
         // Setup pause button
-        pauseTexture = Game.res.getTexture("pauseButton");
-        // Setup pause menu button
+        Texture pauseTexture = Game.res.getTexture("buttonMap");
+        pauseButton = new TextureRegion(pauseTexture,670,190,450,450);
+
+        // Setup pause menu.
         pauseMenuTexture = Game.res.getTexture("pauseMenu");
     }
 
     public void render(SpriteBatch sb) {
+        float DOWNSCALE_MULTIPLIER = 12;
+        float HUD_ICONS_MULTIPLIER = 8;
+        float HUD_ICON_OFFSET = 22;
+
         sb.begin();
 
         // Draw the hearts and empty hearts.
         for(int i = 0; i < Player.returnMaxHealth(); i++) {
-            sb.draw(heartSilhoutteTexture, 5 + (i*17),222, 12,12);
+            sb.draw(heartSilhouetteTexture, 3 + (i*HUD_ICON_OFFSET),Game.V_HEIGHT - HUD_ICON_OFFSET - 3,
+                    heartSilhouetteTexture.getRegionWidth() / HUD_ICONS_MULTIPLIER,
+                    heartSilhouetteTexture.getRegionHeight() / HUD_ICONS_MULTIPLIER);
         }
-        for(int i = 0; i < player.returnHealth(); i++) {
-            sb.draw(heartTexture, 5 + (i*17),222, 12,12);
+        for(int i = 0; i < Player.returnHealth(); i++) {
+            sb.draw(heartTexture, 3 + (i*HUD_ICON_OFFSET),Game.V_HEIGHT - HUD_ICON_OFFSET - 3,
+                    heartTexture.getRegionWidth() / HUD_ICONS_MULTIPLIER,
+                    heartTexture.getRegionHeight() / HUD_ICONS_MULTIPLIER);
         }
 
         // Draw the ammo and empty ammo.
         for(int i = 0; i < Player.returnMaxAmmo(); i++) {
-            sb.draw(ammoSilhoutteTexture, 5 + (i*17),190, 12,24);
+            sb.draw(toothPasteSilhouetteTexture, 5 + (i*HUD_ICON_OFFSET),Game.V_HEIGHT - (heartSilhouetteTexture.getRegionHeight() / HUD_ICONS_MULTIPLIER) - HUD_ICON_OFFSET - 6,
+                    toothPasteSilhouetteTexture.getRegionWidth() / HUD_ICONS_MULTIPLIER,
+                    toothPasteSilhouetteTexture.getRegionHeight() / HUD_ICONS_MULTIPLIER);
         }
         for(int i = 0; i < Player.returnNumberOfAmmo(); i++) {
-            sb.draw(ammoTexture, 5 + (i*17),190, 12,24);
+            sb.draw(toothPasteTexture, 5 + (i*HUD_ICON_OFFSET),Game.V_HEIGHT - (heartTexture.getRegionHeight() / HUD_ICONS_MULTIPLIER) - HUD_ICON_OFFSET - 6,
+                    toothPasteTexture.getRegionWidth() / HUD_ICONS_MULTIPLIER,
+                    toothPasteTexture.getRegionHeight() / HUD_ICONS_MULTIPLIER);
         }
 
         // draw crystal amount
-        sb.draw(toothpaste, 100, 222);
-        drawString(sb, player.getNumCrystals() + " / " + player.getTotalCrystals(), 132, 222);
-
-
+        sb.draw(crystal, Game.V_WIDTH - 206, Game.V_HEIGHT - 22);
+        drawString(sb, player.getNumCrystals() + " / " + player.getTotalCrystals(), Game.V_WIDTH - 180, Game.V_HEIGHT - 18);
 
         //draw pause menu if game is paused
         if(!Gdx.graphics.isContinuousRendering()) {
-            sb.draw(pauseMenuTexture, (Game.V_WIDTH / 2) - (pauseMenuTexture.getWidth() / 2 ),(Game.V_HEIGHT / 2 ) - (pauseMenuTexture.getHeight() / 2), pauseMenuTexture.getWidth(),pauseMenuTexture.getHeight());
+            sb.draw(pauseMenuTexture, 0,0, pauseMenuTexture.getWidth(),pauseMenuTexture.getHeight());
         } else {
             //draw pause button only when the game is not paused.
-            sb.draw(pauseTexture, 280,200, 32,32);
+            sb.draw(pauseButton,Game.V_WIDTH - (pauseButton.getRegionWidth() / DOWNSCALE_MULTIPLIER) - 5,
+                    Game.V_HEIGHT - (pauseButton.getRegionHeight() / DOWNSCALE_MULTIPLIER)- 5,
+                    (pauseButton.getRegionWidth() / DOWNSCALE_MULTIPLIER),
+                    (pauseButton.getRegionHeight() / DOWNSCALE_MULTIPLIER));
         }
-
         sb.end();
     }
 

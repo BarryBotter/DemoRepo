@@ -7,14 +7,8 @@ import com.badlogic.gdx.physics.box2d.Body;
 import my.game.Game;
 import my.game.handlers.B2DVars;
 
-/**
- * Created by Katriina on 23.3.2018.
- */
-
 public class TextureDraw extends B2DSprite {
-
     private Texture tex;
-
 
     public TextureDraw(Body body, String key) {
         super(body);
@@ -23,7 +17,7 @@ public class TextureDraw extends B2DSprite {
 
     public void render(SpriteBatch sb) {
         sb.begin();
-        sb.draw(tex,body.getPosition().x * B2DVars.PPM - width / 2, body.getPosition().y * B2DVars.PPM - height/2,25,25);
+        sb.draw(tex,body.getPosition().x * B2DVars.PPM - width / 2, body.getPosition().y * B2DVars.PPM - height/2,tex.getWidth(),tex.getHeight());
         sb.end();
     }
 }

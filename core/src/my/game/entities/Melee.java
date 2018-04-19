@@ -7,14 +7,10 @@ import com.badlogic.gdx.physics.box2d.Body;
 import my.game.Game;
 import my.game.states.Play;
 
-/**
- * Created by jimbo on 3.4.2018.
- */
-
 public class Melee extends Projectile {
-    // Cooldown between shooting swinging melee attack.
-    private static final float MELEE_COOLDOWN_TIMER = 0.3f;
-    private boolean meleeCoolDownSet = false;
+    // Cool down between shooting swinging melee attack.
+    private static final float MELEE_COOL_DOWN_TIMER = 0.25f;
+    private static boolean meleeCoolDownSet = false;
     private float actionBeginTime = 0;
 
     public Melee(Body body) {
@@ -24,22 +20,28 @@ public class Melee extends Projectile {
         setAnimation(sprites, 1/8f);
     }
 
-    public void checkMeleeCoolDown() {
-        if(Play.accumulator - actionBeginTime > MELEE_COOLDOWN_TIMER && meleeCoolDownSet){
+    public void checkMeleeCoolDown(Body playerBody) {
+        if(Play.accumulator - actionBeginTime > MELEE_COOL_DOWN_TIMER && meleeCoolDownSet){
             meleeCoolDownSet = false;
             actionBeginTime = 0;
             body.setTransform(-500,-500,0);
         }
+        else if(meleeCoolDownSet){
+            body.setTransform(playerBody.getPosition().x + 0.3f, playerBody.getPosition().y, 0);
+        }
     }
 
-    public boolean returnMeleeCoolDownState() {
+    public static boolean returnMeleeCoolDownState() {
         return meleeCoolDownSet;
     }
 
-    public void meleeSwing() {
-        if(!meleeCoolDownSet) {
-            actionBeginTime = Play.accumulator;
-            meleeCoolDownSet = true;
+    public void meleeManager() {
+        //If melee swing is not on cool down make melee hit box appear in front of the player.
+        if (!returnMeleeCoolDownState() && !Projectile.returnCoolDownState() && Player.returnNumberOfAmmo() == 0) {
+            if(!meleeCoolDownSet) {
+                actionBeginTime = Play.accumulator;
+                meleeCoolDownSet = true;
+            }
         }
     }
 }

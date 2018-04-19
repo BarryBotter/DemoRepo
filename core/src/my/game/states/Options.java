@@ -1,6 +1,8 @@
 package my.game.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -36,14 +38,14 @@ public class Options extends GameState {
     String Name = "", soundvalue = "",difficultyString = "",hintname = "Your Name";
     private int row_height,col_width,width,height;
     private Label nameLabel,soundLabel,difficultyLabel;
-    Skin mySkin;
-    Stage stage;
+    private Stage stage;
     private ImageButton nameEditButton,difficultyButton,soundButton,exitButton;
     StretchViewport viewport;
 
     public Options(final GameStateManager gsm){
         super(gsm);
         getSettings();
+        Skin mySkin;
         width= Game.V_WIDTH*2;
         height= Game.V_HEIGHT*2;
         row_height = Game.V_HEIGHT/ 6;
@@ -53,6 +55,17 @@ public class Options extends GameState {
         setup();
         createButtons(mySkin);
         optionsLayout(nameEditButton,difficultyButton,soundButton);
+
+        /*Gdx.input.setInputProcessor(new InputAdapter() {
+            @Override
+            public boolean keyDown (int keycode) {
+                // Go back to menu when Andoird back button is pressed.
+                if(keycode == Input.Keys.BACK) {
+                    gsm.setState(GameStateManager.MENU);
+                }
+                return false;
+            }
+        });*/
 
     }
 
@@ -266,12 +279,10 @@ public class Options extends GameState {
 
     @Override
     public void handleInput() {
-
     }
 
     @Override
     public void update(float dt) {
-
     }
 
     @Override
