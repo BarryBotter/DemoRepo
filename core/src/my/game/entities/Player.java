@@ -5,14 +5,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
 
 import my.game.Game;
-import my.game.handlers.B2DVars;
 
 import static my.game.handlers.B2DVars.MAX_HEALTH;
-
-
-/**
- * Created by Katriina on 22.3.2018.
- */
 
 public class Player extends  B2DSprite{
     //private static final int MAX_HEALTH = 3;

@@ -17,9 +17,6 @@ public class HUD {
     private TextureRegion toothPasteTexture;
     private TextureRegion toothPasteSilhouetteTexture;
 
-    //private TextureRegion ammoTexture;
-    //private TextureRegion ammoSilhouetteTexture;
-
     public Texture pauseMenuTexture;
     public TextureRegion pauseButton;
 
@@ -48,9 +45,6 @@ public class HUD {
         heartSilhouetteTexture = new TextureRegion(hudIconTextures,160,0,160,160);
         toothPasteTexture = new TextureRegion(hudIconTextures,650,0,160,160);
         toothPasteSilhouetteTexture = new TextureRegion(hudIconTextures,830,0,160,160);
-
-        //ammoTexture = new TextureRegion(hudIconTextures,330,0,160,160);
-        //ammoSilhouetteTexture = new TextureRegion(hudIconTextures,480,0,160,160);
 
         // Setup pause button
         Texture pauseTexture = Game.res.getTexture("buttonMap");

@@ -6,7 +6,6 @@ import com.badlogic.gdx.InputAdapter;
 
 import my.game.Game;
 import my.game.entities.Background;
-import my.game.entities.Bullet;
 import my.game.entities.Enemy;
 import my.game.entities.HUD;
 import my.game.entities.Melee;
@@ -197,6 +196,7 @@ public class Play extends GameState {
                 // Pause button touched
                 if(topRightSideTouched(touchPoint.x, touchPoint.y) && Gdx.graphics.isContinuousRendering()) {
                     Gdx.graphics.setContinuousRendering(false);
+                    game.decreaseMusicLevel();
                 }
 
                 // Fighting stuff.
@@ -227,6 +227,7 @@ public class Play extends GameState {
 
                 // Pause menu left button touched. Goes to menu.
                 else if (pauseMenuLeftButtonTouched(touchPoint.x, touchPoint.y) && !Gdx.graphics.isContinuousRendering()) {
+                    game.increaseMusicLevel();
                     game.pauseMusic();
                     game.resumeMenuMusic();
                     gsm.setState(GameStateManager.LEVEL_SELECT);
@@ -235,11 +236,13 @@ public class Play extends GameState {
                 // Pause menu middle button touched. Restarts level.
                 else if (pauseMenuMiddleButtonTouched(touchPoint.x, touchPoint.y) && !Gdx.graphics.isContinuousRendering()) {
                     gsm.setState(GameStateManager.PLAY);
+                    game.increaseMusicLevel();
                 }
 
                 // Pause menu right button touched. Resumes game.
                 else if (pauseMenuRightButtonTouched(touchPoint.x, touchPoint.y) && !Gdx.graphics.isContinuousRendering()) {
                     Gdx.graphics.setContinuousRendering(true);
+                    game.increaseMusicLevel();
                 }
                 return super.touchDown(x, y, pointer, button);
             }
@@ -254,6 +257,7 @@ public class Play extends GameState {
                 if(keycode == Input.Keys.BACK) {
                     if(Gdx.graphics.isContinuousRendering()) {
                         Gdx.graphics.setContinuousRendering(false);
+                        game.decreaseMusicLevel();
                     }
                 }
                 return false;

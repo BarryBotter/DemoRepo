@@ -18,19 +18,16 @@ public class Enemy extends B2DSprite{
         setAnimation(sprites, 1/12f);
     }
 
-    public void setCurrentLocation(float x) {
+    private void setCurrentLocation(float x) {
         currentX = x;
     }
-
-    public float returnCurrentLocation() {
+    private float returnCurrentLocation() {
         return currentX;
     }
-
-    public void switchDirection() {
+    private void switchDirection() {
         directionToGo = !directionToGo;
     }
-
-    public boolean returnDirection() {
+    private boolean returnDirection() {
         return directionToGo;
     }
 

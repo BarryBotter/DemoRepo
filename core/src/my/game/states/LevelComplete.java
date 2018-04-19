@@ -1,15 +1,10 @@
 package my.game.states;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 
 import my.game.Game;
 import my.game.entities.Background;
@@ -17,7 +12,6 @@ import my.game.entities.Player;
 import my.game.handlers.GameButton;
 import my.game.handlers.GameStateManager;
 
-import static my.game.handlers.B2DVars.MAX_HEALTH;
 import static my.game.handlers.B2DVars.SOUND_LEVEL;
 
 public class LevelComplete extends GameState {
