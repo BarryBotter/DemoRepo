@@ -3,6 +3,7 @@ package my.game;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -26,7 +27,7 @@ public class Game implements ApplicationListener {
 
 	private SpriteBatch sb;
 	private static BoundedCamera cam;
-	private OrthographicCamera hudCam;
+	private OrthographicCamera hudCam,bigCam;
 
 	private GameStateManager gsm;
 
@@ -38,9 +39,10 @@ public class Game implements ApplicationListener {
 	public SpriteBatch getSpriteBatch(){return sb;}
 	public static BoundedCamera getCamera(){return cam;}
 	public OrthographicCamera getHUDCamera(){return hudCam;}
+	public OrthographicCamera getBigCam(){return bigCam;}
 
 	public Skin mySkin;
-	public BitmapFont font12,font24;
+	public BitmapFont font8,font12,font18,font24,textFont;
 
 	@Override
 	public void create() {
@@ -55,6 +57,8 @@ public class Game implements ApplicationListener {
 		cam.setToOrtho(false, V_WIDTH,V_HEIGHT);
 		hudCam = new OrthographicCamera();
 		hudCam.setToOrtho(false, V_WIDTH, V_HEIGHT);
+		bigCam = new OrthographicCamera();
+		bigCam.setToOrtho(false,640,480);
 		mySkin = new Skin(Gdx.files.internal("res/skin/glassy-ui.json"));
 
 		gsm = new GameStateManager(this);
@@ -128,10 +132,19 @@ public class Game implements ApplicationListener {
 		FreeTypeFontGenerator.setMaxTextureSize(2048);
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("res/fonts/Gauge-Regular.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+		parameter.size = 8;
+		font8 = generator.generateFont(parameter);
 		parameter.size = 12;
-		font12 = generator.generateFont(parameter); // font size 12 pixels
+		font12 = generator.generateFont(parameter);
+		parameter.size = 18;
+		font18 = generator.generateFont(parameter);
 		parameter.size = 24;
-		font24 = generator.generateFont(parameter); // font size 24 pixels
+		font24 = generator.generateFont(parameter);
+		parameter.size = 16;
+		parameter.shadowOffsetX = 3;
+		parameter.shadowOffsetY = 3;
+		parameter.color = Color.GREEN;
+		textFont = generator.generateFont(parameter);
 		generator.dispose(); // don't forget to dispose to avoid memory leaks!
 	}
 
@@ -140,9 +153,23 @@ public class Game implements ApplicationListener {
 		res.loadTexture("res/images/bgs.png","bg");
 		res.loadTexture("res/images/menu.png","menu");
 		res.loadTexture("kuva.png","olvi");
-		res.loadTexture("res/UI_final/rebg.png","menubg");
+		res.loadTexture("res/UI_final/play.png", "play");
+		res.loadTexture("res/UI_final/settings.png","settings");
+		res.loadTexture("res/UI_final/exit.png","exit");
+		res.loadTexture("res/UI_final/tooth_80.png", "tooth_80");
+		res.loadTexture("res/UI_final/back_80.png","back");
+		res.loadTexture("res/UI_final/right_80.png","right");
+		res.loadTexture("res/UI_final/background_640.png","menubg");
 		res.loadTexture("res/UI_final/resized_paavalikko.png","main");
 		res.loadTexture("res/UI_final/menu_logo.png","menulogo");
+		res.loadTexture("res/UI_final/sound_off.png","sound_off");
+		res.loadTexture("res/UI_final/sound_on.png","sound_on");
+		res.loadTexture("res/UI_final/tooth_easy_80.png","easy");
+		res.loadTexture("res/UI_final/tooth_normal_80.png","normal");
+		res.loadTexture("res/UI_final/tooth_hard_80.png","hard");
+		res.loadTexture("res/UI_final/tooth_bubble_120.png","bubble");
+		res.loadTexture("res/UI_final/tutorial.png","tutorial");
+		res.loadTexture("res/images/Game_Over.png", "gameover");
 		res.loadTexture("res/background/testimaa.png","bgone");
 		res.loadTexture("res/background/rsz_karkkimaas.png","bgones");
 		res.loadTexture("res/background/mountains.png", "mountain");
@@ -204,7 +231,6 @@ public class Game implements ApplicationListener {
 			res.getMusic("bbsong").setVolume(0);
 			res.getMusic("theme").setVolume(0);
 		}
-
 	}
 
 	public void pauseMusic(){

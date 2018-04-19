@@ -3,9 +3,6 @@ package my.game.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
-
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -13,15 +10,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import my.game.Game;
-import my.game.entities.Background;
 import my.game.handlers.GameStateManager;
 
-import static my.game.handlers.B2DVars.P_HEIGHT;
-import static my.game.handlers.B2DVars.P_WIDTH;
+
 import static my.game.handlers.B2DVars.SOUND_LEVEL;
 
 /**
@@ -30,7 +24,7 @@ import static my.game.handlers.B2DVars.SOUND_LEVEL;
 
 public class Menu extends GameState{
     private TextureRegion bg;
-    int row_height,col_width;
+    int row_height,col_width,width,height;
     Image logo;
     Table table, table1;
     Stage stage;
@@ -40,9 +34,10 @@ public class Menu extends GameState{
 
     public Menu(final GameStateManager gsm) {
         super(gsm);
-        Skin mySkin;
-        row_height = Game.V_HEIGHT/ 12;
-        col_width = Game.V_WIDTH /12;
+        width= Game.V_WIDTH*2;
+        height= Game.V_HEIGHT*2;
+        row_height = Game.V_HEIGHT/6;
+        col_width = Game.V_WIDTH /6;
         mySkin = game.mySkin;
         stage = gsm.stage;
         setup();
@@ -51,10 +46,10 @@ public class Menu extends GameState{
     }
 
     void setup(){
-        cam.setToOrtho(false, Game.V_WIDTH, Game.V_HEIGHT);
-        viewport = new StretchViewport(320,240, cam);
+        cam.setToOrtho(false, width, height);
+        viewport = new StretchViewport(width,height, cam);
 
-        cam.setBounds(P_WIDTH,P_HEIGHT,P_WIDTH,P_HEIGHT);
+        cam.setBounds(width,height,width,height);
 
         Texture logoTex =Game.res.getTexture("menulogo");
         logo = new Image(logoTex);
@@ -62,7 +57,7 @@ public class Menu extends GameState{
 
         //background
         Texture tex = Game.res.getTexture("menubg");
-        bg = new TextureRegion(tex, 0, 0, Game.V_WIDTH, Game.V_HEIGHT);
+        bg = new TextureRegion(tex, 0, 0, width, height);
 
         //stage
         stage = new Stage(viewport);
@@ -70,12 +65,10 @@ public class Menu extends GameState{
     }
 
     void createButtons(Skin Skin){
-        row_height = 20;
-        col_width = 20;
+
         playButton = new ImageButton(Skin);
         playButton.setStyle(gsm.playStyle);
         playButton.setSize(col_width,row_height);
-        //playButton.setScale(2f,2f);
         playButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
@@ -131,12 +124,12 @@ public class Menu extends GameState{
         table.add(optionsButton).width(col_width*1.5f);
         table.row();//second row
         table.add();
-        table.add(logo).colspan(3).height(row_height*6).width(col_width*7);
+        table.add(logo).colspan(3).height(row_height*6).width(col_width*5);
         table.add().width(col_width);
         table.add(table1); //nested table
         table1.add(playButton).width(col_width*4);
         table1.row();
-        table1.add().height(row_height/5);
+        table1.add().height(row_height);
         table1.row();
         table1.add(exitButton).width(col_width*4);
         table.row();//third row

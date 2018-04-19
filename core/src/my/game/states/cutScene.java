@@ -11,65 +11,103 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.XmlReader;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import my.game.Game;
-import my.game.entities.Background;
 import my.game.handlers.GameStateManager;
 
+/**
+ * Created by velij on 4.4.2018.
+ */
+
 public class cutScene extends GameState {
-    ExtendViewport viewport;
-    private Background bg;
+    private TextureRegion bg,tutorialBg;
     private BitmapFont font;
-    private String dialogString = "default_string";
-    private int screenWidth = 1920,screenHeight = 1080;
+    private String dialogString = "default_string",name;
+    private int width = 320,height = 240;
     private static Pixmap pixmap;
     private Texture pixmaptex;
     String[] strings;
-    int dialogNumber = 1;
+    public static int dialogNumber; // changing this changes the dialog
+    private boolean tutorialBool; //draws tutorial or default background
+    private Texture tex,tutorial;
+    int i = 1;
+
     public cutScene(final GameStateManager gsm){
         super(gsm);
-
-        Texture tex = Game.res.getTexture("menubg"); //background
-        bg = new Background(new TextureRegion(tex),hudCam,5 );
-        bg.setVector(0, 0);
-
+        xmlRead();
+        if (dialogNumber == 1){
+            name = game.prefs.getString("name", "no name stored");
+            dialogString += " " + name;
+        }
         //camera
-        viewport = new ExtendViewport(screenWidth, screenHeight,screenWidth,screenHeight, cam);
+        bigCam.setToOrtho(false,640,480);
 
-        //rectanglebox for dialogs
-        getPixmapRoundedRectangle(250,250,50, Color.LIGHT_GRAY);
-        pixmaptex = new Texture( pixmap );
-        //pixmaptex.
-        pixmap.dispose();
+        tex = Game.res.getTexture("menubg"); //background
+        bg = new TextureRegion(tex,0,0,width,height);
 
         //Text in the box
-        font = new BitmapFont();
-        font.getData().setScale(1f,1f);
-        xmlRead();
+        //font = game.font8;
+
+        //tutorial
+        tutorial = Game.res.getTexture("tutorial");
+        tutorialBg = new TextureRegion(tutorial,0,0,640,480);
+        if (dialogNumber == 0) {
+            tutorialBool = true; //changes the background
+            i = 2;
+            font = game.font18;
+            boxCreate(500,500,100);
+        }else {
+            //Text in the box
+            font = game.font8;
+            boxCreate(250,250,50);
+        }
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-                if (dialogNumber < 3){
+                //tutorialScene
+                if (dialogNumber == 0){
+                    tutorialBool = true;
+                    dialogString = strings[dialogNumber];
+                    dispose();
+                    gsm.setState(GameStateManager.LEVEL_SELECT);
+
+                    return super.touchUp(screenX, screenY, pointer, button);
+                }
+                //scene for using username merge string to get a whole dialog
+                else if (dialogNumber == 1) {
+                    tutorialBool = false;
+                    dialogString = strings[1];
+                    dialogString += " " + name;
+                    dialogNumber++;
+
+                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
+                    return super.touchUp(screenX, screenY, pointer, button);
+
+                }
+                else if (dialogNumber > 1 && dialogNumber < 4){
+                    tutorialBool = false;
                     dialogString = strings[dialogNumber];
                     dialogNumber++;
+                    return super.touchUp(screenX, screenY, pointer, button);
+
                 }else {
                     dispose();
                     gsm.setState(GameStateManager.LEVEL_SELECT);
+                    return super.touchUp(screenX, screenY, pointer, button);
+
                 }
-                return super.touchUp(screenX, screenY, pointer, button);
             }
         });
 
     }
-
     void xmlRead() {
         strings = new String[20];
         //Gdx.app.log("tag0", "method start");
-        FileHandle ProgressFileHandle = Gdx.files.internal("res/xml/dialogs.xml");
+        FileHandle xmlHandle = Gdx.files.internal("res/xml/dialogs.xml");
         XmlReader reader = new XmlReader();
-        XmlReader.Element xml_element = reader.parse(ProgressFileHandle);
+        XmlReader.Element xml_element = reader.parse(xmlHandle);
         Array<XmlReader.Element> dialogs = xml_element.getChildrenByName("dialog");
         int i = 0;
         for (XmlReader.Element child : dialogs) {
@@ -77,26 +115,47 @@ public class cutScene extends GameState {
             Gdx.app.log("string"+i, strings[i]);
             i++;
         }
-        dialogString = strings[0];
+        dialogString = strings[dialogNumber];
     }
 
-    public void handleInput() {}
+    private void boxCreate(int width,int height, int radius){
+        //rectanglebox for dialogs
+        //getPixmapRoundedRectangle(250,250,50, Color.LIGHT_GRAY);
+        getPixmapRoundedRectangle(width,height,radius, Color.LIGHT_GRAY);
+        pixmaptex = new Texture( pixmap );
+        pixmap.dispose();
+    }
 
-    public void update(float dt) {}
+    @Override
+    public void handleInput() {
+
+    }
+
+    @Override
+    public void update(float dt) {
+
+    }
 
     @Override
     public void render() {
-        bg.render(sb);
         sb.begin();
-        sb.draw(pixmaptex,10,10,300,80);
-        font.draw(sb,dialogString,(float) (screenWidth*0.01) ,75);
+        if (tutorialBool){
+            sb.draw(tutorialBg,0,0);
+            sb.draw(pixmaptex,width/8*2,10,width*0.75f*2,height/4*2);
+            font.draw(sb,dialogString,width*0.1875f *2,height/4*2-10);
+        }else {
+            sb.draw(bg,0,0);
+            sb.draw(pixmaptex,width/8,10,width*0.75f,height/4);
+            font.draw(sb,dialogString,width*0.1875f ,height/4-10);
+        }
+        //sb.draw(pixmaptex,width/8,10,width*0.75f,height/4);
         sb.end();
     }
 
     @Override
     public void dispose() {
         pixmaptex.dispose();
-        font.dispose();
+        Gdx.input.setInputProcessor(null);
     }
 
     private void getPixmapRoundedRectangle(int width, int height, int radius, Color color) {
