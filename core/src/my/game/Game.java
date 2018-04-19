@@ -43,7 +43,6 @@ public class Game implements ApplicationListener {
 	public Skin mySkin;
 	public BitmapFont font12,font24;
 
-
 	@Override
 	public void create() {
 
@@ -127,6 +126,7 @@ public class Game implements ApplicationListener {
 	}
 
 	public void loadFont(){
+		FreeTypeFontGenerator.setMaxTextureSize(2048);
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("res/fonts/Gauge-Regular.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = 12;
