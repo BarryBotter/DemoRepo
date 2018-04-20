@@ -160,8 +160,10 @@ public class Play extends GameState {
 
         startTime = System.currentTimeMillis();
 
-        game.pauseMenuMusic();
-        game.resumeMusic();
+        if (game.prefs.getBoolean("sound")) {
+            game.pauseMenuMusic();
+            game.resumeMusic();
+        }
 
         Gdx.input.setCatchBackKey(true);
 
@@ -923,10 +925,13 @@ public class Play extends GameState {
 
     private void animationManager() {
         // Melee attack animation.
-        if(Melee.returnMeleeCoolDownState() && player.returnCurrentAnimation().equalsIgnoreCase("playerWalk")) {
+        /*if(Melee.returnMeleeCoolDownState() && player.returnCurrentAnimation().equalsIgnoreCase("playerWalk")) {
             player.setPlayerAnimation("playerAttack");
+        }*/
+        if (!cl.isPlayerOnGround()){
+            player.setPlayerAnimation("playerJump");
         }
-        else if(!Melee.returnMeleeCoolDownState() && player.returnCurrentAnimation().equalsIgnoreCase("playerAttack")){
+        else if(cl.isPlayerOnGround() && player.returnCurrentAnimation().equalsIgnoreCase("playerJump")){
             player.setPlayerAnimation("playerWalk");
         }
 

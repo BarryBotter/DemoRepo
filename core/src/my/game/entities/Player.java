@@ -31,7 +31,7 @@ public class Player extends  B2DSprite{
     public void setPlayerAnimation(String animationKey) {
         this.animationKey = animationKey;
         Texture tex = Game.res.getTexture(animationKey);
-        TextureRegion[] sprites = TextureRegion.split(tex, 32, 32)[0];
+        TextureRegion[] sprites = TextureRegion.split(tex,  36, 34)[0];
         setAnimation(sprites, 1 / 12f);
     }
 

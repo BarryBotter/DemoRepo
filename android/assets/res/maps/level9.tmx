@@ -16,7 +16,7 @@
   </data>
  </layer>
  <objectgroup name="crystals"/>
- <layer name="platforms" width="100" height="10">
+ <layer name="platforms" width="100" height="10" visible="0">
   <data encoding="base64" compression="zlib">
    eJzt1yEOACAMA8BJ/v9iFAmBCQQwc5dU13VZBLzTkgBQY97hH5u8drgDADu7WCv7V27/LycdIx04HAER
   </data>

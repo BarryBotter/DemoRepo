@@ -7,7 +7,7 @@
  <tileset firstgid="9" source="gameblocks.tsx"/>
  <layer name="platforms" width="100" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUjIJRMApGwSgYBaNg+AIeCjCyGehmYrMHl/343EXI3fgAMWpIUUeOmaSGJwCwLwH5
+   eJxjYBgFo2AUjIJRMApGwSgYBaNg+AIeCjCyGehmYrMHl/343EXI3YTk8akhVx2x9pITngDO7wJB
   </data>
  </layer>
  <layer name="corner" width="100" height="8">
