@@ -85,6 +85,7 @@ public class Game implements ApplicationListener {
 		scores = Gdx.app.getPreferences("highscores");
 		if (!scores.contains("score1")){
 			scores.putInteger("score1",0);
+			scores.putInteger("collect1",0);
 			scores.flush();
 		}
 
