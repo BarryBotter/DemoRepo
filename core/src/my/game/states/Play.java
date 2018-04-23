@@ -103,8 +103,7 @@ public class Play extends GameState {
     public Play(GameStateManager gsm) {
         super(gsm);
 
-        cam.setToOrtho(false, P_WIDTH,P_HEIGHT);
-
+        cam.setToOrtho(false, 480,320);//Game.V_WIDTH, Game.V_HEIGHT);
         //Resets rendering every time play state is started.
         Gdx.graphics.setContinuousRendering(true);
 
@@ -143,10 +142,10 @@ public class Play extends GameState {
         TextureRegion sky = new TextureRegion(bgs, 0, 0, 320, 240);
         TextureRegion mountains = new TextureRegion(bgs, 0, 235, 320, 240);
         Texture trees = Game.res.getTexture("bgone");
-        TextureRegion treeLayer = new TextureRegion(trees, 0, 27, 320, 240);
-        backgrounds = new Background[2];
-        backgrounds[0] = new Background(sky, cam, 0f);
-        backgrounds[1] = new Background(mountains, cam, 0.2f);
+        TextureRegion treeLayer = new TextureRegion(trees, 0, 0, 320, 240);
+        backgrounds = new Background[1];
+        backgrounds[0] = new Background(sky, cam, 0.1f);
+        //backgrounds[1] = new Background(mountains, cam, 0.2f);
         //backgrounds[2] = new Background(treeLayer, cam, 0f);
 
         // set up hud
@@ -163,10 +162,12 @@ public class Play extends GameState {
         }
 
         Gdx.input.setCatchBackKey(true);
+
     }
 
     @Override
     public void handleInput() {
+
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
@@ -180,7 +181,6 @@ public class Play extends GameState {
 
                 // Pause button touched
                 if(topRightSideTouched(touchPoint.x, touchPoint.y) && Gdx.graphics.isContinuousRendering()) {
-                    Game.res.getSound("buttonClick").play(SOUND_LEVEL);
                     Gdx.graphics.setContinuousRendering(false);
                     game.decreaseMusicLevel();
                 }
@@ -216,20 +216,17 @@ public class Play extends GameState {
                     game.increaseMusicLevel();
                     game.pauseMusic();
                     game.resumeMenuMusic();
-                    Game.res.getSound("buttonClick").play(SOUND_LEVEL);
                     gsm.setState(GameStateManager.LEVEL_SELECT);
                 }
 
                 // Pause menu middle button touched. Restarts level.
                 else if (pauseMenuMiddleButtonTouched(touchPoint.x, touchPoint.y) && !Gdx.graphics.isContinuousRendering()) {
-                    Game.res.getSound("buttonClick").play(SOUND_LEVEL);
                     gsm.setState(GameStateManager.PLAY);
                     game.increaseMusicLevel();
                 }
 
                 // Pause menu right button touched. Resumes game.
                 else if (pauseMenuRightButtonTouched(touchPoint.x, touchPoint.y) && !Gdx.graphics.isContinuousRendering()) {
-                    Game.res.getSound("buttonClick").play(SOUND_LEVEL);
                     Gdx.graphics.setContinuousRendering(true);
                     game.increaseMusicLevel();
                 }
@@ -245,7 +242,6 @@ public class Play extends GameState {
                 //Pause game when Android back button is pressed.
                 if(keycode == Input.Keys.BACK) {
                     if(Gdx.graphics.isContinuousRendering()) {
-                        Game.res.getSound("buttonClick").play(SOUND_LEVEL);
                         Gdx.graphics.setContinuousRendering(false);
                         game.decreaseMusicLevel();
                     }
@@ -288,7 +284,6 @@ public class Play extends GameState {
                 traps.get(i).update(dt);
             }
         }
-
         // Game over stuff
         if (player.getBody().getPosition().y < 0) {
             Game.res.getSound("scream").play(SOUND_LEVEL);
