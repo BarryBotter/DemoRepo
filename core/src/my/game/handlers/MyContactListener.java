@@ -102,8 +102,8 @@ public class MyContactListener implements ContactListener {
                 Player.increaseEnemyKC();
             }
             else if(fa.getUserData().equals("melee")) {
-                enemyBodiesToRemove.add(fb.getBody());
                 Game.res.getSound("hit").play(SOUND_LEVEL);
+                enemyBodiesToRemove.add(fb.getBody());
                 meleeBodiesToRemove.add(fa.getBody());
                 Player.increaseEnemyKC();
             }
@@ -161,26 +161,8 @@ public class MyContactListener implements ContactListener {
         }
         if (fa.getUserData() != null && fa.getUserData().equals("jump")) {
             if (fb.getUserData().equals("player")) {
-                Game.res.getSound("bounceBack").play(SOUND_LEVEL);
+                //Game.res.getSound("bounceBack").play(SOUND_LEVEL);
                 fb.getBody().applyLinearImpulse(1,6,0,0,true);
-            }
-        }
-
-        //Check collision between corner block and player
-        if (fa.getUserData() != null && fa.getUserData().equals("corner")) {
-            if (fb.getUserData().equals("player")) {
-                Game.res.getSound("bounceBack").play(SOUND_LEVEL);
-            }
-            else if (fb.getUserData().equals("bullet")) {
-                //Game.res.getSound("shoot").play(SOUND_LEVEL);
-            }
-        }
-        if (fb.getUserData() != null && fb.getUserData().equals("corner")) {
-            if (fa.getUserData().equals("player")) {
-                Game.res.getSound("shoot").play(SOUND_LEVEL);
-            }
-            else if (fa.getUserData().equals("bullet")) {
-                //Game.res.getSound("shoot").play(SOUND_LEVEL);
             }
         }
     }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="2018.03.21" orientation="orthogonal" renderorder="right-down" width="78" height="8" tilewidth="32" tileheight="32" infinite="0" nextobjectid="69">
+<map version="1.0" tiledversion="1.1.3" orientation="orthogonal" renderorder="right-down" width="78" height="8" tilewidth="32" tileheight="32" infinite="0" nextobjectid="77">
  <tileset firstgid="1" name="blocks" tilewidth="32" tileheight="32" tilecount="4" columns="4">
   <image source="demoblock.png" width="128" height="32"/>
  </tileset>
@@ -7,26 +7,26 @@
  <tileset firstgid="9" source="gameblocks.tsx"/>
  <layer name="platforms" width="78" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2DwAx4i8SigLhgN51EwCkYBCFCa/4ktw4kpbyipD2ihh9ywodQsAAwpA1U=
+   eJxjYBgFo2BwAy4g5iECcw6UA4cpwBXuo+E8CkbByAOw/E+pfmzlCaEynhTzCJVTpOohtv4htXwkxlxeAmYAAEqFA2o=
   </data>
  </layer>
  <layer name="fill" width="78" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUjIJRMApGwSgYBdQEvGiYVMCDxQxkDAAjOACc
+   eJxjYBgFo2AUjIJRMApGwSgYBdQEvGiYUv3oGAAjWACd
   </data>
  </layer>
  <layer name="corner" width="78" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2BwA66BdsAIBaPhPgpGwSgAAUrLAmqWJZSYRY5eWpWD1DAXAMH4AFE=
+   eJxjYBgFo2AUjIJRMApGwSjADriQ2JwU6icXINtLrnnUcMdgAgBRMAA7
   </data>
  </layer>
  <layer name="jump" width="78" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUjIJRMApGwSgYnIB7oB1AAqCnWwEabAAX
+   eJxjYBgFo2AUjIJRMApGwSgYnIB7oB2ABwyk2wAbHAAX
   </data>
  </layer>
  <objectgroup name="win">
-  <object id="60" x="2432.36" y="126.97" width="56.667" height="44.7879"/>
+  <object id="60" x="2429.36" y="147.97" width="56.667" height="44.7879"/>
  </objectgroup>
  <objectgroup name="crystals">
   <object id="61" x="512" y="32">
@@ -35,19 +35,16 @@
   <object id="62" x="642" y="30">
    <ellipse/>
   </object>
-  <object id="63" x="478" y="192">
-   <ellipse/>
-  </object>
-  <object id="64" x="1028" y="72">
-   <ellipse/>
-  </object>
-  <object id="65" x="1386" y="204">
-   <ellipse/>
-  </object>
-  <object id="66" x="1790" y="134">
-   <ellipse/>
-  </object>
   <object id="67" x="2156" y="198">
+   <ellipse/>
+  </object>
+  <object id="69" x="1414" y="188">
+   <ellipse/>
+  </object>
+  <object id="70" x="1059" y="65">
+   <ellipse/>
+  </object>
+  <object id="76" x="1865" y="41">
    <ellipse/>
   </object>
  </objectgroup>
