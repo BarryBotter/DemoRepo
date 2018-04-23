@@ -143,16 +143,13 @@ public class Game implements ApplicationListener {
 		parameter.size = 16;
 		parameter.shadowOffsetX = 3;
 		parameter.shadowOffsetY = 3;
-		parameter.color = Color.GREEN;
+		parameter.color = Color.WHITE;
 		textFont = generator.generateFont(parameter);
 		generator.dispose(); // don't forget to dispose to avoid memory leaks!
 	}
 
 	private void loadTextures(){
 		res.loadTexture("res/images/hud.png","hud");
-		res.loadTexture("res/images/bgs.png","bg");
-		res.loadTexture("res/images/menu.png","menu");
-		res.loadTexture("kuva.png","olvi");
 		res.loadTexture("res/UI_final/play.png", "play");
 		res.loadTexture("res/UI_final/settings.png","settings");
 		res.loadTexture("res/UI_final/exit.png","exit");
@@ -172,9 +169,10 @@ public class Game implements ApplicationListener {
 		res.loadTexture("res/background/testimaa.png","bgone");
 		res.loadTexture("res/background/rsz_karkkimaas.png","bgones");
 		res.loadTexture("res/background/mountains.png", "mountain");
-		res.loadTexture("res/images/complete.png", "complete");
-		res.loadTexture("res/images/testibg.png", "testibg");
-		res.loadTexture("res/images/testitausta.png","taustatesti");
+
+		//Level select preview pics
+		res.loadTexture("res/UI_assets/previewBackground.png", "preview1");
+		res.loadTexture("res/UI_assets/previewBackground2.png", "preview2");
 
 		//Player animations
 		res.loadTexture("res/playerAnimations/playerWalk.png","playerWalk");
@@ -185,6 +183,7 @@ public class Game implements ApplicationListener {
 		res.loadTexture("res/UI_assets/pauseMenu.png","pauseMenu");
 		res.loadTexture("res/UI_assets/buttons.png","buttonMap");
 		res.loadTexture("res/UI_assets/HUD_Icons.png","hudIcons");
+		res.loadTexture("res/UI_assets/levelComplete.png", "complete");
 
 		//Enemies
 		res.loadTexture("res/enemies/enemyBat.png","enemyBat");
@@ -198,6 +197,7 @@ public class Game implements ApplicationListener {
 		//PickUps
 		res.loadTexture("res/pickups/crystal.png", "Crystal");
 		res.loadTexture("res/pickups/toothPastePickUp.png", "toothPaste");
+        res.loadTexture("res/pickups/flagPole.png", "flagPole");
 	}
 
 	private void loadSounds(){
@@ -210,17 +210,18 @@ public class Game implements ApplicationListener {
 		res.loadSound("res/sfx/overSound.mp3", "over");
 		res.loadSound("res/sfx/meleeHit.mp3", "melee");
         res.loadSound("res/sfx/pickupSound.mp3", "pickup");
+		res.loadSound("res/sfx/buttonClick.mp3","buttonClick");
+		res.loadSound("res/sfx/meleeSwing.mp3", "meleeSwing");
+		res.loadSound("res/sfx/shootingSound.mp3", "shoot");
+		res.loadSound("res/sfx/bounceBack.mp3", "bounceBack");
 
         // music
 		res.loadMusic("res/music/menuSong.mp3","theme");
 		res.loadMusic("res/music/bbsong.ogg", "bbsong");
 		res.getMusic("bbsong").setLooping(true);
-
-
 	}
 
 	public void isMusicPlaying(){
-
 		if (prefs.getBoolean("sound")) {
 			res.getMusic("bbsong").setVolume(1);
 			res.getMusic("theme").setVolume(1);
@@ -235,7 +236,9 @@ public class Game implements ApplicationListener {
 	public void pauseMusic(){
 	    res.getMusic("bbsong").pause();
     }
-    public void resumeMusic(){ res.getMusic("bbsong").play(); }
+    public void resumeMusic(){
+		res.getMusic("bbsong").play();
+		res.getMusic("bbsong").setVolume(0.8f);}
 
 	public void pauseMenuMusic(){
 		res.getMusic("theme").pause();
@@ -243,5 +246,5 @@ public class Game implements ApplicationListener {
 	public void resumeMenuMusic(){ res.getMusic("theme").play(); }
 
 	public void decreaseMusicLevel() { res.getMusic("bbsong").setVolume(0.33f); }
-	public void increaseMusicLevel() { res.getMusic("bbsong").setVolume(1); }
+	public void increaseMusicLevel() { res.getMusic("bbsong").setVolume(0.8f); }
 }

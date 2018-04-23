@@ -22,12 +22,10 @@ public class LevelComplete extends GameState {
     private World world;
     private BitmapFont textFont;
 
-    private int hearthScore;
+    private int heartScore;
     private int totalScore;
     private int scoreCount = 0;
     private int compareScore;
-
-
 
     public LevelComplete(GameStateManager gsm) {
         super(gsm);
@@ -38,7 +36,7 @@ public class LevelComplete extends GameState {
 
         textFont = game.textFont;
 
-        hearthScore =  Game.lvls.getInteger("hits");
+        heartScore =  Game.lvls.getInteger("hits");
 
         tex = Game.res.getTexture("main");
 
@@ -48,7 +46,6 @@ public class LevelComplete extends GameState {
         menuButtons[1] = new TextureRegion(tex, 340, 125, 200, 100);
         playButton = new GameButton(menuButtons[0], 350, 100, cam);
         exitButton = new GameButton(menuButtons[1], 100, 110, cam);
-
 
         cam.setToOrtho(false, Game.V_WIDTH, Game.V_HEIGHT);
 
@@ -63,12 +60,13 @@ public class LevelComplete extends GameState {
 
     @Override
     public void handleInput() {
-
         if (playButton.isClicked()) {
             Play.level++;
+            Game.res.getSound("buttonClick").play(SOUND_LEVEL);
             gsm.setState(GameStateManager.PLAY);
             game.resumeMusic();
         } else if (exitButton.isClicked()) {
+            Game.res.getSound("buttonClick").play(SOUND_LEVEL);
             gsm.setState(GameStateManager.MENU);
             game.resumeMenuMusic();
         }
@@ -76,18 +74,12 @@ public class LevelComplete extends GameState {
 
     @Override
     public void update(float dt) {
-
         handleInput();
-
         world.step(dt / 5, 8, 3);
 
         bg.update(dt);
-
         playButton.update(dt);
-
         exitButton.update(dt);
-
-        System.out.println(compareScore);
     }
 
     @Override
@@ -104,15 +96,15 @@ public class LevelComplete extends GameState {
         sb.begin();
         textFont.draw(sb,"toothpaste collected", 130,215);
         textFont.draw(sb, "enemies destroyed",130, 195);
-        textFont.draw(sb, "Hits taken",130,175);
-        textFont.draw(sb, "Hearths left", 130 ,155);
+        textFont.draw(sb, "hits taken",130,175);
+        textFont.draw(sb, "hearts left", 130 ,155);
         textFont.draw(sb,"total score",110, 80);
 
 
         // draw crystal amount
         textFont.draw(sb, Game.lvls.getInteger("crystals") + "", 110, 215);
         textFont.draw(sb, Game.lvls.getInteger("enemies") + "", 110, 195);
-        textFont.draw(sb, hearthScore + "",110,175);
+        textFont.draw(sb, heartScore + "",110,175);
         textFont.draw(sb, String.valueOf(Player.returnHealth()),110,155);
         textFont.draw(sb, String.valueOf(settime()) + "s",110,135);
 
@@ -129,33 +121,28 @@ public class LevelComplete extends GameState {
         }
 
         sb.end();
-
-
     }
 
     @Override
-    public void dispose() {
-
-    }
-
+    public void dispose() { }
 
     private int getScore() {
         int crystalScore;
         int enemyScore;
         int hitScore;
         float timescore;
-        int hearthsLeft;
+        int heartsLeft;
 
         crystalScore = Game.lvls.getInteger("crystals") * 100;
         enemyScore = Game.lvls.getInteger("enemies") * 100;
         hitScore = Game.lvls.getInteger("hits");
         timescore = (60 - (Play.gettime()/1000)) * 1000;
-        hearthsLeft = Player.returnHealth() * 2;
+        heartsLeft = Player.returnHealth() * 2;
 
         if (hitScore == 0)
-            totalScore = (int) ((int) ((timescore * hearthsLeft) + ((enemyScore +crystalScore)*5))* 1.5f);
+            totalScore = (int) ((int) ((timescore * heartsLeft) + ((enemyScore +crystalScore)*5))* 1.5f);
         else
-            totalScore= (int) ((timescore * hearthsLeft) + ((enemyScore +crystalScore)*5));
+            totalScore= (int) ((timescore * heartsLeft) + ((enemyScore +crystalScore)*5));
 
         return totalScore;
     }

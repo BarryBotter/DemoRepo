@@ -57,8 +57,8 @@ public class GameButton {
         cam.unproject(vec);
 
         if(Gdx.input.isTouched() &&
-                vec.x > x - width / 2 && vec.x < x + width / 2 &&
-                vec.y > y - height / 2 && vec.y < y + height / 2) {
+                vec.x > x - width / 2.5f && vec.x < x + width / 2.5f &&
+                vec.y > y - height / 2.5f && vec.y < y + height / 2.5f) {
             clicked = true;
         }
         else {

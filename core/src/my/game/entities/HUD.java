@@ -9,7 +9,7 @@ import my.game.Game;
 
 public class HUD {
     private Player player;
-    private TextureRegion crystal;
+    //private TextureRegion crystal;
     private TextureRegion[] font;
 
     private TextureRegion heartTexture;
@@ -30,7 +30,7 @@ public class HUD {
             blocks[i] = new TextureRegion(tex, 32 + i * 16, 0, 16, 16);
         }
 
-        crystal = new TextureRegion(tex, 80, 0, 16, 16);
+        //crystal = new TextureRegion(tex, 80, 0, 16, 16);
 
         font = new TextureRegion[11];
         for (int i = 0; i < 6; i++) {
@@ -85,8 +85,11 @@ public class HUD {
                     toothPasteTexture.getRegionHeight() / HUD_ICONS_MULTIPLIER);
         }
 
-        // draw crystal amount
-        sb.draw(crystal, Game.V_WIDTH - 206, Game.V_HEIGHT - 22);
+        // draw Collected toothpaste amount
+        //sb.draw(crystal, Game.V_WIDTH - 206, Game.V_HEIGHT - 22);
+        sb.draw(toothPasteTexture, Game.V_WIDTH - 206, Game.V_HEIGHT - 25,
+                toothPasteTexture.getRegionWidth() / HUD_ICONS_MULTIPLIER,
+                toothPasteTexture.getRegionHeight() / HUD_ICONS_MULTIPLIER);
         drawString(sb, player.getNumCrystals() + " / " + player.getTotalCrystals(), Game.V_WIDTH - 180, Game.V_HEIGHT - 18);
 
         //draw pause menu if game is paused
