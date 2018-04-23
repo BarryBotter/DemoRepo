@@ -34,7 +34,6 @@ public class GameStateManager {
             toothStyle,backStyle,rightStyle, soundStyle,
             bubbleStyle, easyStyle,normalStyle,hardStyle;
 
-    private TextureRegion menuButtons[];
     public Stage stage;
 
     public GameStateManager(Game game){
@@ -103,24 +102,25 @@ public class GameStateManager {
     private void makeStyles() {
         //styles for buttons
 
+        TextureRegion menuButtons[];
         //todo load from a bigger texture
         Texture tex = my.game.Game.res.getTexture("main");
         menuButtons = new TextureRegion[5];
         menuButtons[0] =  new TextureRegion(tex, 340, 40, 200, 100);
         menuButtons[1] =  new TextureRegion(tex, 340, 125, 200, 100);
 
-        TextureRegion play = new TextureRegion(game.res.getTexture("play"));
-        TextureRegion options = new TextureRegion(game.res.getTexture("settings"));
-        TextureRegion exit = new TextureRegion(game.res.getTexture("exit"));
-        TextureRegion tooth = new TextureRegion(game.res.getTexture("tooth_80"));
-        TextureRegion back = new TextureRegion(game.res.getTexture("back"));
-        TextureRegion right = new TextureRegion(game.res.getTexture("right"));
-        TextureRegion sound_off = new TextureRegion(game.res.getTexture("sound_off"));
-        TextureRegion sound_on = new TextureRegion(game.res.getTexture("sound_on"));
-        TextureRegion tooth_easy = new TextureRegion(game.res.getTexture("easy"));
-        TextureRegion tooth_normal = new TextureRegion(game.res.getTexture("normal"));
-        TextureRegion tooth_hard = new TextureRegion(game.res.getTexture("hard"));
-        TextureRegion bubble = new TextureRegion(game.res.getTexture("bubble"));
+        TextureRegion play = new TextureRegion(Game.res.getTexture("play"));
+        TextureRegion options = new TextureRegion(Game.res.getTexture("settings"));
+        TextureRegion exit = new TextureRegion(Game.res.getTexture("exit"));
+        TextureRegion tooth = new TextureRegion(Game.res.getTexture("tooth_80"));
+        TextureRegion back = new TextureRegion(Game.res.getTexture("back"));
+        TextureRegion right = new TextureRegion(Game.res.getTexture("right"));
+        TextureRegion sound_off = new TextureRegion(Game.res.getTexture("sound_off"));
+        TextureRegion sound_on = new TextureRegion(Game.res.getTexture("sound_on"));
+        TextureRegion tooth_easy = new TextureRegion(Game.res.getTexture("easy"));
+        TextureRegion tooth_normal = new TextureRegion(Game.res.getTexture("normal"));
+        TextureRegion tooth_hard = new TextureRegion(Game.res.getTexture("hard"));
+        TextureRegion bubble = new TextureRegion(Game.res.getTexture("bubble"));
 
         easyStyle = new  ImageButton.ImageButtonStyle();
         easyStyle.up = new TextureRegionDrawable(tooth_easy);
@@ -149,5 +149,4 @@ public class GameStateManager {
         toothStyle.imageDown = new TextureRegionDrawable(tooth);
         toothStyle.imageUp = new TextureRegionDrawable(tooth);
     }
-
 }

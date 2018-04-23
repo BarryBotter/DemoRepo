@@ -69,6 +69,7 @@ public class Options extends GameState {
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 dispose();
+                Game.res.getSound("buttonClick").play(SOUND_LEVEL);
                 gsm.setState(GameStateManager.MENU);
             }
             @Override
@@ -86,6 +87,7 @@ public class Options extends GameState {
         nameEditButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                Game.res.getSound("buttonClick").play(SOUND_LEVEL);
                 //creates textinputlistener and inputs the output to Preferences
                 MyTextInputListener listener = new MyTextInputListener(game);
                 Gdx.input.getTextInput(listener, "Enter your name:", "", hintname);            }
@@ -107,6 +109,7 @@ public class Options extends GameState {
         soundButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                Game.res.getSound("buttonClick").play(SOUND_LEVEL);
                 soundOption();//sound on/off
             }
             @Override
@@ -128,6 +131,7 @@ public class Options extends GameState {
         difficultyButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                Game.res.getSound("buttonClick").play(SOUND_LEVEL);
                 difficultyChange();
             }
             @Override

@@ -1,24 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="2018.03.21" orientation="orthogonal" renderorder="right-down" width="100" height="10" tilewidth="32" tileheight="32" infinite="0" nextobjectid="7">
+<map version="1.0" tiledversion="1.1.3" orientation="orthogonal" renderorder="right-down" width="100" height="10" tilewidth="32" tileheight="32" infinite="0" nextobjectid="1818">
  <tileset firstgid="1" source="demoblock.tsx"/>
  <tileset firstgid="5" source="gameblocks.tsx"/>
  <layer name="corner" width="100" height="10">
   <data encoding="base64" compression="zlib">
-   eJzt1b0KACAIhVGXft7/iaNBcDEouEXwnUlcFISrGaBRk365ugUAYIqZ3EOtyuTsByhnAsBvPCvJxTdWvyrauU87nOEGoLcATQ==
+   eJxjYBgFo2AUjIJRMAqGH2DDIc5KV1eMglEwCoY6wFWWjALag9Gwpw8Y6uGMz/3IdT5IHQcSHqztAQDDnABM
   </data>
  </layer>
  <objectgroup name="win">
-  <object id="1" x="3024.24" y="172.727" width="142.424" height="81.8182"/>
+  <object id="1793" x="1914.83" y="238" width="44" height="50"/>
  </objectgroup>
  <layer name="jump" width="100" height="10">
   <data encoding="base64" compression="zlib">
-   eJzt1rEKACAIRVE3+/8vbnESBMUEiXvgDTakkygC4BdqAYAOv0eqtXcsAIB9NEj1j5d1tmc0b/atY+rmvo2SAMc=
+   eJxjYBgFo2AUjIJRMAqGFuAgUmwU0AeMxsfAAlY0/mh8DC4wGh+DC4zGB/0BrvBlg8phw+jl2kgCAD3eAJk=
   </data>
  </layer>
- <objectgroup name="crystals"/>
- <layer name="platforms" width="100" height="10" visible="0">
+ <objectgroup name="crystals">
+  <object id="1807" x="1324.33" y="95.3333" width="16.6667" height="18.6667">
+   <ellipse/>
+  </object>
+  <object id="1808" x="1001.67" y="62" width="16.6667" height="18.6667">
+   <ellipse/>
+  </object>
+  <object id="1809" x="711.667" y="157.333" width="16.6667" height="18.6667">
+   <ellipse/>
+  </object>
+  <object id="1810" x="521.667" y="184" width="16.6667" height="18.6667">
+   <ellipse/>
+  </object>
+  <object id="1813" x="1565" y="128" width="16.6667" height="18.6667">
+   <ellipse/>
+  </object>
+  <object id="1814" x="1641" y="174.667" width="16.6667" height="18.6667">
+   <ellipse/>
+  </object>
+  <object id="1815" x="1713" y="226.667" width="15.3334" height="18.6667">
+   <ellipse/>
+  </object>
+  <object id="1816" x="960.667" y="255.667" width="16.6667" height="18.6667">
+   <ellipse/>
+  </object>
+  <object id="1817" x="817.667" y="253.667" width="16.6667" height="18.6667">
+   <ellipse/>
+  </object>
+ </objectgroup>
+ <layer name="platforms" width="100" height="10">
   <data encoding="base64" compression="zlib">
-   eJzt1yEOACAMA8BJ/v9iFAmBCQQwc5dU13VZBLzTkgBQY97hH5u8drgDADu7WCv7V27/LycdIx04HAER
+   eJzt1rEKACAIRVGXwv//4hod0qiQEO4BiTZB0CcCAIj0WepU+9gX9lYzA6qyu8j+kS/a+8wg1+m9ZR53vJzzmnXUvJm5yeu9ogE+egFU
   </data>
  </layer>
 </map>

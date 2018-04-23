@@ -36,6 +36,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import java.util.Random;
 
 import my.game.handlers.GameStateManager;
 import my.game.handlers.MyContactListener;
@@ -98,15 +99,14 @@ public class Play extends GameState {
     private Background[] backgrounds;
 
     private HUD hud;
-    private BitmapFont textFont;
 
     public Play(GameStateManager gsm) {
         super(gsm);
 
-        cam.setToOrtho(false, 480,320);//Game.V_WIDTH, Game.V_HEIGHT);
+        cam.setToOrtho(false, P_WIDTH,P_HEIGHT);
+
         //Resets rendering every time play state is started.
         Gdx.graphics.setContinuousRendering(true);
-
 
         world = new World(new Vector2(0, -9.81f), true);
         cl = new MyContactListener();
@@ -143,10 +143,10 @@ public class Play extends GameState {
         TextureRegion sky = new TextureRegion(bgs, 0, 0, 320, 240);
         TextureRegion mountains = new TextureRegion(bgs, 0, 235, 320, 240);
         Texture trees = Game.res.getTexture("bgone");
-        TextureRegion treeLayer = new TextureRegion(trees, 0, 0, 320, 240);
-        backgrounds = new Background[1];
-        backgrounds[0] = new Background(sky, cam, 0.1f);
-        //backgrounds[1] = new Background(mountains, cam, 0.2f);
+        TextureRegion treeLayer = new TextureRegion(trees, 0, 27, 320, 240);
+        backgrounds = new Background[2];
+        backgrounds[0] = new Background(sky, cam, 0f);
+        backgrounds[1] = new Background(mountains, cam, 0.2f);
         //backgrounds[2] = new Background(treeLayer, cam, 0f);
 
         // set up hud
@@ -163,12 +163,10 @@ public class Play extends GameState {
         }
 
         Gdx.input.setCatchBackKey(true);
-
     }
 
     @Override
     public void handleInput() {
-
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
@@ -182,6 +180,7 @@ public class Play extends GameState {
 
                 // Pause button touched
                 if(topRightSideTouched(touchPoint.x, touchPoint.y) && Gdx.graphics.isContinuousRendering()) {
+                    Game.res.getSound("buttonClick").play(SOUND_LEVEL);
                     Gdx.graphics.setContinuousRendering(false);
                     game.decreaseMusicLevel();
                 }
@@ -217,17 +216,20 @@ public class Play extends GameState {
                     game.increaseMusicLevel();
                     game.pauseMusic();
                     game.resumeMenuMusic();
+                    Game.res.getSound("buttonClick").play(SOUND_LEVEL);
                     gsm.setState(GameStateManager.LEVEL_SELECT);
                 }
 
                 // Pause menu middle button touched. Restarts level.
                 else if (pauseMenuMiddleButtonTouched(touchPoint.x, touchPoint.y) && !Gdx.graphics.isContinuousRendering()) {
+                    Game.res.getSound("buttonClick").play(SOUND_LEVEL);
                     gsm.setState(GameStateManager.PLAY);
                     game.increaseMusicLevel();
                 }
 
                 // Pause menu right button touched. Resumes game.
                 else if (pauseMenuRightButtonTouched(touchPoint.x, touchPoint.y) && !Gdx.graphics.isContinuousRendering()) {
+                    Game.res.getSound("buttonClick").play(SOUND_LEVEL);
                     Gdx.graphics.setContinuousRendering(true);
                     game.increaseMusicLevel();
                 }
@@ -243,6 +245,7 @@ public class Play extends GameState {
                 //Pause game when Android back button is pressed.
                 if(keycode == Input.Keys.BACK) {
                     if(Gdx.graphics.isContinuousRendering()) {
+                        Game.res.getSound("buttonClick").play(SOUND_LEVEL);
                         Gdx.graphics.setContinuousRendering(false);
                         game.decreaseMusicLevel();
                     }
@@ -285,6 +288,7 @@ public class Play extends GameState {
                 traps.get(i).update(dt);
             }
         }
+
         // Game over stuff
         if (player.getBody().getPosition().y < 0) {
             Game.res.getSound("scream").play(SOUND_LEVEL);
@@ -296,56 +300,27 @@ public class Play extends GameState {
             gsm.setState(GameStateManager.GAMEOVER);
         }
 
-            // Win stuff
-            if (cl.isPlayerWin()) {
-                if (level == 1) {
-                    unlockLevel();
-                    Collected();
-                    cutScene.dialogNumber = 1;
-                    gsm.setState(GameStateManager.CUTSCENE);
-                } else if (level == 2) {
-                    unlockLevel();
-                    Collected();
-                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
-                } else if (level == 3) {
-                    unlockLevel();
-                    Collected();
-                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
-                }
-                else if (level == 4) {
-                    unlockLevel();
-                    Collected();
-                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
-                } else if (level == 5) {
-                    unlockLevel();
-                    Collected();
-                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
-                } else if (level == 6) {
-                    unlockLevel();
-                    Collected();
-                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
-                }
-                else if (level == 7) {
-                    unlockLevel();
-                    Collected();
-                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
-                } else if (level == 8) {
-                    unlockLevel();
-                    Collected();
-                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
-                } else if (level == 9) {
-                    unlockLevel();
-                    Collected();
-                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
-                }
+        // Win stuff
+        if (cl.isPlayerWin()) {
+            if (level == 1) {
+                unlockLevel();
+                Collected();
+                cutScene.dialogNumber = level;
+                dispose();
+                gsm.setState(GameStateManager.CUTSCENE);
+            } else if (level >= 2) {
+                unlockLevel();
+                Collected();
+                dispose();
+                gsm.setState(GameStateManager.LEVEL_COMPLETE);
             }
+        }
 
-            time = System.currentTimeMillis() - startTime;
+        time = System.currentTimeMillis() - startTime;
 
         // Player animations
         animationManager();
-
-        }
+    }
 
     private boolean rightSideTouched(float x, float y) {
         return screenRightSide.contains(x, y);
@@ -380,16 +355,7 @@ public class Play extends GameState {
 
     @Override
     public void render() {
-        //set cam to follow player
-        //cam with bounds and centered stage
-       //cam.setPosition(player.getposition().x * PPM + P_WIDTH / 4, P_HEIGHT / 2);
-
-        //cam without bounds and set to bottom
-        //if (cam.position.x < tileMapWidth *28){
-            cam.position.set(player.getposition().x * PPM + P_WIDTH / 4, P_HEIGHT/ 2, 0);
-            cam.update();
-        //}
-
+        cam.position.set(player.getposition().x * PPM + P_WIDTH / 4, P_HEIGHT/ 2, 0);
         cam.update();
 
         // draw bgs
@@ -410,22 +376,27 @@ public class Play extends GameState {
         for (int i = 0; i < crystals.size; i++) {
             crystals.get(i).render(sb);
         }
+
         //draw enemy
         for (int i = 0; i < enemies.size; i++) {
             enemies.get(i).render(sb);
         }
+
         //draw traps
         for (int i = 0; i < traps.size; i++) {
             traps.get(i).render(sb);
         }
+
         //draw bullets
         for (int i = 0; i < bullets.size; i++) {
             bullets.get(i).render(sb);
         }
+
         //draw melee hit box
         for (int i = 0; i < meleeHitBoxes.size; i++) {
             meleeHitBoxes.get(i).render(sb);
         }
+
         //draw win
         win.render(sb);
 
@@ -435,10 +406,7 @@ public class Play extends GameState {
     }
 
     @Override
-    public void dispose() {
-        //tileMap.dispose();
-       //world.dispose();
-    }
+    public void dispose() { }
 
     private void createPlayer() {
         BodyDef bdef = new BodyDef();
@@ -561,9 +529,6 @@ public class Play extends GameState {
                 v[3] = new Vector2(ts / 2 / PPM, -ts / 2 / PPM);
                 cs.createChain(v);
 
-                //PolygonShape cs = new PolygonShape();
-                //cs.setAsBox(32,32);
-
                 FixtureDef fd = new FixtureDef();
                 fd.friction = 0;
                 fd.shape = cs;
@@ -572,7 +537,6 @@ public class Play extends GameState {
                 fd.filter.maskBits = BIT_PLAYER | BIT_ENEMY |BIT_BULLET;
                 world.createBody(bdef).createFixture(fd).setUserData("corner");
                 cs.dispose();
-
             }
         }
     }
@@ -693,6 +657,7 @@ public class Play extends GameState {
         if (layer != null){
         BodyDef bdef = new BodyDef();
         FixtureDef fdef = new FixtureDef();
+        PolygonShape shape = new PolygonShape();
 
             for (MapObject mo : layer.getObjects()) {
 
@@ -703,19 +668,17 @@ public class Play extends GameState {
 
                 bdef.position.set(x, y);
 
-                CircleShape cshape = new CircleShape();
-                cshape.setRadius(8 / PPM);
-
-                fdef.shape = cshape;
+                shape.setAsBox(9 / PPM, Gdx.graphics.getHeight());
+                fdef.shape = shape;
                 fdef.isSensor = true;
                 fdef.filter.categoryBits = BIT_WIN;
                 fdef.filter.maskBits = BIT_PLAYER;
 
                 Body body = world.createBody(bdef);
                 body.createFixture(fdef).setUserData("win");
-                cshape.dispose();
+                shape.dispose();
 
-                win = new TextureDraw(body, "Crystal");
+                win = new TextureDraw(body, "flagPole");
 
                 body.setUserData(win);
             }
@@ -753,7 +716,10 @@ public class Play extends GameState {
         PolygonShape shape = new PolygonShape();
         FixtureDef fdef = new FixtureDef();
 
-        bdef.position.set(player.getposition().x + 5, player.getposition().y + 2);
+        Random rand = new Random();
+        int i = rand.nextInt(5);
+
+        bdef.position.set(player.getposition().x + i + Math.abs(3*(player.getBody().getLinearVelocity().x)), player.getposition().y + 2);
         bdef.linearVelocity.set(0, 0);
         bdef.type = BodyDef.BodyType.DynamicBody;
         Body body = world.createBody(bdef);

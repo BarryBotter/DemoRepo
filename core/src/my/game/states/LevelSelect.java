@@ -18,6 +18,8 @@ import my.game.Game;
 import my.game.entities.Player;
 import my.game.handlers.GameStateManager;
 
+import static my.game.handlers.B2DVars.SOUND_LEVEL;
+
 public class LevelSelect extends GameState {
     private TextureRegion reg;
     private Skin mySkin;
@@ -61,32 +63,37 @@ public class LevelSelect extends GameState {
     private void buttons(){
         updateImg();
 
-        Table table = new Table();
-        table.left().bottom();
+       // Table table = new Table();
+        //table.left().bottom();
         //button back to menu
         Button exitButton,tutorialButton;
         exitButton = new ImageButton(mySkin);
-        exitButton.setSize(80,80);
+        exitButton.setSize(60,60);
         exitButton.setStyle(gsm.backStyle);
+        exitButton.setPosition(width *0.94f,height * 0.92f,1);
         exitButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 dispose();
+                Game.res.getSound("buttonClick").play(SOUND_LEVEL);
                 gsm.setState(GameStateManager.MENU);
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 return true;}
         });
-        table.add(exitButton);
+        stage.addActor(exitButton);
+        //table.add(exitButton);
         //button tutorial
         tutorialButton = new ImageButton(mySkin);
-        tutorialButton.setSize(80,80);
+        tutorialButton.setSize(60,60);
         tutorialButton.setStyle(gsm.toothStyle);
+        tutorialButton.setPosition(width * 0.06f,height * 0.92f,1);
         tutorialButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 dispose();
+                Game.res.getSound("buttonClick").play(SOUND_LEVEL);
                 cutScene.dialogNumber = 0;
                 gsm.setState(GameStateManager.CUTSCENE);
             }
@@ -94,9 +101,10 @@ public class LevelSelect extends GameState {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 return true;}
         });
-        table.add(tutorialButton);
+        stage.addActor(tutorialButton);
+        //table.add(tutorialButton);
 
-        stage.addActor(table);
+        //stage.addActor(table);
         //table.debug();
 
         //move to previous lvl
@@ -108,6 +116,7 @@ public class LevelSelect extends GameState {
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 if ( event.getStageX() < width/4 && leftButton.isPressed() && Play.level > 1) {
+                    Game.res.getSound("buttonClick").play(SOUND_LEVEL);
                     Play.level -= 1;
                     lvlname = "Level number " + Play.level;
                     updateImg();
@@ -128,6 +137,7 @@ public class LevelSelect extends GameState {
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 if (event.getStageX() > width*0.75  && rightButton.isPressed() && Play.level < 9) {
+                    Game.res.getSound("buttonClick").play(SOUND_LEVEL);
                     Play.level += 1;
                     lvlname = "Level number " + Play.level;
                     updateImg();
@@ -144,10 +154,10 @@ public class LevelSelect extends GameState {
         Image lvlImg;
 
         if (Play.level < 5) {
-            lvlImg = new Image(Game.res.getTexture("olvi"));
+            lvlImg = new Image(Game.res.getTexture("preview1"));
         }
         else{
-            lvlImg = new Image(Game.res.getTexture("testibg"));
+            lvlImg = new Image(Game.res.getTexture("preview2"));
         }
         lvlImg.setSize(width/2,height/2);
         lvlImg.setPosition(width/4,height/3);
@@ -157,6 +167,7 @@ public class LevelSelect extends GameState {
                 if ( event.getStageX() > width/4 && event.getStageX() < width*0.75f
                         && Play.level > 0 && Play.level <10) {
                     dispose();
+                    Game.res.getSound("buttonClick").play(SOUND_LEVEL);
                     gsm.setState(GameStateManager.PLAY);
                 }
             }

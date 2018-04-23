@@ -8,13 +8,9 @@ import my.game.Game;
 import my.game.states.Play;
 
 import static my.game.handlers.B2DVars.PPM;
+import static my.game.handlers.B2DVars.SOUND_LEVEL;
 
 public class Projectile extends B2DSprite{
-    //Velocity of the bullet.
-    private static final float BULLET_SPEED = 300f;
-    // Cooldown between shooting bullets.
-    private static final float BULLET_COOL_DOWN_TIMER = 0.4f;
-
     private static boolean coolDownSet = false;
     private float actionBeginTime = 0;
 
@@ -32,7 +28,8 @@ public class Projectile extends B2DSprite{
     }
 
     public void checkBulletCoolDown() {
-        if(Play.accumulator - actionBeginTime > BULLET_COOL_DOWN_TIMER && coolDownSet){
+        final float BULLET_COOL_DOWN_TIMER = 0.4f;
+        if(Play.accumulator - actionBeginTime > BULLET_COOL_DOWN_TIMER && returnCoolDownState()){
             coolDownSet = false;
             actionBeginTime = 0;
         }
@@ -43,17 +40,17 @@ public class Projectile extends B2DSprite{
     }
 
     private void shootBullet(float touchPointX, float touchPointY, boolean belowPlayer) {
+        final float BULLET_SPEED = 500f;
+
         if(!coolDownSet) {
             if(body.getLinearVelocity().epsilonEquals(0,0)) {
                 if (Player.returnNumberOfAmmo() > 0) {
                     if(belowPlayer) {
-                       // body.applyForceToCenter(touchPointX * BULLET_SPEED, touchPointY * BULLET_SPEED, true);
-                       // body.applyLinearImpulse(touchPointX * BULLET_SPEED,-(touchPointY * BULLET_SPEED), body.getWorldCenter().x,body.getWorldCenter().y,true);
+                        Game.res.getSound("shoot").play(SOUND_LEVEL);
                         body.applyForce(touchPointX * BULLET_SPEED, touchPointY  * BULLET_SPEED,body.getWorldCenter().x,body.getWorldCenter().y ,true);
                     }
                     else {
-                       // body.applyForceToCenter(touchPointX * BULLET_SPEED, touchPointY * BULLET_SPEED, true);
-                       // body.applyLinearImpulse(touchPointX * BULLET_SPEED,touchPointY * BULLET_SPEED, body.getWorldCenter().x,body.getWorldCenter().y,true);
+                        Game.res.getSound("shoot").play(SOUND_LEVEL);
                         body.applyForce(touchPointX * BULLET_SPEED, touchPointY * BULLET_SPEED,body.getWorldCenter().x,body.getWorldCenter().y  ,true);
                     }
                     actionBeginTime = Play.accumulator;

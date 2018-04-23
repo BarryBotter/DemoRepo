@@ -73,7 +73,7 @@ public class Menu extends GameState{
         playButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                my.game.Game.res.getSound("hit").play(SOUND_LEVEL);
+                Game.res.getSound("buttonClick").play(SOUND_LEVEL);
                 dispose();
                 gsm.setState(GameStateManager.LEVEL_SELECT);
             }
@@ -90,7 +90,7 @@ public class Menu extends GameState{
         optionsButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                my.game.Game.res.getSound("hit").play(SOUND_LEVEL);
+                Game.res.getSound("buttonClick").play(SOUND_LEVEL);
                 dispose();
                 gsm.setState(GameStateManager.OPTIONS);
                 //gsm.pushState(GameStateManager.OPTIONS);
