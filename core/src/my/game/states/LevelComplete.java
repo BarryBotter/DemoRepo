@@ -99,30 +99,24 @@ public class LevelComplete extends GameState {
         exitButton.render(sb);
 
         sb.begin();
-        textFont.draw(sb,"toothpaste collected", 130,215);
-        textFont.draw(sb, "enemies destroyed",130, 195);
-        textFont.draw(sb, "hits taken",130,175);
-        textFont.draw(sb, "hearts left", 130 ,155);
-        textFont.draw(sb,"total score",110, 80);
 
-
-        // draw crystal amount
-        textFont.draw(sb, Game.lvls.getInteger("crystals") + "", 110, 215);
-        textFont.draw(sb, Game.lvls.getInteger("enemies") + "", 110, 195);
-        textFont.draw(sb, heartScore + "",110,175);
-        textFont.draw(sb, String.valueOf(Player.returnHealth()),110,155);
-        textFont.draw(sb, String.valueOf(settime()) + "s",110,135);
+        textFont.draw(sb, Game.lvls.getInteger("crystals") + "/6 toothpaste collected", 90, 215);
+        textFont.draw(sb, String.valueOf(settime()) + "s completion time",90,195);
+        textFont.draw(sb, Game.lvls.getInteger("enemies") + " enemies destroyed", 90, 175);
+        textFont.draw(sb, String.valueOf(Player.returnHealth()) + " health left",90,155);
+        textFont.draw(sb, heartScore + " hits taken",90,135);
+        textFont.draw(sb,"total score",90, 80);
 
         for (int i = 0; i < totalScore /1000; i++) {
             if (scoreCount == totalScore)
-                textFont.draw(sb, String.valueOf(scoreCount), 110, 100);
+                textFont.draw(sb, String.valueOf(scoreCount), 90, 100);
             else
             scoreCount = scoreCount + 5;
-            textFont.draw(sb, String.valueOf(scoreCount), 110, 100);
+            textFont.draw(sb, String.valueOf(scoreCount), 90, 100);
         }
 
         if(compareScore < getScore()) {
-            textFont.draw(sb, "NEW HIGHSCORE!", 100, 40);
+            textFont.draw(sb, "NEW HIGHSCORE!", 90, 40);
         }
 
         sb.end();

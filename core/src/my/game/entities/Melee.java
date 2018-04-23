@@ -10,20 +10,19 @@ import my.game.states.Play;
 import static my.game.handlers.B2DVars.SOUND_LEVEL;
 
 public class Melee extends Projectile {
-    // Cool down between shooting swinging melee attack.
-    private static final float MELEE_COOL_DOWN_TIMER = 0.25f;
     private static boolean meleeCoolDownSet = false;
     private float actionBeginTime = 0;
 
     public Melee(Body body) {
         super(body);
-        Texture tex = Game.res.getTexture("bullet");
-        TextureRegion[] sprites = TextureRegion.split(tex,10,10)[0];
+        Texture tex = Game.res.getTexture("bulletParticles");
+        TextureRegion[] sprites = TextureRegion.split(tex,tex.getWidth(),tex.getHeight())[0];
         setAnimation(sprites, 1/8f);
     }
 
     public void checkMeleeCoolDown(Body playerBody) {
-        if(Play.accumulator - actionBeginTime > MELEE_COOL_DOWN_TIMER && meleeCoolDownSet){
+        final float MELEE_COOL_DOWN_TIMER = 0.25f;
+        if(Play.accumulator - actionBeginTime > MELEE_COOL_DOWN_TIMER && returnMeleeCoolDownState()){
             meleeCoolDownSet = false;
             actionBeginTime = 0;
             body.setTransform(-500,-500,0);

@@ -138,15 +138,19 @@ public class Play extends GameState {
         createMeleeHitBox();
 
         // create backgrounds
-        Texture bgs = Game.res.getTexture("bgones");
-        TextureRegion sky = new TextureRegion(bgs, 0, 0, 320, 240);
-        TextureRegion mountains = new TextureRegion(bgs, 0, 235, 320, 240);
-        Texture trees = Game.res.getTexture("bgone");
-        TextureRegion treeLayer = new TextureRegion(trees, 0, 0, 320, 240);
-        backgrounds = new Background[1];
-        backgrounds[0] = new Background(sky, cam, 0.1f);
-        //backgrounds[1] = new Background(mountains, cam, 0.2f);
-        //backgrounds[2] = new Background(treeLayer, cam, 0f);
+        Texture skyLayer = Game.res.getTexture("skyLayer");
+        TextureRegion skyLayerRegion = new TextureRegion(skyLayer, 0, 0, 320, 240);
+        Texture mountainLayer = Game.res.getTexture("mountainLayer");
+        TextureRegion mountainLayerRegion = new TextureRegion(mountainLayer, 0, 0, 320, 240);
+        Texture forestLayer = Game.res.getTexture("forestLayer");
+        TextureRegion forestLayerRegion = new TextureRegion(forestLayer, 0, 0, 320, 240);
+        Texture sweetLayer = Game.res.getTexture("sweetLayer");
+        TextureRegion sweetLayerRegion = new TextureRegion(sweetLayer, 0, 0, 320, 240);
+        backgrounds = new Background[3];
+        backgrounds[0] = new Background(skyLayerRegion, cam, 0.1f);
+        backgrounds[1] = new Background(mountainLayerRegion, cam, 0.2f);
+        backgrounds[2] = new Background(forestLayerRegion, cam, 0.3f);
+        //backgrounds[3] = new Background(forestLayerRegion, cam, 0.3f);
 
         // set up hud
         hud = new HUD(player);

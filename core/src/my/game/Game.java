@@ -150,7 +150,6 @@ public class Game implements ApplicationListener {
 	}
 
 	private void loadTextures(){
-		res.loadTexture("res/images/hud.png","hud");
 		res.loadTexture("res/UI_final/play.png", "play");
 		res.loadTexture("res/UI_final/settings.png","settings");
 		res.loadTexture("res/UI_final/exit.png","exit");
@@ -167,21 +166,24 @@ public class Game implements ApplicationListener {
 		res.loadTexture("res/UI_final/tooth_hard_80.png","hard");
 		res.loadTexture("res/UI_final/tooth_bubble_120.png","bubble");
 		res.loadTexture("res/UI_final/tutorial.png","tutorial");
-		res.loadTexture("res/background/testimaa.png","bgone");
-		res.loadTexture("res/background/rsz_karkkimaas.png","bgones");
-		res.loadTexture("res/background/mountains.png", "mountain");
+
+		//Backgrounds
+        res.loadTexture("res/background/skyLayer.png", "skyLayer");
+        res.loadTexture("res/background/mountainLayer.png", "mountainLayer");
+        res.loadTexture("res/background/forestLayer.png", "forestLayer");
+		res.loadTexture("res/background/sweetLayer.png", "sweetLayer");
 
 		//Level select preview pics
 		res.loadTexture("res/UI_assets/previewBackground.png", "preview1");
 		res.loadTexture("res/UI_assets/previewBackground2.png", "preview2");
 
 		//Player animations
-		//res.loadTexture("res/playerAnimations/playerWalk.png","playerWalk");
 		res.loadTexture("res/playerAnimations/playerAttack.png","playerAttack");
 		res.loadTexture("res/playerAnimations/walkingTest.png", "playerWalk");
 		res.loadTexture("res/playerAnimations/jumpframe.png", "playerJump");
 
 		//UI
+        res.loadTexture("res/images/hud.png","hud");
 		res.loadTexture("res/UI_assets/GameOverScreen.png", "gameOver");
 		res.loadTexture("res/UI_assets/pauseMenu.png","pauseMenu");
 		res.loadTexture("res/UI_assets/buttons.png","buttonMap");
