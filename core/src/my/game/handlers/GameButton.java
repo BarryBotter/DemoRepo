@@ -27,7 +27,6 @@ public class GameButton {
     private TextureRegion[] font;
 
     public GameButton(TextureRegion reg, float x, float y, OrthographicCamera cam) {
-
         this.reg = reg;
         this.x = x;
         this.y = y;
@@ -45,7 +44,6 @@ public class GameButton {
         for(int i = 0; i < 5; i++) {
             font[i + 6] = new TextureRegion(tex, 32 + i * 9, 25, 9, 9);
         }
-
     }
 
     public boolean isClicked() { return clicked; }
