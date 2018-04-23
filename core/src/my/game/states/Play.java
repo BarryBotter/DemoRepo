@@ -149,9 +149,6 @@ public class Play extends GameState {
         //backgrounds[1] = new Background(mountains, cam, 0.2f);
         //backgrounds[2] = new Background(treeLayer, cam, 0f);
 
-        //create font
-        textFont = new BitmapFont(Gdx.files.internal("res/images/fontstyle.fnt"), false);
-
         // set up hud
         hud = new HUD(player);
 
@@ -431,8 +428,6 @@ public class Play extends GameState {
         }
         //draw win
         win.render(sb);
-
-        updateText();
 
         //draw hud
         sb.setProjectionMatrix(hudCam.combined);
@@ -809,14 +804,6 @@ public class Play extends GameState {
             accumulator -= Game.STEP;
             world.step(Game.STEP, 1, 1);
         }
-    }
-
-    private void updateText(){
-        int score = Game.scores.getInteger("score"+String.valueOf(Play.level));
-
-        sb.begin();
-        textFont.draw(sb,String.valueOf(score), player.getposition().x + 50 , player.getposition().y  + 150);
-        sb.end();
     }
 
     private void unlockLevel(){
