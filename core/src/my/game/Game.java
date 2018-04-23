@@ -173,6 +173,10 @@ public class Game implements ApplicationListener {
         res.loadTexture("res/background/mountainLayer.png", "mountainLayer");
         res.loadTexture("res/background/forestLayer.png", "forestLayer");
 		res.loadTexture("res/background/sweetLayer.png", "sweetLayer");
+		res.loadTexture("res/UI_final/cutscene1.png","cutscene1");
+		res.loadTexture("res/background/testimaa.png","bgone");
+		res.loadTexture("res/background/rsz_karkkimaas.png","bgones");
+		res.loadTexture("res/background/mountains.png", "mountain");
 
 		//Level select preview pics
 		res.loadTexture("res/UI_assets/previewBackground.png", "preview1");
