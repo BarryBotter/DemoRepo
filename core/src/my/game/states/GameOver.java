@@ -2,20 +2,13 @@ package my.game.states;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
 
 import my.game.Game;
 import my.game.entities.Background;
 import my.game.handlers.GameButton;
 import my.game.handlers.GameStateManager;
 
-import static my.game.handlers.B2DVars.PPM;
 import static my.game.handlers.B2DVars.SOUND_LEVEL;
-
-/**
- * Created by Katriina on 27.3.2018.
- */
 
 public class GameOver extends GameState {
 
@@ -48,11 +41,12 @@ public class GameOver extends GameState {
     public void handleInput() {
         if(playButton.isClicked()) {
             Game.res.getSound("over").stop();
+            Game.res.getSound("buttonClick").play(SOUND_LEVEL);
             gsm.setState(GameStateManager.PLAY);
         }
         else if(exitButton.isClicked()){
             Game.res.getSound("over").stop();
-            game.resumeMenuMusic();
+            Game.res.getSound("buttonClick").play(SOUND_LEVEL);
             gsm.setState(GameStateManager.MENU);
             game.pauseMusic();
             game.resumeMenuMusic();

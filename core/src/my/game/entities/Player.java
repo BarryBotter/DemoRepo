@@ -5,14 +5,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
 
 import my.game.Game;
-import my.game.handlers.B2DVars;
 
 import static my.game.handlers.B2DVars.MAX_HEALTH;
-
-
-/**
- * Created by Katriina on 22.3.2018.
- */
 
 public class Player extends  B2DSprite{
     //private static final int MAX_HEALTH = 3;
@@ -37,7 +31,7 @@ public class Player extends  B2DSprite{
     public void setPlayerAnimation(String animationKey) {
         this.animationKey = animationKey;
         Texture tex = Game.res.getTexture(animationKey);
-        TextureRegion[] sprites = TextureRegion.split(tex, 32, 32)[0];
+        TextureRegion[] sprites = TextureRegion.split(tex,  36, 34)[0];
         setAnimation(sprites, 1 / 12f);
     }
 
@@ -50,7 +44,7 @@ public class Player extends  B2DSprite{
     public void collectCrystal(){numCrystals++;}
     public int getNumCrystals(){return numCrystals;}
     public void setTotalCrystals(int i){totalCrystals = i;}
-    int getTotalCrystals(){return totalCrystals;}
+    public int getTotalCrystals(){return totalCrystals;}
 
     public static int returnNumberOfAmmo() {
         return numberOfAmmo;

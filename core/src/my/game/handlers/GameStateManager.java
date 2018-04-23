@@ -1,6 +1,5 @@
 package my.game.handlers;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -31,9 +30,10 @@ public class GameStateManager {
     public static final int CUTSCENE = 55768;
 
     public ImageButton.ImageButtonStyle
-            playStyle, optionStyle,exitStyle,toothStyle,backStyle;
+            playStyle,optionStyle,exitStyle,
+            toothStyle,backStyle,rightStyle, soundStyle,
+            bubbleStyle, easyStyle,normalStyle,hardStyle;
 
-    private TextureRegion menuButtons[];
     public Stage stage;
 
     public GameStateManager(Game game){
@@ -102,23 +102,42 @@ public class GameStateManager {
     private void makeStyles() {
         //styles for buttons
 
+        TextureRegion menuButtons[];
         //todo load from a bigger texture
         Texture tex = my.game.Game.res.getTexture("main");
         menuButtons = new TextureRegion[5];
         menuButtons[0] =  new TextureRegion(tex, 340, 40, 200, 100);
         menuButtons[1] =  new TextureRegion(tex, 340, 125, 200, 100);
 
-        TextureRegion play = new TextureRegion(new Texture(Gdx.files.internal("res/UI_final/play.png")));
-        TextureRegion options = new TextureRegion(new Texture(Gdx.files.internal("res/UI_final/settings.png")));
-        TextureRegion exit = new TextureRegion(new Texture(Gdx.files.internal("res/UI_final/exit.png")));
-        TextureRegion tooth = new TextureRegion(new Texture(Gdx.files.internal("res/UI_final/tooth_80.png")));
-        TextureRegion back = new TextureRegion(new Texture(Gdx.files.internal("res/UI_final/back_80.png")));
+        TextureRegion play = new TextureRegion(Game.res.getTexture("play"));
+        TextureRegion options = new TextureRegion(Game.res.getTexture("settings"));
+        TextureRegion exit = new TextureRegion(Game.res.getTexture("exit"));
+        TextureRegion tooth = new TextureRegion(Game.res.getTexture("tooth_80"));
+        TextureRegion back = new TextureRegion(Game.res.getTexture("back"));
+        TextureRegion right = new TextureRegion(Game.res.getTexture("right"));
+        TextureRegion sound_off = new TextureRegion(Game.res.getTexture("sound_off"));
+        TextureRegion sound_on = new TextureRegion(Game.res.getTexture("sound_on"));
+        TextureRegion tooth_easy = new TextureRegion(Game.res.getTexture("easy"));
+        TextureRegion tooth_normal = new TextureRegion(Game.res.getTexture("normal"));
+        TextureRegion tooth_hard = new TextureRegion(Game.res.getTexture("hard"));
+        TextureRegion bubble = new TextureRegion(Game.res.getTexture("bubble"));
 
+        easyStyle = new  ImageButton.ImageButtonStyle();
+        easyStyle.up = new TextureRegionDrawable(tooth_easy);
+        normalStyle = new  ImageButton.ImageButtonStyle();
+        normalStyle.up = new TextureRegionDrawable(tooth_normal);
+        hardStyle = new  ImageButton.ImageButtonStyle();
+        hardStyle.up = new TextureRegionDrawable(tooth_hard);
+        soundStyle = new ImageButton.ImageButtonStyle();
+        soundStyle.imageUp = new TextureRegionDrawable(sound_off);
+        soundStyle.imageChecked = new TextureRegionDrawable(sound_on);
+        bubbleStyle = new ImageButton.ImageButtonStyle();
+        bubbleStyle.imageUp = new TextureRegionDrawable(bubble);
         backStyle = new ImageButton.ImageButtonStyle();
-        backStyle.imageDown = new TextureRegionDrawable(back);
         backStyle.imageUp = new TextureRegionDrawable(back);
+        rightStyle = new ImageButton.ImageButtonStyle();
+        rightStyle.imageUp = new TextureRegionDrawable(right);
         playStyle = new ImageButton.ImageButtonStyle();
-        playStyle.imageDown = new TextureRegionDrawable(play);
         playStyle.imageUp = new TextureRegionDrawable(play);
         optionStyle = new ImageButton.ImageButtonStyle();
         optionStyle.imageDown = new TextureRegionDrawable(options);
@@ -126,9 +145,8 @@ public class GameStateManager {
         exitStyle = new ImageButton.ImageButtonStyle();
         exitStyle.imageDown = new TextureRegionDrawable(exit);
         exitStyle.imageUp = new TextureRegionDrawable(exit);
-        toothStyle = new ImageButton.ImageButtonStyle();
+        toothStyle = new ImageButton.ImageButtonStyle(); // style which uses the appicon
         toothStyle.imageDown = new TextureRegionDrawable(tooth);
         toothStyle.imageUp = new TextureRegionDrawable(tooth);
     }
-
 }

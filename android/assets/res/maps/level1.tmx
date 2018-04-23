@@ -10,6 +10,11 @@
    eJxjYBgFo2AUjIJRMApGAb0BD5l4sANy/TWY/E9rP1DDXwBm7QMl
   </data>
  </layer>
+ <layer name="fill" width="78" height="8">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjIJRMApGwSgYGoCXTDzYAan+AQDCzAFT
+  </data>
+ </layer>
  <layer name="corner" width="78" height="8">
   <data encoding="base64" compression="zlib">
    eJxjYBgFo2AUjIJRMApGAT0B10A7AAmA3MKDhjkpMGuog6HiBwClxABi
@@ -21,7 +26,7 @@
   </data>
  </layer>
  <objectgroup name="win">
-  <object id="58" x="2394.67" y="140" width="66.6667" height="41.3333"/>
+  <object id="58" x="2392.17" y="151.5" width="66.6667" height="41.3333"/>
  </objectgroup>
  <objectgroup name="crystals">
   <object id="59" x="1585.33" y="148">

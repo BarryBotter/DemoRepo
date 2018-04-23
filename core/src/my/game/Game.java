@@ -3,6 +3,7 @@ package my.game;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -26,7 +27,7 @@ public class Game implements ApplicationListener {
 
 	private SpriteBatch sb;
 	private static BoundedCamera cam;
-	private OrthographicCamera hudCam;
+	private OrthographicCamera hudCam,bigCam;
 
 	private GameStateManager gsm;
 
@@ -38,9 +39,10 @@ public class Game implements ApplicationListener {
 	public SpriteBatch getSpriteBatch(){return sb;}
 	public static BoundedCamera getCamera(){return cam;}
 	public OrthographicCamera getHUDCamera(){return hudCam;}
+	public OrthographicCamera getBigCam(){return bigCam;}
 
 	public Skin mySkin;
-	public BitmapFont font12,font24;
+	public BitmapFont font8,font12,font18,font24,textFont;
 
 	@Override
 	public void create() {
@@ -55,6 +57,8 @@ public class Game implements ApplicationListener {
 		cam.setToOrtho(false, V_WIDTH,V_HEIGHT);
 		hudCam = new OrthographicCamera();
 		hudCam.setToOrtho(false, V_WIDTH, V_HEIGHT);
+		bigCam = new OrthographicCamera();
+		bigCam.setToOrtho(false,640,480);
 		mySkin = new Skin(Gdx.files.internal("res/skin/glassy-ui.json"));
 
 		gsm = new GameStateManager(this);
@@ -81,6 +85,7 @@ public class Game implements ApplicationListener {
 		scores = Gdx.app.getPreferences("highscores");
 		if (!scores.contains("score1")){
 			scores.putInteger("score1",0);
+			scores.putInteger("collect1",0);
 			scores.flush();
 		}
 
@@ -121,44 +126,67 @@ public class Game implements ApplicationListener {
 
 	@Override
 	public void dispose() {
-		res.removeAll();
+		//res.removeAll();
 	}
 
-	public void loadFont(){
+	private void loadFont(){
 		FreeTypeFontGenerator.setMaxTextureSize(2048);
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("res/fonts/Gauge-Regular.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+		parameter.size = 8;
+		font8 = generator.generateFont(parameter);
 		parameter.size = 12;
-		font12 = generator.generateFont(parameter); // font size 12 pixels
+		font12 = generator.generateFont(parameter);
+		parameter.size = 18;
+		font18 = generator.generateFont(parameter);
 		parameter.size = 24;
-		font24 = generator.generateFont(parameter); // font size 24 pixels
+		font24 = generator.generateFont(parameter);
+		parameter.size = 16;
+		parameter.shadowOffsetX = 3;
+		parameter.shadowOffsetY = 3;
+		parameter.color = Color.WHITE;
+		textFont = generator.generateFont(parameter);
 		generator.dispose(); // don't forget to dispose to avoid memory leaks!
 	}
 
-	public void loadTextures(){
+	private void loadTextures(){
 		res.loadTexture("res/images/hud.png","hud");
-		res.loadTexture("res/images/bgs.png","bg");
-		res.loadTexture("res/images/menu.png","menu");
-		res.loadTexture("kuva.png","olvi");
-		res.loadTexture("res/UI_final/rebg.png","menubg");
+		res.loadTexture("res/UI_final/play.png", "play");
+		res.loadTexture("res/UI_final/settings.png","settings");
+		res.loadTexture("res/UI_final/exit.png","exit");
+		res.loadTexture("res/UI_final/tooth_80.png", "tooth_80");
+		res.loadTexture("res/UI_final/back_80.png","back");
+		res.loadTexture("res/UI_final/right_80.png","right");
+		res.loadTexture("res/UI_final/background_640.png","menubg");
 		res.loadTexture("res/UI_final/resized_paavalikko.png","main");
 		res.loadTexture("res/UI_final/menu_logo.png","menulogo");
+		res.loadTexture("res/UI_final/sound_off.png","sound_off");
+		res.loadTexture("res/UI_final/sound_on.png","sound_on");
+		res.loadTexture("res/UI_final/tooth_easy_80.png","easy");
+		res.loadTexture("res/UI_final/tooth_normal_80.png","normal");
+		res.loadTexture("res/UI_final/tooth_hard_80.png","hard");
+		res.loadTexture("res/UI_final/tooth_bubble_120.png","bubble");
+		res.loadTexture("res/UI_final/tutorial.png","tutorial");
 		res.loadTexture("res/background/testimaa.png","bgone");
 		res.loadTexture("res/background/rsz_karkkimaas.png","bgones");
 		res.loadTexture("res/background/mountains.png", "mountain");
-		res.loadTexture("res/images/complete.png", "complete");
-		res.loadTexture("res/images/testibg.png", "testibg");
-		res.loadTexture("res/images/testitausta.png","taustatesti");
+
+		//Level select preview pics
+		res.loadTexture("res/UI_assets/previewBackground.png", "preview1");
+		res.loadTexture("res/UI_assets/previewBackground2.png", "preview2");
 
 		//Player animations
-		res.loadTexture("res/playerAnimations/playerWalk.png","playerWalk");
+		//res.loadTexture("res/playerAnimations/playerWalk.png","playerWalk");
 		res.loadTexture("res/playerAnimations/playerAttack.png","playerAttack");
+		res.loadTexture("res/playerAnimations/walkingTest.png", "playerWalk");
+		res.loadTexture("res/playerAnimations/jumpframe.png", "playerJump");
 
 		//UI
 		res.loadTexture("res/UI_assets/GameOverScreen.png", "gameOver");
 		res.loadTexture("res/UI_assets/pauseMenu.png","pauseMenu");
 		res.loadTexture("res/UI_assets/buttons.png","buttonMap");
 		res.loadTexture("res/UI_assets/HUD_Icons.png","hudIcons");
+		res.loadTexture("res/UI_assets/levelComplete.png", "complete");
 
 		//Enemies
 		res.loadTexture("res/enemies/enemyBat.png","enemyBat");
@@ -172,6 +200,7 @@ public class Game implements ApplicationListener {
 		//PickUps
 		res.loadTexture("res/pickups/crystal.png", "Crystal");
 		res.loadTexture("res/pickups/toothPastePickUp.png", "toothPaste");
+        res.loadTexture("res/pickups/flagPole.png", "flagPole");
 	}
 
 	private void loadSounds(){
@@ -184,17 +213,18 @@ public class Game implements ApplicationListener {
 		res.loadSound("res/sfx/overSound.mp3", "over");
 		res.loadSound("res/sfx/meleeHit.mp3", "melee");
         res.loadSound("res/sfx/pickupSound.mp3", "pickup");
+		res.loadSound("res/sfx/buttonClick.mp3","buttonClick");
+		res.loadSound("res/sfx/meleeSwing.mp3", "meleeSwing");
+		res.loadSound("res/sfx/shootingSound.mp3", "shoot");
+		res.loadSound("res/sfx/bounceBack.mp3", "bounceBack");
 
         // music
 		res.loadMusic("res/music/menuSong.mp3","theme");
 		res.loadMusic("res/music/bbsong.ogg", "bbsong");
 		res.getMusic("bbsong").setLooping(true);
-
-
 	}
 
 	public void isMusicPlaying(){
-
 		if (prefs.getBoolean("sound")) {
 			res.getMusic("bbsong").setVolume(1);
 			res.getMusic("theme").setVolume(1);
@@ -204,18 +234,20 @@ public class Game implements ApplicationListener {
 			res.getMusic("bbsong").setVolume(0);
 			res.getMusic("theme").setVolume(0);
 		}
-
 	}
 
 	public void pauseMusic(){
 	    res.getMusic("bbsong").pause();
     }
-    public void resumeMusic(){ res.getMusic("bbsong").play();
-	}
+    public void resumeMusic(){
+		res.getMusic("bbsong").play();
+		res.getMusic("bbsong").setVolume(0.8f);}
 
 	public void pauseMenuMusic(){
 		res.getMusic("theme").pause();
 	}
-	public void resumeMenuMusic(){ res.getMusic("theme").play();
-	}
+	public void resumeMenuMusic(){ res.getMusic("theme").play(); }
+
+	public void decreaseMusicLevel() { res.getMusic("bbsong").setVolume(0.33f); }
+	public void increaseMusicLevel() { res.getMusic("bbsong").setVolume(0.8f); }
 }

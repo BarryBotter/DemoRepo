@@ -39,7 +39,6 @@ public class Background {
     }
 
     public void render(SpriteBatch sb) {
-
         float x = ((this.x + gameCam.viewportWidth / 2 - gameCam.position.x) * scale) % image.getRegionWidth();
         float y = ((this.y + gameCam.viewportHeight / 2 - gameCam.position.y) * scale) % image.getRegionHeight();
 

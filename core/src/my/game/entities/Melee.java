@@ -7,6 +7,8 @@ import com.badlogic.gdx.physics.box2d.Body;
 import my.game.Game;
 import my.game.states.Play;
 
+import static my.game.handlers.B2DVars.SOUND_LEVEL;
+
 public class Melee extends Projectile {
     // Cool down between shooting swinging melee attack.
     private static final float MELEE_COOL_DOWN_TIMER = 0.25f;
@@ -39,6 +41,7 @@ public class Melee extends Projectile {
         //If melee swing is not on cool down make melee hit box appear in front of the player.
         if (!returnMeleeCoolDownState() && !Projectile.returnCoolDownState() && Player.returnNumberOfAmmo() == 0) {
             if(!meleeCoolDownSet) {
+                Game.res.getSound("meleeSwing").play(SOUND_LEVEL);
                 actionBeginTime = Play.accumulator;
                 meleeCoolDownSet = true;
             }

@@ -15,6 +15,11 @@
    eJxjYBgFo2AUDFfABcScdOQPNQAAgLQAhg==
   </data>
  </layer>
+ <layer name="fill" width="40" height="8">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjIKBA7xobFry0QEANfQAqg==
+  </data>
+ </layer>
  <layer name="jump" width="40" height="8">
   <data encoding="base64" compression="zlib">
    eJxjYBgFo2AUjIKRCQAFAAAB

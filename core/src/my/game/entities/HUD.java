@@ -6,19 +6,17 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import my.game.Game;
+import my.game.states.Play;
 
 public class HUD {
     private Player player;
-    private TextureRegion crystal;
+    //private TextureRegion crystal;
     private TextureRegion[] font;
 
     private TextureRegion heartTexture;
     private TextureRegion heartSilhouetteTexture;
     private TextureRegion toothPasteTexture;
     private TextureRegion toothPasteSilhouetteTexture;
-
-    //private TextureRegion ammoTexture;
-    //private TextureRegion ammoSilhouetteTexture;
 
     public Texture pauseMenuTexture;
     public TextureRegion pauseButton;
@@ -33,7 +31,7 @@ public class HUD {
             blocks[i] = new TextureRegion(tex, 32 + i * 16, 0, 16, 16);
         }
 
-        crystal = new TextureRegion(tex, 80, 0, 16, 16);
+        //crystal = new TextureRegion(tex, 80, 0, 16, 16);
 
         font = new TextureRegion[11];
         for (int i = 0; i < 6; i++) {
@@ -48,9 +46,6 @@ public class HUD {
         heartSilhouetteTexture = new TextureRegion(hudIconTextures,160,0,160,160);
         toothPasteTexture = new TextureRegion(hudIconTextures,650,0,160,160);
         toothPasteSilhouetteTexture = new TextureRegion(hudIconTextures,830,0,160,160);
-
-        //ammoTexture = new TextureRegion(hudIconTextures,330,0,160,160);
-        //ammoSilhouetteTexture = new TextureRegion(hudIconTextures,480,0,160,160);
 
         // Setup pause button
         Texture pauseTexture = Game.res.getTexture("buttonMap");
@@ -91,9 +86,15 @@ public class HUD {
                     toothPasteTexture.getRegionHeight() / HUD_ICONS_MULTIPLIER);
         }
 
-        // draw crystal amount
-        sb.draw(crystal, Game.V_WIDTH - 206, Game.V_HEIGHT - 22);
+        // draw Collected toothpaste amount
+        //sb.draw(crystal, Game.V_WIDTH - 206, Game.V_HEIGHT - 22);
+        sb.draw(toothPasteTexture, Game.V_WIDTH - 206, Game.V_HEIGHT - 25,
+                toothPasteTexture.getRegionWidth() / HUD_ICONS_MULTIPLIER,
+                toothPasteTexture.getRegionHeight() / HUD_ICONS_MULTIPLIER);
         drawString(sb, player.getNumCrystals() + " / " + player.getTotalCrystals(), Game.V_WIDTH - 180, Game.V_HEIGHT - 18);
+
+        //drawString(sb, Play.gettime()/1000 +"",Game.V_WIDTH - 120, Game.V_HEIGHT - 18);
+        //TIMERI KENTTIIN
 
         //draw pause menu if game is paused
         if(!Gdx.graphics.isContinuousRendering()) {

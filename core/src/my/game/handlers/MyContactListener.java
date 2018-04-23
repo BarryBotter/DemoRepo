@@ -151,24 +151,42 @@ public class MyContactListener implements ContactListener {
         // Check collision between bullet and ground
         if(fa.getUserData() != null && fa.getUserData().equals("ground")){
             if(fb.getUserData().equals("bullet")) {
-                //bulletBodiesToRemove.add(fb.getBody());
+                //Game.res.getSound("shoot").play(SOUND_LEVEL);
             }
         }
         if(fb.getUserData() != null && fb.getUserData().equals("ground")){
             if(fa.getUserData().equals("bullet")) {
-                //bulletBodiesToRemove.add(fa.getBody());
+                //Game.res.getSound("shoot").play(SOUND_LEVEL);
             }
         }
         if (fa.getUserData() != null && fa.getUserData().equals("jump")) {
             if (fb.getUserData().equals("player")) {
+                Game.res.getSound("bounceBack").play(SOUND_LEVEL);
                 fb.getBody().applyLinearImpulse(1,6,0,0,true);
+            }
+        }
+
+        //Check collision between corner block and player
+        if (fa.getUserData() != null && fa.getUserData().equals("corner")) {
+            if (fb.getUserData().equals("player")) {
+                Game.res.getSound("bounceBack").play(SOUND_LEVEL);
+            }
+            else if (fb.getUserData().equals("bullet")) {
+                //Game.res.getSound("shoot").play(SOUND_LEVEL);
+            }
+        }
+        if (fb.getUserData() != null && fb.getUserData().equals("corner")) {
+            if (fa.getUserData().equals("player")) {
+                Game.res.getSound("shoot").play(SOUND_LEVEL);
+            }
+            else if (fa.getUserData().equals("bullet")) {
+                //Game.res.getSound("shoot").play(SOUND_LEVEL);
             }
         }
     }
 
     @Override
     public void endContact(Contact contact) {
-
         Fixture fa = contact.getFixtureA();
         Fixture fb = contact.getFixtureB();
 

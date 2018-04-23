@@ -6,6 +6,7 @@
 
     <application
         android:allowBackup="true"
+        android:resizeableActivity="false"
         android:icon="@drawable/ic_tooth"
         android:label="@string/app_name"
         android:theme="@style/GdxTheme"

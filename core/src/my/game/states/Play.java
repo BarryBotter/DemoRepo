@@ -6,7 +6,6 @@ import com.badlogic.gdx.InputAdapter;
 
 import my.game.Game;
 import my.game.entities.Background;
-import my.game.entities.Bullet;
 import my.game.entities.Enemy;
 import my.game.entities.HUD;
 import my.game.entities.Melee;
@@ -22,30 +21,23 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapImageLayer;
-import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Pool;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
+import java.util.Random;
 
-import my.game.handlers.Content;
 import my.game.handlers.GameStateManager;
 import my.game.handlers.MyContactListener;
 
@@ -69,9 +61,7 @@ import static my.game.handlers.B2DVars.P_WIDTH;
 import static my.game.handlers.B2DVars.SOUND_LEVEL;
 
 public class Play extends GameState {
-
     public static int level;
-    private int levelS;
     private World world;
 
     public static float accumulator = 0;
@@ -109,9 +99,6 @@ public class Play extends GameState {
     private Background[] backgrounds;
 
     private HUD hud;
-    private BitmapFont textFont;
-
-
 
     public Play(GameStateManager gsm) {
         super(gsm);
@@ -119,7 +106,6 @@ public class Play extends GameState {
         cam.setToOrtho(false, 480,320);//Game.V_WIDTH, Game.V_HEIGHT);
         //Resets rendering every time play state is started.
         Gdx.graphics.setContinuousRendering(true);
-
 
         world = new World(new Vector2(0, -9.81f), true);
         cl = new MyContactListener();
@@ -154,16 +140,13 @@ public class Play extends GameState {
         // create backgrounds
         Texture bgs = Game.res.getTexture("bgones");
         TextureRegion sky = new TextureRegion(bgs, 0, 0, 320, 240);
-        TextureRegion mountains = new TextureRegion(bgs, 0, 235, 320, 340);
+        TextureRegion mountains = new TextureRegion(bgs, 0, 235, 320, 240);
         Texture trees = Game.res.getTexture("bgone");
-        TextureRegion treeLayer = new TextureRegion(trees, 0, 27, 320, 240);
+        TextureRegion treeLayer = new TextureRegion(trees, 0, 0, 320, 240);
         backgrounds = new Background[1];
-        backgrounds[0] = new Background(sky, cam, 0f);
+        backgrounds[0] = new Background(sky, cam, 0.1f);
         //backgrounds[1] = new Background(mountains, cam, 0.2f);
         //backgrounds[2] = new Background(treeLayer, cam, 0f);
-
-        //create font
-        textFont = new BitmapFont(Gdx.files.internal("res/images/fontstyle.fnt"), false);
 
         // set up hud
         hud = new HUD(player);
@@ -173,8 +156,10 @@ public class Play extends GameState {
 
         startTime = System.currentTimeMillis();
 
-        game.pauseMenuMusic();
-        game.resumeMusic();
+        if (game.prefs.getBoolean("sound")) {
+            game.pauseMenuMusic();
+            game.resumeMusic();
+        }
 
         Gdx.input.setCatchBackKey(true);
 
@@ -197,6 +182,7 @@ public class Play extends GameState {
                 // Pause button touched
                 if(topRightSideTouched(touchPoint.x, touchPoint.y) && Gdx.graphics.isContinuousRendering()) {
                     Gdx.graphics.setContinuousRendering(false);
+                    game.decreaseMusicLevel();
                 }
 
                 // Fighting stuff.
@@ -227,6 +213,7 @@ public class Play extends GameState {
 
                 // Pause menu left button touched. Goes to menu.
                 else if (pauseMenuLeftButtonTouched(touchPoint.x, touchPoint.y) && !Gdx.graphics.isContinuousRendering()) {
+                    game.increaseMusicLevel();
                     game.pauseMusic();
                     game.resumeMenuMusic();
                     gsm.setState(GameStateManager.LEVEL_SELECT);
@@ -235,11 +222,13 @@ public class Play extends GameState {
                 // Pause menu middle button touched. Restarts level.
                 else if (pauseMenuMiddleButtonTouched(touchPoint.x, touchPoint.y) && !Gdx.graphics.isContinuousRendering()) {
                     gsm.setState(GameStateManager.PLAY);
+                    game.increaseMusicLevel();
                 }
 
                 // Pause menu right button touched. Resumes game.
                 else if (pauseMenuRightButtonTouched(touchPoint.x, touchPoint.y) && !Gdx.graphics.isContinuousRendering()) {
                     Gdx.graphics.setContinuousRendering(true);
+                    game.increaseMusicLevel();
                 }
                 return super.touchDown(x, y, pointer, button);
             }
@@ -254,6 +243,7 @@ public class Play extends GameState {
                 if(keycode == Input.Keys.BACK) {
                     if(Gdx.graphics.isContinuousRendering()) {
                         Gdx.graphics.setContinuousRendering(false);
+                        game.decreaseMusicLevel();
                     }
                 }
                 return false;
@@ -305,55 +295,27 @@ public class Play extends GameState {
             gsm.setState(GameStateManager.GAMEOVER);
         }
 
-            // Win stuff
-            if (cl.isPlayerWin()) {
-                if (level == 1) {
-                    unlockLevel();
-                    Collected();
-                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
-                } else if (level == 2) {
-                    unlockLevel();
-                    Collected();
-                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
-                } else if (level == 3) {
-                    unlockLevel();
-                    Collected();
-                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
-                }
-                else if (level == 4) {
-                    unlockLevel();
-                    Collected();
-                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
-                } else if (level == 5) {
-                    unlockLevel();
-                    Collected();
-                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
-                } else if (level == 6) {
-                    unlockLevel();
-                    Collected();
-                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
-                }
-                else if (level == 7) {
-                    unlockLevel();
-                    Collected();
-                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
-                } else if (level == 8) {
-                    unlockLevel();
-                    Collected();
-                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
-                } else if (level == 9) {
-                    unlockLevel();
-                    Collected();
-                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
-                }
+        // Win stuff
+        if (cl.isPlayerWin()) {
+            if (level == 1) {
+                unlockLevel();
+                Collected();
+                cutScene.dialogNumber = level;
+                dispose();
+                gsm.setState(GameStateManager.CUTSCENE);
+            } else if (level >= 2) {
+                unlockLevel();
+                Collected();
+                dispose();
+                gsm.setState(GameStateManager.LEVEL_COMPLETE);
             }
+        }
 
-            time = System.currentTimeMillis() - startTime;
+        time = System.currentTimeMillis() - startTime;
 
         // Player animations
         animationManager();
-
-        }
+    }
 
     private boolean rightSideTouched(float x, float y) {
         return screenRightSide.contains(x, y);
@@ -388,16 +350,7 @@ public class Play extends GameState {
 
     @Override
     public void render() {
-        //set cam to follow player
-        //cam with bounds and centered stage
-       //cam.setPosition(player.getposition().x * PPM + P_WIDTH / 4, P_HEIGHT / 2);
-
-        //cam without bounds and set to bottom
-        //if (cam.position.x < tileMapWidth *28){
-            cam.position.set(player.getposition().x * PPM + P_WIDTH / 4, P_HEIGHT/ 2, 0);
-            cam.update();
-        //}
-
+        cam.position.set(player.getposition().x * PPM + P_WIDTH / 4, P_HEIGHT/ 2, 0);
         cam.update();
 
         // draw bgs
@@ -418,26 +371,29 @@ public class Play extends GameState {
         for (int i = 0; i < crystals.size; i++) {
             crystals.get(i).render(sb);
         }
+
         //draw enemy
         for (int i = 0; i < enemies.size; i++) {
             enemies.get(i).render(sb);
         }
+
         //draw traps
         for (int i = 0; i < traps.size; i++) {
             traps.get(i).render(sb);
         }
+
         //draw bullets
         for (int i = 0; i < bullets.size; i++) {
             bullets.get(i).render(sb);
         }
+
         //draw melee hit box
         for (int i = 0; i < meleeHitBoxes.size; i++) {
             meleeHitBoxes.get(i).render(sb);
         }
+
         //draw win
         win.render(sb);
-
-        updateText();
 
         //draw hud
         sb.setProjectionMatrix(hudCam.combined);
@@ -445,10 +401,7 @@ public class Play extends GameState {
     }
 
     @Override
-    public void dispose() {
-        //tileMap.dispose();
-       //world.dispose();
-    }
+    public void dispose() { }
 
     private void createPlayer() {
         BodyDef bdef = new BodyDef();
@@ -571,9 +524,6 @@ public class Play extends GameState {
                 v[3] = new Vector2(ts / 2 / PPM, -ts / 2 / PPM);
                 cs.createChain(v);
 
-                //PolygonShape cs = new PolygonShape();
-                //cs.setAsBox(32,32);
-
                 FixtureDef fd = new FixtureDef();
                 fd.friction = 0;
                 fd.shape = cs;
@@ -582,7 +532,6 @@ public class Play extends GameState {
                 fd.filter.maskBits = BIT_PLAYER | BIT_ENEMY |BIT_BULLET;
                 world.createBody(bdef).createFixture(fd).setUserData("corner");
                 cs.dispose();
-
             }
         }
     }
@@ -703,6 +652,7 @@ public class Play extends GameState {
         if (layer != null){
         BodyDef bdef = new BodyDef();
         FixtureDef fdef = new FixtureDef();
+        PolygonShape shape = new PolygonShape();
 
             for (MapObject mo : layer.getObjects()) {
 
@@ -713,19 +663,17 @@ public class Play extends GameState {
 
                 bdef.position.set(x, y);
 
-                CircleShape cshape = new CircleShape();
-                cshape.setRadius(8 / PPM);
-
-                fdef.shape = cshape;
+                shape.setAsBox(9 / PPM, Gdx.graphics.getHeight());
+                fdef.shape = shape;
                 fdef.isSensor = true;
                 fdef.filter.categoryBits = BIT_WIN;
                 fdef.filter.maskBits = BIT_PLAYER;
 
                 Body body = world.createBody(bdef);
                 body.createFixture(fdef).setUserData("win");
-                cshape.dispose();
+                shape.dispose();
 
-                win = new TextureDraw(body, "Crystal");
+                win = new TextureDraw(body, "flagPole");
 
                 body.setUserData(win);
             }
@@ -763,7 +711,10 @@ public class Play extends GameState {
         PolygonShape shape = new PolygonShape();
         FixtureDef fdef = new FixtureDef();
 
-        bdef.position.set(player.getposition().x + 5, player.getposition().y + 2);
+        Random rand = new Random();
+        int i = rand.nextInt(5);
+
+        bdef.position.set(player.getposition().x + i + Math.abs(3*(player.getBody().getLinearVelocity().x)), player.getposition().y + 2);
         bdef.linearVelocity.set(0, 0);
         bdef.type = BodyDef.BodyType.DynamicBody;
         Body body = world.createBody(bdef);
@@ -816,15 +767,8 @@ public class Play extends GameState {
         }
     }
 
-    private void updateText(){
-        int score = Game.scores.getInteger("score"+String.valueOf(Play.level));
-
-        sb.begin();
-        textFont.draw(sb,String.valueOf(score), player.getposition().x + 50 , player.getposition().y  + 150);
-        sb.end();
-    }
-
     private void unlockLevel(){
+        int levelS;
         levelS = Game.lvls.getInteger("key");
 
         if (level < levelS) {
@@ -929,10 +873,13 @@ public class Play extends GameState {
 
     private void animationManager() {
         // Melee attack animation.
-        if(Melee.returnMeleeCoolDownState() && player.returnCurrentAnimation().equalsIgnoreCase("playerWalk")) {
+        /*if(Melee.returnMeleeCoolDownState() && player.returnCurrentAnimation().equalsIgnoreCase("playerWalk")) {
             player.setPlayerAnimation("playerAttack");
+        }*/
+        if (!cl.isPlayerOnGround()){
+            player.setPlayerAnimation("playerJump");
         }
-        else if(!Melee.returnMeleeCoolDownState() && player.returnCurrentAnimation().equalsIgnoreCase("playerAttack")){
+        else if(cl.isPlayerOnGround() && player.returnCurrentAnimation().equalsIgnoreCase("playerJump")){
             player.setPlayerAnimation("playerWalk");
         }
 
