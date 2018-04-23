@@ -126,7 +126,7 @@ public class Game implements ApplicationListener {
 
 	@Override
 	public void dispose() {
-		res.removeAll();
+		//res.removeAll();
 	}
 
 	private void loadFont(){

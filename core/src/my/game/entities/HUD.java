@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import my.game.Game;
+import my.game.states.Play;
 
 public class HUD {
     private Player player;
@@ -91,6 +92,9 @@ public class HUD {
                 toothPasteTexture.getRegionWidth() / HUD_ICONS_MULTIPLIER,
                 toothPasteTexture.getRegionHeight() / HUD_ICONS_MULTIPLIER);
         drawString(sb, player.getNumCrystals() + " / " + player.getTotalCrystals(), Game.V_WIDTH - 180, Game.V_HEIGHT - 18);
+
+        //drawString(sb, Play.gettime()/1000 +"",Game.V_WIDTH - 120, Game.V_HEIGHT - 18);
+        //TIMERI KENTTIIN
 
         //draw pause menu if game is paused
         if(!Gdx.graphics.isContinuousRendering()) {

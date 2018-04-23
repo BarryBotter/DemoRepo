@@ -75,7 +75,7 @@ public class LevelSelect extends GameState {
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 dispose();
-                Game.res.getSound("buttonClick").play(SOUND_LEVEL);
+                //Game.res.getSound("buttonClick").play(SOUND_LEVEL);
                 gsm.setState(GameStateManager.MENU);
             }
             @Override
@@ -93,7 +93,7 @@ public class LevelSelect extends GameState {
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 dispose();
-                Game.res.getSound("buttonClick").play(SOUND_LEVEL);
+                //Game.res.getSound("buttonClick").play(SOUND_LEVEL);
                 cutScene.dialogNumber = 0;
                 gsm.setState(GameStateManager.CUTSCENE);
             }
@@ -116,11 +116,11 @@ public class LevelSelect extends GameState {
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 if ( event.getStageX() < width/4 && leftButton.isPressed() && Play.level > 1) {
-                    Game.res.getSound("buttonClick").play(SOUND_LEVEL);
                     Play.level -= 1;
                     lvlname = "Level number " + Play.level;
                     updateImg();
                 }
+                //Game.res.getSound("buttonClick").play(SOUND_LEVEL);
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -137,11 +137,11 @@ public class LevelSelect extends GameState {
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 if (event.getStageX() > width*0.75  && rightButton.isPressed() && Play.level < 9) {
-                    Game.res.getSound("buttonClick").play(SOUND_LEVEL);
                     Play.level += 1;
                     lvlname = "Level number " + Play.level;
                     updateImg();
                 }
+                //Game.res.getSound("buttonClick").play(SOUND_LEVEL);
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -167,7 +167,7 @@ public class LevelSelect extends GameState {
                 if ( event.getStageX() > width/4 && event.getStageX() < width*0.75f
                         && Play.level > 0 && Play.level <10) {
                     dispose();
-                    Game.res.getSound("buttonClick").play(SOUND_LEVEL);
+                    //Game.res.getSound("buttonClick").play(SOUND_LEVEL);
                     gsm.setState(GameStateManager.PLAY);
                 }
             }
