@@ -116,7 +116,6 @@ public class Play extends GameState {
 
         //create tile
         createWalls();
-        cam.setBounds(0, tileMapWidth * tileSize, 0, tileMapHeight * tileSize);
 
         //create crystals
         createCrystals();
@@ -146,11 +145,11 @@ public class Play extends GameState {
         TextureRegion forestLayerRegion = new TextureRegion(forestLayer, 0, 0, 320, 240);
         Texture sweetLayer = Game.res.getTexture("sweetLayer");
         TextureRegion sweetLayerRegion = new TextureRegion(sweetLayer, 0, 0, 320, 240);
-        backgrounds = new Background[3];
+        backgrounds = new Background[2];
         backgrounds[0] = new Background(skyLayerRegion, cam, 0.1f);
         backgrounds[1] = new Background(mountainLayerRegion, cam, 0.2f);
-        backgrounds[2] = new Background(forestLayerRegion, cam, 0.3f);
-        //backgrounds[3] = new Background(forestLayerRegion, cam, 0.3f);
+        //backgrounds[2] = new Background(forestLayerRegion, cam, 0.3f);
+        //backgrounds[3] = new Background(sweetLayerRegion, cam, 0.3f);
 
         // set up hud
         hud = new HUD(player);

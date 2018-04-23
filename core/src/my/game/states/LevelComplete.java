@@ -28,6 +28,11 @@ public class LevelComplete extends GameState {
     private int compareScore;
     private int crystalScore;
 
+    private int enemyScore;
+    private int hitScore;
+    private float timescore;
+    private int heartsLeft;
+
     public LevelComplete(GameStateManager gsm) {
         super(gsm);
 
@@ -126,11 +131,6 @@ public class LevelComplete extends GameState {
     public void dispose() { }
 
     private int getScore() {
-        int crystalScore;
-        int enemyScore;
-        int hitScore;
-        float timescore;
-        int heartsLeft;
 
         crystalScore = Game.lvls.getInteger("crystals") * 100;
         enemyScore = Game.lvls.getInteger("enemies") * 100;

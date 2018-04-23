@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import my.game.handlers.BoundedCamera;
+
 import my.game.handlers.Content;
 import my.game.handlers.GameStateManager;
 import static my.game.handlers.B2DVars.CRYSTALS_COLLECTED;
@@ -26,7 +26,7 @@ public class Game implements ApplicationListener {
 	public static final float STEP = 1 / 90f;
 
 	private SpriteBatch sb;
-	private static BoundedCamera cam;
+	private static OrthographicCamera cam;
 	private OrthographicCamera hudCam,bigCam;
 
 	private GameStateManager gsm;
@@ -37,7 +37,7 @@ public class Game implements ApplicationListener {
 	public static Preferences scores;
 
 	public SpriteBatch getSpriteBatch(){return sb;}
-	public static BoundedCamera getCamera(){return cam;}
+	public static OrthographicCamera getCamera(){return cam;}
 	public OrthographicCamera getHUDCamera(){return hudCam;}
 	public OrthographicCamera getBigCam(){return bigCam;}
 
@@ -53,7 +53,7 @@ public class Game implements ApplicationListener {
 		loadFont();
 
 		sb = new SpriteBatch();
-		cam = new BoundedCamera();
+		cam = new OrthographicCamera();
 		cam.setToOrtho(false, V_WIDTH,V_HEIGHT);
 		hudCam = new OrthographicCamera();
 		hudCam.setToOrtho(false, V_WIDTH, V_HEIGHT);
@@ -193,7 +193,6 @@ public class Game implements ApplicationListener {
 		//Enemies
 		res.loadTexture("res/enemies/enemyBat.png","enemyBat");
 		res.loadTexture("res/enemies/enemyTooth.png","enemyTooth");
-		res.loadTexture("res/enemies/trap.png","trap");
 
 		//Particles
 		res.loadTexture("res/particles/bulletParticle.png","bulletParticles");
@@ -218,7 +217,6 @@ public class Game implements ApplicationListener {
 		res.loadSound("res/sfx/buttonClick.mp3","buttonClick");
 		res.loadSound("res/sfx/meleeSwing.mp3", "meleeSwing");
 		res.loadSound("res/sfx/shootingSound.mp3", "shoot");
-		res.loadSound("res/sfx/bounceBack.mp3", "bounceBack");
 
         // music
 		res.loadMusic("res/music/menuSong.mp3","theme");
