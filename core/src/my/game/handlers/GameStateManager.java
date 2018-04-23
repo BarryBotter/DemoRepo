@@ -21,13 +21,13 @@ public class GameStateManager {
     private my.game.Game game;
     private Stack<GameState> gameStates;
 
-    public static final int PLAY = 218231;
-    public static final int MENU = 823183;
-    public static final int LEVEL_SELECT = 32391;
-    public static final int GAMEOVER = 21312;
-    public static final int LEVEL_COMPLETE = 28209;
-    public static final int OPTIONS = 34578;
-    public static final int CUTSCENE = 55768;
+    public static final int PLAY = 21831;
+    public static final int MENU = 82212483;
+    public static final int LEVEL_SELECT = 34212191;
+    public static final int GAMEOVER = 658212;
+    public static final int LEVEL_COMPLETE = 5542109;
+    public static final int OPTIONS = 349568;
+    public static final int CUTSCENE = 598568;
 
     public ImageButton.ImageButtonStyle
             playStyle,optionStyle,exitStyle,
@@ -38,9 +38,9 @@ public class GameStateManager {
 
     public GameStateManager(Game game){
         this.game = game;
-        makeStyles();
         stage = new Stage();
         gameStates = new Stack<GameState>();
+        makeStyles();
         pushState(MENU);
     }
 

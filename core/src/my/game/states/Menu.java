@@ -50,8 +50,6 @@ public class Menu extends GameState{
         StretchViewport viewport;
         viewport = new StretchViewport(width,height, cam);
 
-        cam.setBounds(width,height,width,height);
-
         Texture logoTex =Game.res.getTexture("menulogo");
         logo = new Image(logoTex);
         logo.setSize(col_width,row_height);

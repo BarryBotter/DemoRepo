@@ -116,7 +116,6 @@ public class Play extends GameState {
 
         //create tile
         createWalls();
-        cam.setBounds(0, tileMapWidth * tileSize, 0, tileMapHeight * tileSize);
 
         //create crystals
         createCrystals();

@@ -78,7 +78,7 @@ public class MyContactListener implements ContactListener {
             }
             else if(fb.getUserData().equals("bullet")) {
                 enemyBodiesToRemove.add(fa.getBody());
-                Game.res.getSound("hit").play();
+                Game.res.getSound("hit").play(SOUND_LEVEL);
                 bulletBodiesToRemove.add(fb.getBody());
                 Player.increaseEnemyKC();
             }
@@ -116,13 +116,13 @@ public class MyContactListener implements ContactListener {
                 trapBodiesToRemove.add(fb.getBody());
             }
             else if (fa.getUserData().equals("bullet")) {
-                Game.res.getSound("hit").play();
+                Game.res.getSound("hit").play(SOUND_LEVEL);
                 trapBodiesToRemove.add(fb.getBody());
                 bulletBodiesToRemove.add(fa.getBody());
                 Player.increaseEnemyKC();
             }
             else if (fa.getUserData().equals("melee")) {
-                Game.res.getSound("hit").play();
+                Game.res.getSound("hit").play(SOUND_LEVEL);
                 trapBodiesToRemove.add(fb.getBody());
                 meleeBodiesToRemove.add(fa.getBody());
                 Player.increaseEnemyKC();
@@ -135,13 +135,13 @@ public class MyContactListener implements ContactListener {
                 trapBodiesToRemove.add(fa.getBody());
             }
             else if (fb.getUserData().equals("bullet")) {
-                Game.res.getSound("hit").play();
+                Game.res.getSound("hit").play(SOUND_LEVEL);
                 trapBodiesToRemove.add(fa.getBody());
                 bulletBodiesToRemove.add(fb.getBody());
                 Player.increaseEnemyKC();
             }
             else if (fb.getUserData().equals("melee")) {
-                Game.res.getSound("hit").play();
+                Game.res.getSound("hit").play(SOUND_LEVEL);
                 trapBodiesToRemove.add(fa.getBody());
                 meleeBodiesToRemove.add(fb.getBody());
                 Player.increaseEnemyKC();

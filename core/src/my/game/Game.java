@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import my.game.handlers.BoundedCamera;
+
 import my.game.handlers.Content;
 import my.game.handlers.GameStateManager;
 import static my.game.handlers.B2DVars.CRYSTALS_COLLECTED;
@@ -26,7 +26,7 @@ public class Game implements ApplicationListener {
 	public static final float STEP = 1 / 90f;
 
 	private SpriteBatch sb;
-	private static BoundedCamera cam;
+	private static OrthographicCamera cam;
 	private OrthographicCamera hudCam,bigCam;
 
 	private GameStateManager gsm;
@@ -37,7 +37,7 @@ public class Game implements ApplicationListener {
 	public static Preferences scores;
 
 	public SpriteBatch getSpriteBatch(){return sb;}
-	public static BoundedCamera getCamera(){return cam;}
+	public static OrthographicCamera getCamera(){return cam;}
 	public OrthographicCamera getHUDCamera(){return hudCam;}
 	public OrthographicCamera getBigCam(){return bigCam;}
 
@@ -53,7 +53,7 @@ public class Game implements ApplicationListener {
 		loadFont();
 
 		sb = new SpriteBatch();
-		cam = new BoundedCamera();
+		cam = new OrthographicCamera();
 		cam.setToOrtho(false, V_WIDTH,V_HEIGHT);
 		hudCam = new OrthographicCamera();
 		hudCam.setToOrtho(false, V_WIDTH, V_HEIGHT);
@@ -61,7 +61,6 @@ public class Game implements ApplicationListener {
 		bigCam.setToOrtho(false,640,480);
 		mySkin = new Skin(Gdx.files.internal("res/skin/glassy-ui.json"));
 
-		gsm = new GameStateManager(this);
 
 		lvls = Gdx.app.getPreferences("mylvls");
 		if(!lvls.contains("key")) lvls.putInteger("key", LVL_UNLOCKED);
@@ -100,6 +99,8 @@ public class Game implements ApplicationListener {
 			res.getMusic("theme").setVolume(0);
 			res.getMusic("bbsong").setVolume(0);
 		}
+
+		gsm = new GameStateManager(this);
 	}
 
 
