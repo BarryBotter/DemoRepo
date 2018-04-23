@@ -27,6 +27,14 @@ public class cutScene extends GameState {
     private boolean tutorialBool; //draws tutorial or default background
     private int i = 1;
 
+    public static final float TIMEPERCHAR = 0.1f; // play with this for dif  speeds
+
+    float ctimeperchar = 0;
+
+    int numchars = 0;
+    float delta; // To get delta time
+
+
     public cutScene(final GameStateManager gsm){
         super(gsm);
         xmlRead();
@@ -133,6 +141,7 @@ public class cutScene extends GameState {
 
     @Override
     public void render() {
+         delta = Gdx.graphics.getDeltaTime();
         sb.begin();
         if (tutorialBool){
             sb.draw(tutorialBg,0,0);
@@ -141,7 +150,21 @@ public class cutScene extends GameState {
         }else {
             sb.draw(bg,0,0);
             sb.draw(pixmaptex,width/8,10,width*0.75f,height/4);
-            font.draw(sb,dialogString,width*0.1875f ,height/4-10);
+
+            if (numchars < dialogString.length()) { // if num of chars are lesser than string // length , if all chars are not parsed
+
+                ctimeperchar += delta; // character time per char to be added with // delta
+
+                if (ctimeperchar >= TIMEPERCHAR) { // if c time ie greater than time // for 1 char
+
+                    ctimeperchar = 0; // make ctimeper char again 0
+
+                    numchars++; // go to next character , to be printed
+
+                }
+            }
+            String str = dialogString.substring(0, numchars); // get string to be printed
+            font.draw(sb, str,width* 0.1875f ,height/4-10);
         }
         //sb.draw(pixmaptex,width/8,10,width*0.75f,height/4);
         sb.end();

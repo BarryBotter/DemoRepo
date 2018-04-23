@@ -141,11 +141,11 @@ public class Play extends GameState {
         // create backgrounds
         Texture bgs = Game.res.getTexture("bgones");
         TextureRegion sky = new TextureRegion(bgs, 0, 0, 320, 240);
-        TextureRegion mountains = new TextureRegion(bgs, 0, 235, 320, 340);
+        TextureRegion mountains = new TextureRegion(bgs, 0, 235, 320, 240);
         Texture trees = Game.res.getTexture("bgone");
-        TextureRegion treeLayer = new TextureRegion(trees, 0, 27, 320, 240);
+        TextureRegion treeLayer = new TextureRegion(trees, 0, 0, 320, 240);
         backgrounds = new Background[1];
-        backgrounds[0] = new Background(sky, cam, 0f);
+        backgrounds[0] = new Background(sky, cam, 0.1f);
         //backgrounds[1] = new Background(mountains, cam, 0.2f);
         //backgrounds[2] = new Background(treeLayer, cam, 0f);
 
