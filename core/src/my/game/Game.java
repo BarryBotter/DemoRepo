@@ -85,6 +85,7 @@ public class Game implements ApplicationListener {
 		scores = Gdx.app.getPreferences("highscores");
 		if (!scores.contains("score1")){
 			scores.putInteger("score1",0);
+			scores.putInteger("collect1",0);
 			scores.flush();
 		}
 
@@ -175,8 +176,10 @@ public class Game implements ApplicationListener {
 		res.loadTexture("res/UI_assets/previewBackground2.png", "preview2");
 
 		//Player animations
-		res.loadTexture("res/playerAnimations/playerWalk.png","playerWalk");
+		//res.loadTexture("res/playerAnimations/playerWalk.png","playerWalk");
 		res.loadTexture("res/playerAnimations/playerAttack.png","playerAttack");
+		res.loadTexture("res/playerAnimations/walkingTest.png", "playerWalk");
+		res.loadTexture("res/playerAnimations/jumpframe.png", "playerJump");
 
 		//UI
 		res.loadTexture("res/UI_assets/GameOverScreen.png", "gameOver");

@@ -10,6 +10,11 @@
    eJxjYBgFo2DwAx4i8SigLhgN51EwCkYBCFCa/4ktw4kpbyipD2ihh9ywodQsAAwpA1U=
   </data>
  </layer>
+ <layer name="fill" width="78" height="8">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjIJRMApGwSgYBdQEvGiYVMCDxQxkDAAjOACc
+  </data>
+ </layer>
  <layer name="corner" width="78" height="8">
   <data encoding="base64" compression="zlib">
    eJxjYBgFo2BwA66BdsAIBaPhPgpGwSgAAUrLAmqWJZSYRY5eWpWD1DAXAMH4AFE=

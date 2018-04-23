@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import my.game.Game;
+import my.game.entities.Player;
 import my.game.handlers.GameStateManager;
 
 import static my.game.handlers.B2DVars.SOUND_LEVEL;
@@ -28,6 +29,9 @@ public class LevelSelect extends GameState {
     private BitmapFont font2;
     private String lvlname,toothpaste;
     private int levelScore;
+    private int pasteScore;
+
+    private Player player;
 
     public LevelSelect(final GameStateManager gsm) {
         super(gsm);
@@ -48,7 +52,7 @@ public class LevelSelect extends GameState {
         //todo current level from preferences
         Play.level = 1;
         lvlname = "Level number " + Play.level;
-        toothpaste = "You collected 0/5 toothpaste";
+        //toothpaste = "You collected 0/5 toothpaste";
         buttons();
         Gdx.input.setInputProcessor(stage);
 
@@ -181,6 +185,7 @@ public class LevelSelect extends GameState {
     @Override
     public void update(float dt) {
         levelScore = Game.scores.getInteger("score"+ String.valueOf(Play.level));
+        pasteScore = Game.scores.getInteger("collect" + String.valueOf(Play.level));
 
     }
 
@@ -198,7 +203,7 @@ public class LevelSelect extends GameState {
         sb.draw(reg, 0, 0); //background
         font2.draw(sb,lvlname,width/4,height*0.90f);//lvlname
         //(lvlImg,width/4,height/3,width/2,height/2,sb);
-        font2.draw(sb,toothpaste,width/4,height/3.5f);
+        font2.draw(sb,"Toothpaste collected:" + pasteScore+ "/6", width/4,height/3.5f);
         font2.draw(sb,game.prefs.getString("name")+"'s highscore is:" + levelScore,width/4,height/4.5f);
         sb.end();
 

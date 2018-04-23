@@ -99,7 +99,6 @@ public class Play extends GameState {
     private Background[] backgrounds;
 
     private HUD hud;
-    //private BitmapFont textFont;
 
     public Play(GameStateManager gsm) {
         super(gsm);
@@ -158,8 +157,10 @@ public class Play extends GameState {
 
         startTime = System.currentTimeMillis();
 
-        game.pauseMenuMusic();
-        game.resumeMusic();
+        if (game.prefs.getBoolean("sound")) {
+            game.pauseMenuMusic();
+            game.resumeMusic();
+        }
 
         Gdx.input.setCatchBackKey(true);
     }
@@ -354,12 +355,7 @@ public class Play extends GameState {
 
     @Override
     public void render() {
-        //cam without bounds and set to bottom
-        //if (cam.position.x < tileMapWidth *28){
-            cam.position.set(player.getposition().x * PPM + P_WIDTH / 4, P_HEIGHT/ 2, 0);
-            cam.update();
-        //}
-
+        cam.position.set(player.getposition().x * PPM + P_WIDTH / 4, P_HEIGHT/ 2, 0);
         cam.update();
 
         // draw bgs
@@ -380,26 +376,29 @@ public class Play extends GameState {
         for (int i = 0; i < crystals.size; i++) {
             crystals.get(i).render(sb);
         }
+
         //draw enemy
         for (int i = 0; i < enemies.size; i++) {
             enemies.get(i).render(sb);
         }
+
         //draw traps
         for (int i = 0; i < traps.size; i++) {
             traps.get(i).render(sb);
         }
+
         //draw bullets
         for (int i = 0; i < bullets.size; i++) {
             bullets.get(i).render(sb);
         }
+
         //draw melee hit box
         for (int i = 0; i < meleeHitBoxes.size; i++) {
             meleeHitBoxes.get(i).render(sb);
         }
+
         //draw win
         win.render(sb);
-
-        //updateText();
 
         //draw hud
         sb.setProjectionMatrix(hudCam.combined);
@@ -407,10 +406,7 @@ public class Play extends GameState {
     }
 
     @Override
-    public void dispose() {
-        // tileMap.dispose();
-        //world.dispose();
-    }
+    public void dispose() { }
 
     private void createPlayer() {
         BodyDef bdef = new BodyDef();
@@ -776,15 +772,6 @@ public class Play extends GameState {
         }
     }
 
-    /*
-    private void updateText(){
-        int score = Game.scores.getInteger("score"+String.valueOf(Play.level));
-
-        sb.begin();
-        textFont.draw(sb,String.valueOf(score), player.getposition().x + 50 , player.getposition().y  + 150);
-        sb.end();
-    }*/
-
     private void unlockLevel(){
         int levelS;
         levelS = Game.lvls.getInteger("key");
@@ -891,10 +878,13 @@ public class Play extends GameState {
 
     private void animationManager() {
         // Melee attack animation.
-        if(Melee.returnMeleeCoolDownState() && player.returnCurrentAnimation().equalsIgnoreCase("playerWalk")) {
+        /*if(Melee.returnMeleeCoolDownState() && player.returnCurrentAnimation().equalsIgnoreCase("playerWalk")) {
             player.setPlayerAnimation("playerAttack");
+        }*/
+        if (!cl.isPlayerOnGround()){
+            player.setPlayerAnimation("playerJump");
         }
-        else if(!Melee.returnMeleeCoolDownState() && player.returnCurrentAnimation().equalsIgnoreCase("playerAttack")){
+        else if(cl.isPlayerOnGround() && player.returnCurrentAnimation().equalsIgnoreCase("playerJump")){
             player.setPlayerAnimation("playerWalk");
         }
 

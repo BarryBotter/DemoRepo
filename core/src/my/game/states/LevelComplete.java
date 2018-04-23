@@ -26,6 +26,7 @@ public class LevelComplete extends GameState {
     private int totalScore;
     private int scoreCount = 0;
     private int compareScore;
+    private int crystalScore;
 
     public LevelComplete(GameStateManager gsm) {
         super(gsm);
@@ -61,10 +62,14 @@ public class LevelComplete extends GameState {
     @Override
     public void handleInput() {
         if (playButton.isClicked()) {
-            Play.level++;
             Game.res.getSound("buttonClick").play(SOUND_LEVEL);
+            if (Play.level < 9){
+                Play.level++;
+            }
+            else {
+                Play.level = 1;
+            }
             gsm.setState(GameStateManager.PLAY);
-            game.resumeMusic();
         } else if (exitButton.isClicked()) {
             Game.res.getSound("buttonClick").play(SOUND_LEVEL);
             gsm.setState(GameStateManager.MENU);
@@ -148,9 +153,15 @@ public class LevelComplete extends GameState {
     }
 
     private void setScore(){
+        int collectCompare;
         compareScore = Game.scores.getInteger("score"+String.valueOf(Play.level));
         if(compareScore < totalScore) {
             Game.scores.putInteger("score" + String.valueOf(Play.level), totalScore);
+            Game.scores.flush();
+        }
+        collectCompare = Game.scores.getInteger("collect"+String.valueOf(Play.level));
+        if(collectCompare < crystalScore) {
+            Game.scores.putInteger("collect" + String.valueOf(Play.level), crystalScore /100);
             Game.scores.flush();
         }
     }
