@@ -22,12 +22,12 @@ public class GameStateManager {
     private Stack<GameState> gameStates;
 
     public static final int PLAY = 21831;
-    public static final int MENU = 82212483;
-    public static final int LEVEL_SELECT = 34212191;
-    public static final int GAMEOVER = 658212;
-    public static final int LEVEL_COMPLETE = 5542109;
-    public static final int OPTIONS = 349568;
-    public static final int CUTSCENE = 598568;
+    public static final int MENU = 8221283;
+    public static final int LEVEL_SELECT = 342191;
+    public static final int GAMEOVER = 68212;
+    public static final int LEVEL_COMPLETE = 52109;
+    public static final int OPTIONS = 34968;
+    public static final int CUTSCENE = 59868;
 
     public ImageButton.ImageButtonStyle
             playStyle,optionStyle,exitStyle,

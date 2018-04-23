@@ -410,7 +410,10 @@ public class Play extends GameState {
     }
 
     @Override
-    public void dispose() { }
+    public void dispose() {
+
+        Gdx.input.setInputProcessor(null);
+    }
 
     private void createPlayer() {
         BodyDef bdef = new BodyDef();

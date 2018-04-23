@@ -1,5 +1,6 @@
 package my.game.states;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -62,12 +63,12 @@ public class LevelComplete extends GameState {
         setScore();
 
         world = new World(new Vector2(0, -9.8f * 5), true);
+        
     }
 
     @Override
     public void handleInput() {
         if (playButton.isClicked()) {
-            Game.res.getSound("buttonClick").play(SOUND_LEVEL);
             if (Play.level < 9){
                 Play.level++;
             }
@@ -76,7 +77,6 @@ public class LevelComplete extends GameState {
             }
             gsm.setState(GameStateManager.PLAY);
         } else if (exitButton.isClicked()) {
-            Game.res.getSound("buttonClick").play(SOUND_LEVEL);
             gsm.setState(GameStateManager.MENU);
             game.resumeMenuMusic();
         }
