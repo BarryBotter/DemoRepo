@@ -77,6 +77,8 @@ public class Play extends GameState {
     private int tileMapWidth;
     private int tileMapHeight;
     private int tileSize;
+
+    private int lvlU = 0;
     private OrthogonalTiledMapRenderer tmRenderer;
 
     private MyContactListener cl;
@@ -780,14 +782,11 @@ public class Play extends GameState {
     }
 
     private void unlockLevel(){
-        int levelS;
-        levelS = Game.lvls.getInteger("key");
+        lvlU = Game.lvls.getInteger("key");
 
-        if (level < levelS) {
-            //LVL_UNLOCKED = level;
-        } else if (level >= levelS)
-            LVL_UNLOCKED = LVL_UNLOCKED + 1;
-        Game.lvls.putInteger("key", LVL_UNLOCKED);
+        if (level >= lvlU)
+            lvlU = lvlU + 1;
+        Game.lvls.putInteger("key", lvlU);
         Game.lvls.flush();
     }
 

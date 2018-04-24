@@ -18,6 +18,7 @@ import my.game.Game;
 import my.game.entities.Player;
 import my.game.handlers.GameStateManager;
 
+import static my.game.handlers.B2DVars.LVL_UNLOCKED;
 import static my.game.handlers.B2DVars.SOUND_LEVEL;
 
 public class LevelSelect extends GameState {
@@ -31,7 +32,7 @@ public class LevelSelect extends GameState {
     private int levelScore;
     private int pasteScore;
 
-    private Player player;
+    private int lvl;
 
     public LevelSelect(final GameStateManager gsm) {
         super(gsm);
@@ -50,7 +51,8 @@ public class LevelSelect extends GameState {
         reg = new TextureRegion(Game.res.getTexture("menubg"), 0, 0, width, height);
         cam.setToOrtho(false, width, height);
         //todo current level from preferences
-        Play.level = 1;
+        lvl = Game.lvls.getInteger("key");
+        Play.level = LVL_UNLOCKED;
         lvlname = "Level number " + Play.level;
         //toothpaste = "You collected 0/5 toothpaste";
         buttons();
@@ -116,9 +118,16 @@ public class LevelSelect extends GameState {
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 if ( event.getStageX() < width/4 && leftButton.isPressed() && Play.level > 1) {
-                    Play.level -= 1;
-                    lvlname = "Level number " + Play.level;
-                    updateImg();
+                    if(Play.level == lvl){
+                        Play.level -=1;
+                        lvlname = "Level number " + Play.level;
+                        updateImg();
+                    }
+                    else {
+                        Play.level -= 1;
+                        lvlname = "Level number " + Play.level;
+                        updateImg();
+                    }
                 }
                 Game.res.getSound("buttonClick").play(SOUND_LEVEL);
             }
@@ -137,9 +146,14 @@ public class LevelSelect extends GameState {
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 if (event.getStageX() > width*0.75  && rightButton.isPressed() && Play.level < 9) {
-                    Play.level += 1;
-                    lvlname = "Level number " + Play.level;
-                    updateImg();
+                    if(Play.level == lvl){
+                        Play.level = lvl;
+                    }
+                    else {
+                        Play.level += 1;
+                        lvlname = "Level number " + Play.level;
+                        updateImg();
+                    }
                 }
                 Game.res.getSound("buttonClick").play(SOUND_LEVEL);
             }
@@ -186,7 +200,7 @@ public class LevelSelect extends GameState {
     public void update(float dt) {
         levelScore = Game.scores.getInteger("score"+ String.valueOf(Play.level));
         pasteScore = Game.scores.getInteger("collect" + String.valueOf(Play.level));
-
+        System.out.println(game.prefs.getInteger("key"));
     }
 
     @Override
