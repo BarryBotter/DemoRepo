@@ -124,8 +124,8 @@ public class Menu extends GameState{
         table.add(optionsButton).width(col_width*1.5f);
         table.row();//second row
         table.add();
-        table.add(logo).colspan(3).height(row_height*6).width(col_width*5);
-        table.add().width(col_width);
+        table.add(logo).colspan(3).height(row_height*8).width(col_width*6);
+        table.add().width(col_width/3);
         table.add(table1); //nested table
         table1.add(playButton).width(col_width*4);
         table1.row();
