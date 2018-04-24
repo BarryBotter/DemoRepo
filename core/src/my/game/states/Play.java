@@ -162,7 +162,7 @@ public class Play extends GameState {
             TextureRegion forestLayerRegion = new TextureRegion(forestLayer, 0, 0, 320, 240);
             Texture sweetLayer = Game.res.getTexture("sweetLayer2");
             TextureRegion sweetLayerRegion = new TextureRegion(sweetLayer, 0, 0, 320, 240);
-            backgrounds = new Background[2];
+            backgrounds = new Background[4];
             backgrounds[0] = new Background(skyLayerRegion, cam, 0.05f);
             backgrounds[1] = new Background(mountainLayerRegion, cam, 0.1f);
             backgrounds[2] = new Background(forestLayerRegion, cam, 0.1f);
