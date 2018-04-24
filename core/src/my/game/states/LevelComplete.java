@@ -124,8 +124,10 @@ public class LevelComplete extends GameState {
         textFont.draw(sb,"total score",x, 65);
 
         for (int i = 0; i < totalScore /1000; i++) {
-            if (scoreCount == totalScore)
+            if (scoreCount == totalScore) {
                 textFont.draw(sb, String.valueOf(scoreCount), x, 85);
+                break;
+            }
             else
             scoreCount = scoreCount + 5;
             textFont.draw(sb, String.valueOf(scoreCount), x, 85);
