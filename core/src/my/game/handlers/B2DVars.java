@@ -23,7 +23,7 @@ public class B2DVars {
 
     //other vars
      public static int MAX_HEALTH = 3;
-     public static int LVL_UNLOCKED = 10;
+     public static int LVL_UNLOCKED = 1;
      public static int CRYSTALS_COLLECTED = 0;
      public static int HITS_TAKEN = 0;
      public static int ENEMIES_DESTROYED = 0;
