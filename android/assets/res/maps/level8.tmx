@@ -1,23 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="2018.03.21" orientation="orthogonal" renderorder="right-down" width="100" height="10" tilewidth="32" tileheight="32" infinite="0" nextobjectid="2">
+<map version="1.0" tiledversion="1.1.3" orientation="orthogonal" renderorder="right-down" width="100" height="10" tilewidth="32" tileheight="32" infinite="0" nextobjectid="27">
  <tileset firstgid="1" source="demoblock.tsx"/>
  <tileset firstgid="5" source="gameblocks.tsx"/>
  <layer name="platforms" width="100" height="10">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUjIJRMApoCziQMLXMora5IwGMhtPgANSKh9H4pAyMxsPAAQ4G6pffxJiDXn+MAuoBetTH6OmG2vbhMp8cjM1MYsUAeFwB0Q==
-  </data>
- </layer>
- <layer name="jump" width="100" height="10">
-  <data encoding="base64" compression="zlib">
-   eJzt1zkKACAMBEAb9f8/thdvUCxmYJuQkHpD+E+ucnKzGwAAAO5Z6V6tjpYG+7FzW/952f9G/2ezAoD8AR0=
+   eJzt1LEKwCAMRdEsLfr/P1w6BEMxjYgYSu+BLOKgPhMRAECkmDqSz/JVvF0+/cOqZh3k54qzTh57eTmo0TyYbXNOaTOpDpbnOduifbYwx+bRy/JN9O5eT/XyW9l/9h5Zdd/lAhVmAqE=
   </data>
  </layer>
  <layer name="corner" width="100" height="10">
   <data encoding="base64" compression="zlib">
-   eJzt0cEJADAIBEFf6b/kgC3EoMhMBcdtBAD8c7oHkHSYoaqDnm902EWHXv6vdQEL3wAx
+   eJzt0cEJACAQA8F72X/JdiAiwgWdqSBkqwBYGd0DHuDDfhpk0CHDrQ569tttoFWG0w4/9Zs79wA9
   </data>
  </layer>
+ <layer name="jump" width="100" height="10">
+  <data encoding="base64" compression="zlib">
+   eJztwzEJAAAMA7B+8+94DvoXEkgCAAAA265c8TLYADI=
+  </data>
+ </layer>
+ <objectgroup name="trap">
+  <object id="14" x="2481.33" y="240">
+   <point/>
+  </object>
+  <object id="16" x="2736" y="205.333">
+   <point/>
+  </object>
+  <object id="18" x="2225.33" y="216">
+   <point/>
+  </object>
+  <object id="21" x="754.667" y="157.333">
+   <point/>
+  </object>
+  <object id="24" x="1040" y="28">
+   <point/>
+  </object>
+ </objectgroup>
+ <layer name="fill" width="100" height="10">
+  <data encoding="base64" compression="zlib">
+   eJzt0zEKACAMBME0Fv7/w34g4iVoILIDdhZyi2YAAPQxnYOYm9vRI8fbjR71dh3oUevUQd0us/MIvfRfagNlY+Xuy3/X3QKN0gKp
+  </data>
+ </layer>
+ <objectgroup name="crystals">
+  <object id="6" x="2598.5" y="261" width="13" height="12">
+   <ellipse/>
+  </object>
+  <object id="7" x="2344.83" y="263.667" width="13" height="12">
+   <ellipse/>
+  </object>
+  <object id="11" x="1030.5" y="229" width="13" height="12">
+   <ellipse/>
+  </object>
+  <object id="12" x="1448.83" y="264.667" width="13" height="12">
+   <ellipse/>
+  </object>
+  <object id="25" x="548.167" y="266" width="13" height="12">
+   <ellipse/>
+  </object>
+  <object id="26" x="266.833" y="107.333" width="13" height="12">
+   <ellipse/>
+  </object>
+ </objectgroup>
  <objectgroup name="win">
-  <object id="1" x="3024" y="132" width="132" height="128"/>
+  <object id="1" x="2933" y="160" width="132" height="128"/>
  </objectgroup>
 </map>

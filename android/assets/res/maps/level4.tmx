@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.3" orientation="orthogonal" renderorder="right-down" width="100" height="10" tilewidth="32" tileheight="32" infinite="0" nextobjectid="16">
+<map version="1.0" tiledversion="1.1.3" orientation="orthogonal" renderorder="right-down" width="100" height="10" tilewidth="32" tileheight="32" infinite="0" nextobjectid="18">
  <tileset firstgid="1" source="demoblock.tsx"/>
  <tileset firstgid="5" source="gameblocks.tsx"/>
  <layer name="corner" width="100" height="10">
   <data encoding="base64" compression="zlib">
-   eJzt1iEOACAMBMEa+v8nozE0aUiKmLFrTl4EwGlNDwAAeCjj/m+qPuXXXfRl0TeYsAAt
+   eJzt1iEOADAIA0DM+P+Tp2fGBAvmzpaklUQAnNb0AACARhn3/6bKX2+6TXTyVxb5BrMUADg=
   </data>
  </layer>
+ <objectgroup name="trap">
+  <object id="17" x="3005" y="208">
+   <point/>
+  </object>
+ </objectgroup>
  <layer name="jump" width="100" height="10">
   <data encoding="base64" compression="zlib">
    eJztzrENACAIAEEadP+NcQIbMDZ3yfcfAQAAwM065e+JB3Yj5hXCmAB1
@@ -24,7 +29,7 @@
   <object id="4" x="2432" y="214.667">
    <ellipse/>
   </object>
-  <object id="11" x="1216" y="217">
+  <object id="11" x="1217" y="240">
    <ellipse/>
   </object>
   <object id="13" x="2754" y="267">
@@ -33,11 +38,11 @@
   <object id="14" x="1087" y="269">
    <ellipse/>
   </object>
-  <object id="15" x="1489" y="239">
+  <object id="15" x="1508" y="238">
    <ellipse/>
   </object>
  </objectgroup>
  <objectgroup name="win">
-  <object id="1" x="3030" y="190" width="130" height="100"/>
+  <object id="1" x="3104.5" y="187.667" width="58.5" height="100"/>
  </objectgroup>
 </map>

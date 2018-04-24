@@ -177,7 +177,7 @@ public class MyContactListener implements ContactListener {
         }
         if (fb.getUserData() != null && fb.getUserData().equals("corner")) {
             if (fa.getUserData().equals("player")) {
-                Game.res.getSound("shoot").play(SOUND_LEVEL);
+                Game.res.getSound("bounceBack").play(SOUND_LEVEL);
             }
             else if (fa.getUserData().equals("bullet")) {
                 //Game.res.getSound("shoot").play(SOUND_LEVEL);

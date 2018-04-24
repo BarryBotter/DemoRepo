@@ -7,7 +7,7 @@
  <tileset firstgid="9" source="gameblocks.tsx"/>
  <layer name="platforms" width="200" height="8">
   <data encoding="base64" compression="zlib">
-   eJzt19EKgCAMhWHvosj3f926Fqyd6Yjm/8HuXGh1wJUCAACyOu46hdqF/nYt5qpfbwC/0MtnduTDZ4V/JPv5LMjHs9XuMmQCrQx3+pH5JGsmlJlPOf/meKayXt13REVnQJ3Je/uy9NSXsvRG876Pke97ATgFCOk=
+   eJzt18EKgCAQRVF3UeT//24tRTB9oxWO98DsNMbqwRgCAADw6rjrFGoX9udrMVb8uwFMoZRP78iHzQr/iPfztSAfZelcs8ocQyaQymf7WXPQcz/xmgnlzqecfzM8U1mv9j26vsiAeid/6q22J1aqZe/brO+j5xtf+goIzQ==
   </data>
  </layer>
  <objectgroup name="crystals">
@@ -37,15 +37,15 @@
  </layer>
  <layer name="corner" width="200" height="8">
   <data encoding="base64" compression="zlib">
-   eJztl20LgCAMhP1a6P//uzEoCCnSvbDm7gFBQdhN7xBLAQBYsnfrzUUFn14/AJq0j/WfoWxE0gviETUf17sRRW9kMr/REfNxvy8PvRn8kqHHEbzyQOfP/eu0l7k22TySrd8RpP6a9Tntr2ddbm3NfKzgCUkPK/RvCfmrPgzrmpJ8ZAHelXEADCECHw==
+   eJzt190KgCAMBWBvDX3/141BQdr/lqzDzgdBQrBZO0gpEdFIU7fOLl3o9f0TfanerP9MsoHUL+FBzcd6bqD0iyzyGY2Yj+338ug3wrxE2OMTXnmQ96/916kn92TDTOxZ5+vtnMvzZamrrc18tCxzzUxck/kqB9fompZ8RML51ZsBihICCw==
   </data>
  </layer>
  <layer name="fill" width="200" height="8">
   <data encoding="base64" compression="zlib">
-   eJzt09kNACAIBFEaoP92bcAjGEWEeYn/wrIiAABgh77+ABCUCv0AelTohxddPMTyOp8KN7LqRObZf+eVz+gWst6IpRPZZr/FuqMT+zyZzyzzKv3Y7UX02RvxCAUi
+   eJzt09kNACAIBFEaoP92bcAjGEWEeYnfisuKAACAHfr6AUBQKvQD6FGhH150cRDL63wq7MiqE5ln/51XPqN7su6IpRPZZr/F+kcn/vNkPrO8q/RjtxfRZ2+FYAT7
   </data>
  </layer>
  <objectgroup name="win">
-  <object id="44" x="6327" y="150" width="42" height="78"/>
+  <object id="44" x="6304.09" y="145.818" width="42" height="78"/>
  </objectgroup>
 </map>

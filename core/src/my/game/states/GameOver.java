@@ -47,7 +47,7 @@ public class GameOver extends GameState {
         else if(exitButton.isClicked()){
             Game.res.getSound("over").stop();
             Game.res.getSound("buttonClick").play(SOUND_LEVEL);
-            gsm.setState(GameStateManager.MENU);
+            gsm.setState(GameStateManager.LEVEL_SELECT);
             game.pauseMusic();
             game.resumeMenuMusic();
         }

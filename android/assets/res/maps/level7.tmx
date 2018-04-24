@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="2018.03.21" orientation="orthogonal" renderorder="right-down" width="100" height="8" tilewidth="32" tileheight="32" infinite="0" nextobjectid="9">
+<map version="1.0" tiledversion="1.1.3" orientation="orthogonal" renderorder="right-down" width="100" height="8" tilewidth="32" tileheight="32" infinite="0" nextobjectid="11">
  <tileset firstgid="1" name="blocks" tilewidth="32" tileheight="32" tilecount="4" columns="4">
   <image source="demoblock.png" width="128" height="32"/>
  </tileset>
@@ -7,7 +7,7 @@
  <tileset firstgid="9" source="gameblocks.tsx"/>
  <layer name="platforms" width="100" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUjIJRMApGwSgYBaNg+AIeCjCyGehmYrMHl/343EXI3YTk8akhVx2x9pITngDO7wJB
+   eJxjYBgFo2AUjIJRMApGwSgYBaNg+AMuIOYhAXMi6eVBMwudj0sMnzgXmh3kyKO7kxrqCKklNRzRzQQAkNsCBg==
   </data>
  </layer>
  <layer name="corner" width="100" height="8">
@@ -21,26 +21,34 @@
   </data>
  </layer>
  <objectgroup name="crystals">
-  <object id="3" x="762" y="188">
+  <object id="3" x="752" y="176">
    <ellipse/>
   </object>
-  <object id="4" x="957" y="188">
+  <object id="4" x="973" y="176">
    <ellipse/>
   </object>
-  <object id="5" x="1378" y="190">
+  <object id="5" x="1357" y="177">
    <ellipse/>
   </object>
-  <object id="6" x="1634" y="187">
+  <object id="6" x="1614" y="172">
    <ellipse/>
   </object>
-  <object id="7" x="2619" y="188">
+  <object id="7" x="2544" y="174">
    <ellipse/>
   </object>
-  <object id="8" x="2110" y="180">
+  <object id="8" x="2190" y="175">
    <ellipse/>
   </object>
  </objectgroup>
+ <objectgroup name="trap">
+  <object id="9" x="1774" y="138">
+   <point/>
+  </object>
+  <object id="10" x="2424" y="140">
+   <point/>
+  </object>
+ </objectgroup>
  <objectgroup name="win">
-  <object id="1" x="2984.85" y="133.333" width="160.606" height="75.7576"/>
+  <object id="1" x="2997.52" y="148.041" width="42.606" height="75.7576"/>
  </objectgroup>
 </map>

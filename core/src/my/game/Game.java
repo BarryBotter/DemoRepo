@@ -168,10 +168,14 @@ public class Game implements ApplicationListener {
 		res.loadTexture("res/UI_final/tutorial.png","tutorial");
 
 		//Backgrounds
-        res.loadTexture("res/background/skyLayer.png", "skyLayer");
-        res.loadTexture("res/background/mountainLayer.png", "mountainLayer");
-        res.loadTexture("res/background/forestLayer.png", "forestLayer");
-		res.loadTexture("res/background/sweetLayer.png", "sweetLayer");
+        res.loadTexture("res/background/skyLayer1.png", "skyLayer1");
+        res.loadTexture("res/background/mountainLayer1.png", "mountainLayer1");
+        res.loadTexture("res/background/forestLayer1.png", "forestLayer1");
+		res.loadTexture("res/background/sweetLayer1.png", "sweetLayer1");
+        res.loadTexture("res/background/skyLayer2.png", "skyLayer2");
+        res.loadTexture("res/background/mountainLayer2.png", "mountainLayer2");
+        res.loadTexture("res/background/forestLayer2.png", "forestLayer2");
+        res.loadTexture("res/background/sweetLayer2.png", "sweetLayer2");
 
 		//Level select preview pics
 		res.loadTexture("res/UI_assets/previewBackground.png", "preview1");
@@ -193,7 +197,6 @@ public class Game implements ApplicationListener {
 		//Enemies
 		res.loadTexture("res/enemies/enemyBat.png","enemyBat");
 		res.loadTexture("res/enemies/enemyTooth.png","enemyTooth");
-		res.loadTexture("res/enemies/trap.png","trap");
 
 		//Particles
 		res.loadTexture("res/particles/bulletParticle.png","bulletParticles");

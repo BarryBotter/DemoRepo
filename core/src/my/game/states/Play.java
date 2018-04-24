@@ -138,19 +138,36 @@ public class Play extends GameState {
         createMeleeHitBox();
 
         // create backgrounds
-        Texture skyLayer = Game.res.getTexture("skyLayer");
-        TextureRegion skyLayerRegion = new TextureRegion(skyLayer, 0, 0, 320, 240);
-        Texture mountainLayer = Game.res.getTexture("mountainLayer");
-        TextureRegion mountainLayerRegion = new TextureRegion(mountainLayer, 0, 0, 320, 240);
-        Texture forestLayer = Game.res.getTexture("forestLayer");
-        TextureRegion forestLayerRegion = new TextureRegion(forestLayer, 0, 0, 320, 240);
-        Texture sweetLayer = Game.res.getTexture("sweetLayer");
-        TextureRegion sweetLayerRegion = new TextureRegion(sweetLayer, 0, 0, 320, 240);
-        backgrounds = new Background[3];
-        backgrounds[0] = new Background(skyLayerRegion, cam, 0.1f);
-        backgrounds[1] = new Background(mountainLayerRegion, cam, 0.2f);
-        backgrounds[2] = new Background(forestLayerRegion, cam, 0.3f);
-        //backgrounds[3] = new Background(forestLayerRegion, cam, 0.3f);
+        if(level < 5) {
+            Texture skyLayer = Game.res.getTexture("skyLayer1");
+            TextureRegion skyLayerRegion = new TextureRegion(skyLayer, 0, 0, 320, 240);
+            Texture mountainLayer = Game.res.getTexture("mountainLayer1");
+            TextureRegion mountainLayerRegion = new TextureRegion(mountainLayer, 0, 0, 320, 240);
+            Texture forestLayer = Game.res.getTexture("forestLayer1");
+            TextureRegion forestLayerRegion = new TextureRegion(forestLayer, 0, 0, 320, 240);
+            Texture sweetLayer = Game.res.getTexture("sweetLayer1");
+            TextureRegion sweetLayerRegion = new TextureRegion(sweetLayer, 0, 0, 320, 240);
+            backgrounds = new Background[4];
+            backgrounds[0] = new Background(skyLayerRegion, cam, 0.05f);
+            backgrounds[1] = new Background(mountainLayerRegion, cam, 0.1f);
+            backgrounds[2] = new Background(forestLayerRegion, cam, 0.15f);
+            backgrounds[3] = new Background(sweetLayerRegion, cam, 0.15f);
+        }
+        else if(level <= 9) {
+            Texture skyLayer = Game.res.getTexture("skyLayer2");
+            TextureRegion skyLayerRegion = new TextureRegion(skyLayer, 0, 0, 320, 240);
+            Texture mountainLayer = Game.res.getTexture("mountainLayer2");
+            TextureRegion mountainLayerRegion = new TextureRegion(mountainLayer, 0, 0, 320, 240);
+            Texture forestLayer = Game.res.getTexture("forestLayer2");
+            TextureRegion forestLayerRegion = new TextureRegion(forestLayer, 0, 0, 320, 240);
+            Texture sweetLayer = Game.res.getTexture("sweetLayer2");
+            TextureRegion sweetLayerRegion = new TextureRegion(sweetLayer, 0, 0, 320, 240);
+            backgrounds = new Background[4];
+            backgrounds[0] = new Background(skyLayerRegion, cam, 0.05f);
+            backgrounds[1] = new Background(mountainLayerRegion, cam, 0.1f);
+            backgrounds[2] = new Background(forestLayerRegion, cam, 0.15f);
+            backgrounds[3] = new Background(sweetLayerRegion, cam, 0.15f);
+        }
 
         // set up hud
         hud = new HUD(player);
@@ -405,7 +422,9 @@ public class Play extends GameState {
     }
 
     @Override
-    public void dispose() { }
+    public void dispose() {
+        Gdx.input.setInputProcessor(null);
+    }
 
     private void createPlayer() {
         BodyDef bdef = new BodyDef();
@@ -631,17 +650,16 @@ public class Play extends GameState {
 
                 bdef.position.set(x, y);
 
-                CircleShape cshape = new CircleShape();
-                cshape.setRadius(8 / PPM);
+                PolygonShape shape = new PolygonShape();
+                shape.setAsBox(14 / PPM, 14 / PPM);
 
-                fdef.shape = cshape;
+                fdef.shape = shape;
                 fdef.restitution = 1;
                 fdef.filter.categoryBits = BIT_TRAP;
                 fdef.filter.maskBits = BIT_PLAYER | BIT_GROUND | BIT_BULLET | BIT_MELEE;
-
                 Body body = world.createBody(bdef);
                 body.createFixture(fdef).setUserData("trap");
-                cshape.dispose();
+                shape.dispose();
 
                 Traps trap = new Traps(body);
                 traps.add(trap);
