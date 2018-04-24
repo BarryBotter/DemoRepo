@@ -27,7 +27,7 @@ public class GameStateManager {
     public static final int GAMEOVER = 68212;
     public static final int LEVEL_COMPLETE = 52109;
     public static final int OPTIONS = 34968;
-    public static final int CUTSCENE = 59868;
+    public static final int CUTSCENE = 2229868;
 
     public ImageButton.ImageButtonStyle
             playStyle,optionStyle,exitStyle,

@@ -29,6 +29,7 @@ public class LevelComplete extends GameState {
     private int totalScore;
     private int scoreCount = 0;
     private int compareScore;
+    private int collectCompare;
     private int crystalScore;
 
     private int enemyScore;
@@ -120,7 +121,7 @@ public class LevelComplete extends GameState {
 
         textFont.draw(sb,"Level Complete!",80,230);
         textFont.draw(sb, Game.lvls.getInteger("crystals") + "/6 toothpaste collected", x, 200);
-        textFont.draw(sb, String.valueOf(settime()) + "s completion time",x,180);
+        textFont.draw(sb,settime() + "s completion time",x,180);
         textFont.draw(sb, Game.lvls.getInteger("enemies") + " enemies destroyed", x, 160);
         textFont.draw(sb, String.valueOf(Player.returnHealth()) + " health left",x,140);
         textFont.draw(sb, heartScore + " hits taken",x,120);
@@ -163,7 +164,6 @@ public class LevelComplete extends GameState {
     }
 
     private void setScore(){
-        int collectCompare;
         compareScore = Game.scores.getInteger("score"+String.valueOf(Play.level));
         if(compareScore < totalScore) {
             Game.scores.putInteger("score" + String.valueOf(Play.level), totalScore);
