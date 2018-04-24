@@ -47,14 +47,15 @@ public class LevelComplete extends GameState {
 
         heartScore =  Game.lvls.getInteger("hits");
 
-        tex = Game.res.getTexture("main");
+        tex = Game.res.getTexture("playButton");
 
         TextureRegion[] menuButtons;
         menuButtons = new TextureRegion[5];
-        menuButtons[0] = new TextureRegion(tex, 340, 40, 200, 100);
-        menuButtons[1] = new TextureRegion(tex, 340, 125, 200, 100);
-        playButton = new GameButton(menuButtons[0], 350, 100, cam);
-        exitButton = new GameButton(menuButtons[1], 250, 110, cam);
+        menuButtons[0] = new TextureRegion(tex, 0, 0, 80, 80);
+        tex = Game.res.getTexture("exitButton");
+        menuButtons[1] = new TextureRegion(tex, 0, 0, 80, 80);
+        playButton = new GameButton(menuButtons[0], 290, 70, cam);
+        exitButton = new GameButton(menuButtons[1], 210, 70, cam);
 
         cam.setToOrtho(false, Game.V_WIDTH, Game.V_HEIGHT);
 
@@ -73,13 +74,13 @@ public class LevelComplete extends GameState {
         if (playButton.isClicked()) {
             if (Play.level < 9){
                 Play.level++;
+                gsm.setState(GameStateManager.PLAY);
             }
             else {
-                Play.level = 1;
+                gsm.setState(GameStateManager.LEVEL_SELECT);
             }
-            gsm.setState(GameStateManager.PLAY);
         } else if (exitButton.isClicked()) {
-            gsm.setState(GameStateManager.MENU);
+            gsm.setState(GameStateManager.LEVEL_SELECT);
             game.resumeMenuMusic();
         }
     }
@@ -104,6 +105,8 @@ public class LevelComplete extends GameState {
         // draw background
         //bg.render(sb);
         Gdx.gl.glClearColor(135/255f, 206/255f, 235/255f, 1);
+        //Gdx.gl.glClearColor(255/255f, 255/255f, 255/255f, 1);
+        //Gdx.gl.glClearColor(0/255f, 0/255f, 0/255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 
