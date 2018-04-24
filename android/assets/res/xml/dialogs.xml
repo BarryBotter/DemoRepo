@@ -11,17 +11,22 @@ toothpaste for extra ammo.
     <!-- merge strings with the name in the program-->
     <dialog name="dialog1">
         <string>
-THIS IS A CUTSCENE. YOUR NAME IS 
+Congratulations
         </string>
     </dialog>
     <dialog name="dialog2">
         <string>
-Remember to brush your teeth!
+You won the first level!
         </string>
     </dialog>
     <dialog name="dialog3">
         <string>
 Wow, you completed a level
+        </string>
+    </dialog>
+    <dialog name="dialog4">
+        <string>
+You completed the game.
         </string>
     </dialog>
 </dialogs>

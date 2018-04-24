@@ -116,7 +116,6 @@ public class Play extends GameState {
 
         //create tile
         createWalls();
-        cam.setBounds(0, tileMapWidth * tileSize, 0, tileMapHeight * tileSize);
 
         //create crystals
         createCrystals();
@@ -324,11 +323,17 @@ public class Play extends GameState {
                 cutScene.dialogNumber = level;
                 dispose();
                 gsm.setState(GameStateManager.CUTSCENE);
-            } else if (level >= 2) {
+            } else if (level >= 2 && level < 9) {
                 unlockLevel();
                 Collected();
                 dispose();
                 gsm.setState(GameStateManager.LEVEL_COMPLETE);
+            }else if (level == 9){
+                unlockLevel();
+                Collected();
+                cutScene.dialogNumber = level;
+                dispose();
+                gsm.setState(GameStateManager.CUTSCENE);
             }
         }
 

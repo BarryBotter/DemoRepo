@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import my.game.handlers.BoundedCamera;
+
 import my.game.handlers.Content;
 import my.game.handlers.GameStateManager;
 import static my.game.handlers.B2DVars.CRYSTALS_COLLECTED;
@@ -26,7 +26,7 @@ public class Game implements ApplicationListener {
 	public static final float STEP = 1 / 90f;
 
 	private SpriteBatch sb;
-	private static BoundedCamera cam;
+	private static OrthographicCamera cam;
 	private OrthographicCamera hudCam,bigCam;
 
 	private GameStateManager gsm;
@@ -37,7 +37,7 @@ public class Game implements ApplicationListener {
 	public static Preferences scores;
 
 	public SpriteBatch getSpriteBatch(){return sb;}
-	public static BoundedCamera getCamera(){return cam;}
+	public static OrthographicCamera getCamera(){return cam;}
 	public OrthographicCamera getHUDCamera(){return hudCam;}
 	public OrthographicCamera getBigCam(){return bigCam;}
 
@@ -53,7 +53,7 @@ public class Game implements ApplicationListener {
 		loadFont();
 
 		sb = new SpriteBatch();
-		cam = new BoundedCamera();
+		cam = new OrthographicCamera();
 		cam.setToOrtho(false, V_WIDTH,V_HEIGHT);
 		hudCam = new OrthographicCamera();
 		hudCam.setToOrtho(false, V_WIDTH, V_HEIGHT);
@@ -61,7 +61,6 @@ public class Game implements ApplicationListener {
 		bigCam.setToOrtho(false,640,480);
 		mySkin = new Skin(Gdx.files.internal("res/skin/glassy-ui.json"));
 
-		gsm = new GameStateManager(this);
 
 		lvls = Gdx.app.getPreferences("mylvls");
 		if(!lvls.contains("key")) lvls.putInteger("key", LVL_UNLOCKED);
@@ -100,6 +99,8 @@ public class Game implements ApplicationListener {
 			res.getMusic("theme").setVolume(0);
 			res.getMusic("bbsong").setVolume(0);
 		}
+
+		gsm = new GameStateManager(this);
 	}
 
 
@@ -142,8 +143,8 @@ public class Game implements ApplicationListener {
 		parameter.size = 24;
 		font24 = generator.generateFont(parameter);
 		parameter.size = 16;
-		parameter.shadowOffsetX = 3;
-		parameter.shadowOffsetY = 3;
+		parameter.borderWidth = 2;
+		parameter.borderColor = Color.PINK;
 		parameter.color = Color.WHITE;
 		textFont = generator.generateFont(parameter);
 		generator.dispose(); // don't forget to dispose to avoid memory leaks!
@@ -177,12 +178,14 @@ public class Game implements ApplicationListener {
         res.loadTexture("res/background/forestLayer2.png", "forestLayer2");
         res.loadTexture("res/background/sweetLayer2.png", "sweetLayer2");
 
+		//cutscene
+		res.loadTexture("res/UI_final/cutscene1.png","cutscene1");
+
 		//Level select preview pics
 		res.loadTexture("res/UI_assets/previewBackground.png", "preview1");
 		res.loadTexture("res/UI_assets/previewBackground2.png", "preview2");
 
 		//Player animations
-		res.loadTexture("res/playerAnimations/playerAttack.png","playerAttack");
 		res.loadTexture("res/playerAnimations/walkingTest.png", "playerWalk");
 		res.loadTexture("res/playerAnimations/jumpframe.png", "playerJump");
 
@@ -203,7 +206,6 @@ public class Game implements ApplicationListener {
 		res.loadTexture("res/particles/bullet.png","bullet");
 
 		//PickUps
-		res.loadTexture("res/pickups/crystal.png", "Crystal");
 		res.loadTexture("res/pickups/toothPastePickUp.png", "toothPaste");
         res.loadTexture("res/pickups/flagPole.png", "flagPole");
 	}
@@ -221,7 +223,6 @@ public class Game implements ApplicationListener {
 		res.loadSound("res/sfx/buttonClick.mp3","buttonClick");
 		res.loadSound("res/sfx/meleeSwing.mp3", "meleeSwing");
 		res.loadSound("res/sfx/shootingSound.mp3", "shoot");
-		res.loadSound("res/sfx/bounceBack.mp3", "bounceBack");
 
         // music
 		res.loadMusic("res/music/menuSong.mp3","theme");

@@ -16,7 +16,7 @@ import my.game.Game;
 import my.game.handlers.GameStateManager;
 
 public class cutScene extends GameState {
-    private TextureRegion bg,tutorialBg;
+    private TextureRegion bg,tutorialBg,cutScene1;
     private BitmapFont font;
     private String dialogString = "default_string",name;
     private int width = 320,height = 240;
@@ -38,19 +38,21 @@ public class cutScene extends GameState {
     public cutScene(final GameStateManager gsm){
         super(gsm);
         xmlRead();
-        if (dialogNumber == 1){
-            name = game.prefs.getString("name", "no name stored");
-            dialogString += " " + name;
-        }
+
         //camera
         bigCam.setToOrtho(false,640,480);
 
-        Texture tex,tutorial;
-        tex = Game.res.getTexture("menubg"); //background
+        Texture tex,tutorial, cutSceneTex1;
+        tex = Game.res.getTexture("menubg"); //Default background
         bg = new TextureRegion(tex,0,0,width,height);
+        cutSceneTex1 = Game.res.getTexture("cutscene1");
+        cutScene1 = new TextureRegion(cutSceneTex1,0,0,width,height);
 
-        //Text in the box
-        //font = game.font8;
+        name = game.prefs.getString("name", "no name stored");
+        if (dialogNumber == 1){
+            dialogString = strings[1] + " " + name + "! " + strings[2];}
+        if (dialogNumber == 9){
+            dialogString = strings[1] + " " + name + "! " + strings[4];}
 
         //tutorial
         tutorial = Game.res.getTexture("tutorial");
@@ -63,31 +65,32 @@ public class cutScene extends GameState {
         }else {
             //Text in the box
             font = game.font8;
-            boxCreate(250,250,50);
-        }
+            boxCreate(250,250,50);}
 
+        //for chancing the cutscene or exiting it
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
                 //tutorialScene
                 if (dialogNumber == 0){
-                    tutorialBool = true;
-                    dialogString = strings[dialogNumber];
+/*                    tutorialBool = true;
+                    dialogString = strings[dialogNumber];*/
                     dispose();
                     gsm.setState(GameStateManager.LEVEL_SELECT);
-
                     return super.touchUp(screenX, screenY, pointer, button);
                 }
                 //scene for using username merge string to get a whole dialog
                 else if (dialogNumber == 1) {
-                    tutorialBool = false;
+/*                    tutorialBool = false;
                     dialogString = strings[1];
-                    dialogString += " " + name;
-                    dialogNumber++;
-
+                    dialogString += " " + name;*/
                     gsm.setState(GameStateManager.LEVEL_COMPLETE);
                     return super.touchUp(screenX, screenY, pointer, button);
+                }
+                else if (dialogNumber == 9){
+                    gsm.setState(GameStateManager.LEVEL_COMPLETE);
 
+                    return super.touchUp(screenX, screenY, pointer, button);
                 }
                 else if (dialogNumber > 1 && dialogNumber < 4){
                     tutorialBool = false;
@@ -145,10 +148,10 @@ public class cutScene extends GameState {
         sb.begin();
         if (tutorialBool){
             sb.draw(tutorialBg,0,0);
-            sb.draw(pixmaptex,width/8*2,10,width*0.75f*2,height/4*2);
-            font.draw(sb,dialogString,width*0.1875f *2,height/4*2-10);
+            //sb.draw(pixmaptex,width/8*2,10,width*0.75f*2,height/4*2);
+            //font.draw(sb,dialogString,width*0.1875f *2,height/4*2-10);
         }else {
-            sb.draw(bg,0,0);
+            sb.draw(cutScene1,0,0);
             sb.draw(pixmaptex,width/8,10,width*0.75f,height/4);
 
             if (numchars < dialogString.length()) { // if num of chars are lesser than string // length , if all chars are not parsed

@@ -1,5 +1,8 @@
 package my.game.states;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -28,6 +31,11 @@ public class LevelComplete extends GameState {
     private int compareScore;
     private int crystalScore;
 
+    private int enemyScore;
+    private int hitScore;
+    private float timescore;
+    private int heartsLeft;
+
     public LevelComplete(GameStateManager gsm) {
         super(gsm);
 
@@ -46,7 +54,7 @@ public class LevelComplete extends GameState {
         menuButtons[0] = new TextureRegion(tex, 340, 40, 200, 100);
         menuButtons[1] = new TextureRegion(tex, 340, 125, 200, 100);
         playButton = new GameButton(menuButtons[0], 350, 100, cam);
-        exitButton = new GameButton(menuButtons[1], 100, 110, cam);
+        exitButton = new GameButton(menuButtons[1], 250, 110, cam);
 
         cam.setToOrtho(false, Game.V_WIDTH, Game.V_HEIGHT);
 
@@ -57,12 +65,12 @@ public class LevelComplete extends GameState {
         setScore();
 
         world = new World(new Vector2(0, -9.8f * 5), true);
+
     }
 
     @Override
     public void handleInput() {
         if (playButton.isClicked()) {
-            Game.res.getSound("buttonClick").play(SOUND_LEVEL);
             if (Play.level < 9){
                 Play.level++;
             }
@@ -71,7 +79,6 @@ public class LevelComplete extends GameState {
             }
             gsm.setState(GameStateManager.PLAY);
         } else if (exitButton.isClicked()) {
-            Game.res.getSound("buttonClick").play(SOUND_LEVEL);
             gsm.setState(GameStateManager.MENU);
             game.resumeMenuMusic();
         }
@@ -80,19 +87,25 @@ public class LevelComplete extends GameState {
     @Override
     public void update(float dt) {
         handleInput();
-        world.step(dt / 5, 8, 3);
+        //world.step(dt / 5, 8, 3);
 
-        bg.update(dt);
+       // bg.update(dt);
         playButton.update(dt);
         exitButton.update(dt);
     }
 
     @Override
     public void render() {
+
+
         sb.setProjectionMatrix(cam.combined);
 
+
         // draw background
-        bg.render(sb);
+        //bg.render(sb);
+        Gdx.gl.glClearColor(135/255f, 206/255f, 235/255f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
 
         // draw button
         playButton.render(sb);
@@ -100,23 +113,28 @@ public class LevelComplete extends GameState {
 
         sb.begin();
 
-        textFont.draw(sb, Game.lvls.getInteger("crystals") + "/6 toothpaste collected", 90, 215);
-        textFont.draw(sb, String.valueOf(settime()) + "s completion time",90,195);
-        textFont.draw(sb, Game.lvls.getInteger("enemies") + " enemies destroyed", 90, 175);
-        textFont.draw(sb, String.valueOf(Player.returnHealth()) + " health left",90,155);
-        textFont.draw(sb, heartScore + " hits taken",90,135);
-        textFont.draw(sb,"total score",90, 80);
+        int x = 15;
+
+        textFont.draw(sb,"Level Complete!",80,230);
+        textFont.draw(sb, Game.lvls.getInteger("crystals") + "/6 toothpaste collected", x, 200);
+        textFont.draw(sb, String.valueOf(settime()) + "s completion time",x,180);
+        textFont.draw(sb, Game.lvls.getInteger("enemies") + " enemies destroyed", x, 160);
+        textFont.draw(sb, String.valueOf(Player.returnHealth()) + " health left",x,140);
+        textFont.draw(sb, heartScore + " hits taken",x,120);
+        textFont.draw(sb,"total score",x, 65);
 
         for (int i = 0; i < totalScore /1000; i++) {
-            if (scoreCount == totalScore)
-                textFont.draw(sb, String.valueOf(scoreCount), 90, 100);
+            if (scoreCount == totalScore) {
+                textFont.draw(sb, String.valueOf(scoreCount), x, 85);
+                break;
+            }
             else
             scoreCount = scoreCount + 5;
-            textFont.draw(sb, String.valueOf(scoreCount), 90, 100);
+            textFont.draw(sb, String.valueOf(scoreCount), x, 85);
         }
 
         if(compareScore < getScore()) {
-            textFont.draw(sb, "NEW HIGHSCORE!", 90, 40);
+            textFont.draw(sb, "NEW HIGHSCORE!", x, 25);
         }
 
         sb.end();
@@ -126,11 +144,6 @@ public class LevelComplete extends GameState {
     public void dispose() { }
 
     private int getScore() {
-        int crystalScore;
-        int enemyScore;
-        int hitScore;
-        float timescore;
-        int heartsLeft;
 
         crystalScore = Game.lvls.getInteger("crystals") * 100;
         enemyScore = Game.lvls.getInteger("enemies") * 100;
