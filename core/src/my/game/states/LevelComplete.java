@@ -118,7 +118,7 @@ public class LevelComplete extends GameState {
 
         textFont.draw(sb,"Level Complete!",80,230);
         textFont.draw(sb, Game.lvls.getInteger("crystals") + "/6 toothpaste collected", x, 200);
-        textFont.draw(sb, String.valueOf(settime()) + "s completion time",x,180);
+        textFont.draw(sb,settime() + "s completion time",x,180);
         textFont.draw(sb, Game.lvls.getInteger("enemies") + " enemies destroyed", x, 160);
         textFont.draw(sb, String.valueOf(Player.returnHealth()) + " health left",x,140);
         textFont.draw(sb, heartScore + " hits taken",x,120);
