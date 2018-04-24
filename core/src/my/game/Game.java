@@ -154,6 +154,8 @@ public class Game implements ApplicationListener {
 		res.loadTexture("res/UI_final/play.png", "play");
 		res.loadTexture("res/UI_final/settings.png","settings");
 		res.loadTexture("res/UI_final/exit.png","exit");
+		res.loadTexture("res/UI_final/exitButton_80.png","exitButton");
+		res.loadTexture("res/UI_final/playButton_80.png","playButton");
 		res.loadTexture("res/UI_final/tooth_80.png", "tooth_80");
 		res.loadTexture("res/UI_final/back_80.png","back");
 		res.loadTexture("res/UI_final/right_80.png","right");
