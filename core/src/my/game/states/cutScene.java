@@ -148,8 +148,8 @@ public class cutScene extends GameState {
         sb.begin();
         if (tutorialBool){
             sb.draw(tutorialBg,0,0);
-            sb.draw(pixmaptex,width/8*2,10,width*0.75f*2,height/4*2);
-            font.draw(sb,dialogString,width*0.1875f *2,height/4*2-10);
+            //sb.draw(pixmaptex,width/8*2,10,width*0.75f*2,height/4*2);
+            //font.draw(sb,dialogString,width*0.1875f *2,height/4*2-10);
         }else {
             sb.draw(cutScene1,0,0);
             sb.draw(pixmaptex,width/8,10,width*0.75f,height/4);
