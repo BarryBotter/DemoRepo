@@ -50,7 +50,7 @@ public class LevelComplete extends GameState {
         tex = Game.res.getTexture("main");
 
         TextureRegion[] menuButtons;
-        menuButtons = new TextureRegion[2];
+        menuButtons = new TextureRegion[5];
         menuButtons[0] = new TextureRegion(tex, 340, 40, 200, 100);
         menuButtons[1] = new TextureRegion(tex, 340, 125, 200, 100);
         playButton = new GameButton(menuButtons[0], 350, 100, cam);
