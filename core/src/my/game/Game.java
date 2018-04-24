@@ -182,7 +182,6 @@ public class Game implements ApplicationListener {
 		res.loadTexture("res/UI_assets/previewBackground2.png", "preview2");
 
 		//Player animations
-		res.loadTexture("res/playerAnimations/playerAttack.png","playerAttack");
 		res.loadTexture("res/playerAnimations/walkingTest.png", "playerWalk");
 		res.loadTexture("res/playerAnimations/jumpframe.png", "playerJump");
 
@@ -203,7 +202,6 @@ public class Game implements ApplicationListener {
 		res.loadTexture("res/particles/bullet.png","bullet");
 
 		//PickUps
-		res.loadTexture("res/pickups/crystal.png", "Crystal");
 		res.loadTexture("res/pickups/toothPastePickUp.png", "toothPaste");
         res.loadTexture("res/pickups/flagPole.png", "flagPole");
 	}
