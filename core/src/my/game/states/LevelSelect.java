@@ -36,30 +36,34 @@ public class LevelSelect extends GameState {
 
     public LevelSelect(final GameStateManager gsm) {
         super(gsm);
+
         width= Game.V_WIDTH*2;
         height= Game.V_HEIGHT*2;
+
         StretchViewport viewport;
         viewport = new StretchViewport(width,height, cam);
+
         mySkin = game.mySkin;
         stage = gsm.stage;
+
         BitmapFont font;
         font = game.font12;
         font.setColor(Color.BLACK);
         font2 = game.font24;
         font2.setColor(Color.BLACK);
+
         stage = new Stage(viewport);
         reg = new TextureRegion(Game.res.getTexture("menubg"), 0, 0, width, height);
         cam.setToOrtho(false, width, height);
-        //todo current level from preferences
+        game.pauseMusic();
+        game.resumeMenuMusic();
         lvl = Game.lvls.getInteger("key");
         Play.level = LVL_UNLOCKED;
         lvlname = "Level number " + Play.level;
-        //toothpaste = "You collected 0/5 toothpaste";
+
         buttons();
         Gdx.input.setInputProcessor(stage);
 
-        game.pauseMusic();
-        game.resumeMenuMusic();
     }
 
     private void buttons(){

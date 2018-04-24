@@ -29,6 +29,7 @@ public class LevelComplete extends GameState {
     private int totalScore;
     private int scoreCount = 0;
     private int compareScore;
+    private int collectCompare;
     private int crystalScore;
 
     private int enemyScore;
@@ -160,7 +161,6 @@ public class LevelComplete extends GameState {
     }
 
     private void setScore(){
-        int collectCompare;
         compareScore = Game.scores.getInteger("score"+String.valueOf(Play.level));
         if(compareScore < totalScore) {
             Game.scores.putInteger("score" + String.valueOf(Play.level), totalScore);
