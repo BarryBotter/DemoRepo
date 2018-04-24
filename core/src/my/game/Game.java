@@ -143,8 +143,8 @@ public class Game implements ApplicationListener {
 		parameter.size = 24;
 		font24 = generator.generateFont(parameter);
 		parameter.size = 16;
-		parameter.shadowOffsetX = 3;
-		parameter.shadowOffsetY = 3;
+		parameter.borderWidth = 2;
+		parameter.borderColor = Color.PINK;
 		parameter.color = Color.WHITE;
 		textFont = generator.generateFont(parameter);
 		generator.dispose(); // don't forget to dispose to avoid memory leaks!
