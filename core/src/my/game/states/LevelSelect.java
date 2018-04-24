@@ -200,7 +200,6 @@ public class LevelSelect extends GameState {
     public void update(float dt) {
         levelScore = Game.scores.getInteger("score"+ String.valueOf(Play.level));
         pasteScore = Game.scores.getInteger("collect" + String.valueOf(Play.level));
-        System.out.println(game.prefs.getInteger("key"));
     }
 
     @Override

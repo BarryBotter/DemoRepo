@@ -112,7 +112,7 @@ public class MyContactListener implements ContactListener {
         if (fb.getUserData() != null && fb.getUserData().equals("trap")) {
             if (fa.getUserData().equals("player")) {
                 Player.loseHealth();
-                Game.res.getSound("snap").play();
+                Game.res.getSound("snap").play(SOUND_LEVEL);
                 trapBodiesToRemove.add(fb.getBody());
             }
             else if (fa.getUserData().equals("bullet")) {
@@ -131,7 +131,7 @@ public class MyContactListener implements ContactListener {
         if (fa.getUserData() != null && fa.getUserData().equals("trap")) {
             if (fb.getUserData().equals("player")) {
                 Player.loseHealth();
-                Game.res.getSound("snap").play();
+                Game.res.getSound("snap").play(SOUND_LEVEL);
                 trapBodiesToRemove.add(fa.getBody());
             }
             else if (fb.getUserData().equals("bullet")) {
